@@ -9,13 +9,18 @@
 create_new_vm.bat SomeNewVMName                   
 ```
 
- - ## This just sets up a new VM, disk, mounts the ubuntu iso and starts the VM
- - ## Two NICs, one set up for host-only the other one for NAT (see script for details)
- - ## One shared directory, named 'shared_workspace', from E:\Users\jhanson\shared_worksace
- - ## https://help.ubuntu.com/community/Installation/MinimalCD/#A64-bit_PC_.28amd64.2C_x86_64.29
+ - This just sets up a new VM, disk, mounts the ubuntu iso and starts the VM
+ - Two NICs, one set up for host-only the other one for NAT (see script for details)
+ - One shared directory, named 'shared_workspace', from 'E:\Users\jhanson\shared_worksace'
+ - https://help.ubuntu.com/community/Installation/MinimalCD/#A64-bit_PC_.28amd64.2C_x86_64.29
   
-- Follow all the onscreen setup, mostly accepting defaults.  Install the openssh server though (that was the only package i selected).
-- set up the windows hosts file, edit c:\Windows\System32\drivers\etc\hosts and add:
+- start the virtual machine with:
+```
+vboxmanage startvm SomeNewVMName
+```
+
+- Follow all the onscreen setup, mostly accepting defaults.  When it comes to selecting packages, select only the OpenSSH server.
+- Choose an IP address for the guest (I chose `192.168.56.11` below) and set up the windows hosts file by editing `c:\Windows\System32\drivers\etc\hosts` and adding (note these domains are specific to my configuration):
 ```
 # Development VM
 192.168.56.11          jonathan-hanson.local
@@ -24,16 +29,17 @@ create_new_vm.bat SomeNewVMName
 192.168.56.11          gas.jonathan-hanson.local
 ```
 
-- ssh into the VM at the IP address you chose and with the credentials you set up in the Ubuntu configuration.
+- At this point it might be worth while to create a backup of the guest's virtual disk to enable future cloning and rollbacks.  See the VirtualBox Manager for details on how to do this.
+
 
 ## ON THE GUEST ##
-### Interfaces ###
-Fresh install of ubuntu from mini.iso (ubuntu server 12.04 mini install)
- - Only package installed was openssh server
-- Made a backup copy of the virtual disk right after logging in once (fresh_ubuntu_1204_server.vdi)
-- Noted from ifconfig that eth0 and lo are present as network adaptors, but eth1 isn't.  Did `ifconfig eth1 up` and it came up, but with only an ipv6 address. Weird.
--  Both adapters were configured for DHCP, which is turned off in my virtual box host config (see /etc/network/interfaces).
--  In order to set up a static IP, added to /etc/network/interfaces:
+Until the network interfaces are set up correctly, you'll need to do this part from the VirtualBox guest directly (that is, not over SSH).
+
+### Set up the network interfaces ###
+- Noted from `ifconfig` that the `eth0` and `lo` adapters are present but `eth1` isn't.  Did `ifconfig eth1 up` and it came up, but with only an ipv6 address.
+- Both adapters were configured for DHCP, but the virtualbox host-only DHCP server is disabled (see above).
+- Set up `eth1` with a static UP by adding this to `/etc/network/interfaces`:
+```
 # The host-only virtualbox interface
 auto eth1
 iface eth1 inet static
@@ -41,28 +47,43 @@ address 192.168.56.11
 netmask 255.255.255.0
 network 192.168.56.0
 broadcast 192.168.56.255
+```
 
-- Rebooted and the machine comes up as expected (could probably also do `sudo service networking restart`, but didn't test)
-
+- Reboot the machine and verify that `ifconfig` now shows `eth1` with the ip address chosen above.  Instead of rebooting, we could probably do `sudo service networking restart` but didn't test that.)
+- At this point you should be able to ssh into the the guest from the host using the IP address chosen above (in my case, `192.168.56.11`).  On subsequent VM startups you should be able to start it headless with:
+```
+vboxmanage startvm SomeVMName --type=headless
+```
 
 ### Set up firewall ###
+```
 sudo ufw default deny
 sudo ufw allow ssh
 sudo ufw allow http
 sudo ufw allow 443
 sudo ufw enable
-
+```
 
 ### Add virtualbox shared mounts ###
+```
 sudo mkdir /media/sf_shared_workspace
-add to /etc/fstab:
+```
+
+- Configure the mount by adding to `/etc/fstab`:
+```
 # virtualbox shared workspace, owned by www-data:www-data
 shared_workspace     /media/sf_shared_workspace vboxsf     defaults,uid=33,gid=33     0     0
+```
 
+- Mount the shared disk
+```
 sudo mount /media/sf_shared_workspace
+```
 
 
 ### install nginx ###
+- Fetch, make, and install:
+```
 sudo apt-get install libc6 libpcre3 libpcre3-dev libpcrecpp0 libssl0.9.8 libssl-dev zlib1g zlib1g-dev lsb-base
 wget http://nginx.org/download/nginx-1.2.2.tar.gz
 tar -xvf nginx-1.2.2.tar.gz
@@ -70,25 +91,39 @@ cd nginx-1.2.2
 ./configure --prefix=/usr --sbin-path=/usr/sbin --pid-path=/var/run/nginx.pid --conf-path=/etc/nginx/nginx.conf --error-log-path=/var/log/nginx/error.log --http-log-path=/var/log/nginx/access.log --user=www-data --group=www-data --with-http_ssl_module
 make
 sudo make install
+```
 
-cp nginx /etc/init.d/                           // TODO I need to actually source this with wget from somewhere.  Note this file has been edited in place.
+- Install the init script (TODO I need to actually source this with wget from somewhere.)
+```
+cp nginx /etc/init.d/
 sudo chmod 755 /etc/init.d/nginx
 sudo update-rc.d nginx defaults
+```
 
+- Create the nginx default log directory
+```
 sudo mkdir /var/log/nginx
+```
 
+- Install the nginx config files (these are specific to the sites I'm developing. TODO source nginx.conf and the sites-available directory from somewhere safe):
+```
 sudo mkdir /etc/nginx/sites-available
 sudo mkdir /etc/nginx/sites-enabled
-cp nginx.conf /etc/nginx/                              // TODO I need to actually source this with wget from somewhere.  Note this file has been edited in place.
-cp sites-available/* /etc/nginx/sites-available/*   // TODO I need to actually source this with wget from somewhere.  Note this file has been edited in place.
+cp nginx.conf /etc/nginx/
+cp sites-available/* /etc/nginx/sites-available/*
 ln -s /etc/nginx/sites-available/catchall /etc/nginx/sites-enabled/catchall
 ln -s /etc/nginx/sites-available/groundhog /etc/nginx/sites-enabled/groundhog
+```
 
--- start nginx
+- start nginx
+```
 sudo service nginx start
+```
 
 
 ### install php ###
+- Fetch, make, and install:
+```
 sudo apt-get install autoconf libxml2 libxml2-dev libcurl3 libcurl4-gnutls-dev libmagic-dev
 wget http://us3.php.net/get/php-5.4.5.tar.bz2/from/us2.php.net/mirror -O php-5.4.5.tar.bz2
 tar -xvf php-5.4.5.tar.bz2
@@ -96,41 +131,74 @@ cd php-5.4.5
 ./configure --prefix=/usr --sysconfdir=/etc --with-config-file-path=/etc --enable-fpm --with-fpm-user=www-data --with-fpm-group=www-data --enable-mbstring --with-mysqli
 make
 sudo make install
+```
 
+- Copy the generated ini file to the config directory:
+```
 sudo cp php.ini-production /etc/php.ini
+```
 
-sudo cp /etc/php-fpm.conf.default /etc/php-fpm.conf      ### NOTE: Modified
-   -- uncommented the pid directive: pid = run/php-fpm.pid
-   -- set the error log location to /var/log/php-fpm/php-fpm.log
-   -- changed the listen location: listen = /tmp/php.socket
+- Copy over the PHP-FPM config file:
+```
+sudo cp /etc/php-fpm.conf.default /etc/php-fpm.conf
+```
+
+ Note that this file has been modified after it was copied:
+ - uncommented the pid directive: `pid = run/php-fpm.pid`
+ - set the error log location to `/var/log/php-fpm/php-fpm.log`
+ - changed the listen location: `listen = /tmp/php.socket`
+
+- Create the php-fpm log file:
+```
 sudo mkdir /var/log/php-fpm
+```
 
+- Install the PHP init script:
+```
 sudo cp sapi/fpm/init.d.php-fpm /etc/init.d/php-fpm
 sudo chmod 755 /etc/init.d/php-fpm
 sudo update-rc.d php-fpm defaults
+```
 
+- Install the APC and HTTP extensions:
+```
 sudo pecl update-channels
 sudo pecl install pecl_http apc-beta (answer with defaults)
-# note that apc-beta was necessary to get  apc 3.1.11 (in beta right now) which includes fixes for php 5.4 compatability
+```
 
-append to /etc/php.ini:
-extension=http.so
-extension=apc.so
+ NOTE that `apc-beta` was necessary above to get APC version 3.1.11 (in beta right now) which includes fixes for PHP 5.4 compatability.  This may not be necessary down the road, so keep an eye on it.  The production package name is `apc`.
 
+ append to `/etc/php.ini`:
+ ```
+ extension=http.so
+ extension=apc.so
+ ```
 
--- set up web root
+- set up web root:
+```
 sudo mkdir /var/www
+```
 
--- start php-fpm
+- start php-fpm:
+```
 sudo service php-fpm start
+```
 
 
 ### MYSQL ###
+- Install:
+- DON'T DO THIS, because nungh:
+```
 ##sudo apt-get install cmake
 ##wget http://dev.mysql.com/get/Downloads/MySQL-5.5/mysql-5.5.25a.tar.gz/from/http://cdn.mysql.com/ -O mysql-5.5.25a.tar.gz
 ##tar -xvf mysql-5.5.25a.tar.gz
 ##cd mysql-5.5.25a
-sudo apt-get install mysql-server-5.5    ## screw it, I'm cheating on this one and using apt-get.  Building from source looks like a pain in the ass with no gain.
+``
+
+Instead do (screw it, I'm cheating on this one and using apt-get.  Building from source looks like a pain in the ass with no gain.):
+```
+sudo apt-get install mysql-server-5.5  
+```
 
 
 ### set up development code symbolic link ###
