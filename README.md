@@ -1,26 +1,46 @@
 # BUILD A NEW DEVELOPMENT VM #
+The goal here is to build a development virtual machine that can support PHP web development.  While I'm aiming to keep this as generally usable as possible, there are places where I install specific tools or configure them specifically to support my projects.  Be aware that there will need to be some improvization along the way if you want this to work for you.
+
+The basic features of this environment are:
+- Minimal Ubuntu 12.04 Server as a VirtualBox guest
+ - Shared directory between the host and guest for code development
+ - Firewall configured with UFW
+- PHP 5.4.5, compiled from source
+ - FastCGI with PHP-FPM, including Unix socket configuration for talking to Nginx
+ - APC from built with PECL
+- Nginx 1.2.2, compiled from Source
+- MySQL, installed from Ubuntu's package repository
+- SASS and Compass, for developing CSS
+- YUI Compressor, for compressing web assets
 
 ## ON THE HOST ##
 ### Create the guest ###
 - Install VirtualBox: https://www.virtualbox.org/wiki/Downloads
-- Configure the host-only network (TODO flesh out these notes)
-- from Windows CLI, run this batch script to create the new virtual machine:
+- Configure the host-only network:
+ - Start up the VirtualBox Manager
+ - Go to `File` -> `Preferences...` -> `Network`
+ - Ensure the existence of (or create) a Host-Only Network with these properties:
+  - Named `VirtualBox Host-Only Ethernet Adapter`
+  - IPv4 Address `192.168.56.1`
+  - IPv4 Network Mask `255.255.255.0`
+  - Disabled DHCP Server
+- Download the Ubuntu 12.04 server minimal ISO from https://help.ubuntu.com/community/Installation/MinimalCD/#A64-bit_PC_.28amd64.2C_x86_64.29
+- from the Windows CLI, run this batch script to create the new virtual machine:
 ```
 create_new_vm.bat SomeNewVMName                   
 ```
 
  - This just sets up a new VM, disk, mounts the ubuntu iso and starts the VM
  - Two NICs, one set up for host-only the other one for NAT (see script for details)
- - One shared directory, named 'shared_workspace', from 'E:\Users\jhanson\shared_worksace'
- - https://help.ubuntu.com/community/Installation/MinimalCD/#A64-bit_PC_.28amd64.2C_x86_64.29
+ - One shared directory, named 'shared_workspace', from 'E:\Users\jhanson\shared_workspace'
   
 - start the virtual machine with:
 ```
 vboxmanage startvm SomeNewVMName
 ```
 
-- Follow all the onscreen setup, mostly accepting defaults.  When it comes to selecting packages, select only the OpenSSH server.
-- Choose an IP address for the guest (I chose `192.168.56.11` below) and set up the windows hosts file by editing `c:\Windows\System32\drivers\etc\hosts` and adding (note these domains are specific to my configuration):
+- Follow all the onscreen Ubuntu setup, mostly accepting defaults.  When it comes to selecting packages, select only the OpenSSH server.
+- Choose an IP address for the guest (I chose `192.168.56.11` below) and set up the Windows hosts file by editing `C:\Windows\System32\drivers\etc\hosts` and adding (note these domains are specific to my configuration):
 ```
 # Development VM
 192.168.56.11          jonathan-hanson.local
@@ -64,7 +84,8 @@ sudo ufw allow 443
 sudo ufw enable
 ```
 
-### Add virtualbox shared mounts ###
+
+### Add VirtualBox shared mount ###
 ```
 sudo mkdir /media/sf_shared_workspace
 ```
