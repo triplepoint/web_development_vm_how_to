@@ -187,54 +187,64 @@ sudo service php-fpm start
 
 ### MYSQL ###
 - Install:
-- DON'T DO THIS, because nungh:
+ DON'T DO THIS (because I'm not building from scratch just yet):
 ```
-##sudo apt-get install cmake
-##wget http://dev.mysql.com/get/Downloads/MySQL-5.5/mysql-5.5.25a.tar.gz/from/http://cdn.mysql.com/ -O mysql-5.5.25a.tar.gz
-##tar -xvf mysql-5.5.25a.tar.gz
-##cd mysql-5.5.25a
-``
+sudo apt-get install cmake
+wget http://dev.mysql.com/get/Downloads/MySQL-5.5/mysql-5.5.25a.tar.gz/from/http://cdn.mysql.com/ -O mysql-5.5.25a.tar.gz
+tar -xvf mysql-5.5.25a.tar.gz
+cd mysql-5.5.25a
+```
 
-Instead do (screw it, I'm cheating on this one and using apt-get.  Building from source looks like a pain in the ass with no gain.):
-```
-sudo apt-get install mysql-server-5.5  
-```
+ Instead do this: (because screw it, I'm cheating on this one and using `apt-get`.  Building MySQL from source looks like a pain in the ass with no gain):
+ ```
+ sudo apt-get install mysql-server-5.5  
+ ```
 
 
 ### set up development code symbolic link ###
+```
 sudo ln -s /media/sf_shared_workspace /var/www
+```
 
 
 ### Install Compass/Sass ###
+```
 sudo apt-get install ruby1.9.3
 sudo gem update
 sudo gem install compass
 sudo ln -s /usr/local/bin/compass /usr/bin/compass
+```
 
 
 ### Install YUI Compressor ###
-### Install java runtime (for yui compressor) ###
+- Install java runtime (required for yui compressor):
+```
 sudo apt-get install default-jre
+```
 
+- Fetch and install the `yui-compressor` jar file
+```
 sudo apt-get install unzip
 wget http://yui.zenfs.com/releases/yuicompressor/yuicompressor-2.4.7.zip
 unzip yuicompressor-2.4.7.zip
 sudo mkdir /usr/share/yui-compressor
 sudo cp yuicompressor-2.4.7/build/yuicompressor-2.4.7.jar /usr/share/yui-compressor/yui-compressor.jar
-
+```
 
 ### Install Git (used by composer.phar) ###
+```
 sudo apt-get install git
+```
 
 
 # UPDATING #
 Periodically it'll be necessary to upgrade this machine without rebuilding it.  Here's how:
--- sudo apt-get update; sudo apt-get dist-upgrade;
--- php - make clean and recompile as above
--- nginx -- make clean and recompile as above
--- ## Mysql is handled by apt-get
--- sudo gem update;  ### Handles compass
--- YUI-compressor - redownload and overwrite the jar file, as above
+- `sudo apt-get update; sudo apt-get dist-upgrade;`
+- php - make clean and recompile as above
+- nginx -- make clean and recompile as above
+- Mysql is handled by `apt-get` above
+- `sudo gem update`  for Compass and SASS
+- YUI-compressor - redownload and overwrite the jar file, as above
 
 
 # TODO #
