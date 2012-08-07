@@ -195,10 +195,6 @@ sudo pecl install pecl_http apc-beta (answer with defaults)
  extension=apc.so
  ```
 
-- set up web root:
-```
-sudo mkdir /var/www
-```
 
 - start php-fpm:
 ```
