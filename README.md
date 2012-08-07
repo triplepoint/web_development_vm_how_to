@@ -58,7 +58,7 @@ Until the network interfaces are set up correctly, you'll need to do this part f
 ### Set up the network interfaces ###
 - Noted from `ifconfig` that the `eth0` and `lo` adapters are present but `eth1` isn't.  Did `ifconfig eth1 up` and it came up, but with only an ipv6 address.
 - Both adapters were configured for DHCP, but the virtualbox host-only DHCP server is disabled (see above).
-- Set up `eth1` with a static UP by adding this to `/etc/network/interfaces`:
+- Set up `eth1` with a static IP by adding this to `/etc/network/interfaces`:
 ```
 # The host-only virtualbox interface
 auto eth1
