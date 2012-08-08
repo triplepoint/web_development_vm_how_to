@@ -7,7 +7,7 @@ The basic features of this environment are:
  - Firewall configured with UFW
 - PHP 5.4.5, compiled from source
  - FastCGI with PHP-FPM, including Unix socket configuration for talking to Nginx
- - APC from built with PECL
+ - APC, built from PECL
 - Nginx 1.2.2, compiled from Source
 - MySQL, installed from Ubuntu's package repository
 - SASS and Compass, for developing CSS
