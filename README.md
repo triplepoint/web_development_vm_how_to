@@ -1,20 +1,21 @@
-# BUILD A NEW DEVELOPMENT VM #
-The goal here is to build a development virtual machine that can support PHP web development.  While I'm aiming to keep this as generally usable as possible, there are places where I install specific tools or configure them specifically to support my projects.  Be aware that there will need to be some improvization along the way if you want this to work for you.
+# BUILD A NEW DEVELOPMENT VM 
+The goal here is to build a development virtual machine that can support PHP web development.  While I'm aiming to keep this as generally usable as possible, there are places where I install specific tools or configure them specifically to support my projects.  Be aware that there will need to be some improvization on your part along the way if you want this to work for you.
 
 The basic features of this environment are:
-- Minimal Ubuntu 12.04 Server as a VirtualBox guest
+- [Minimal Ubuntu 12.04 Server](https://help.ubuntu.com/community/Installation/MinimalCD) as a [VirtualBox](https://www.virtualbox.org/) guest
+ - [Windows 7](http://windows.microsoft.com/en-US/windows7/products/home) Host (but don't let that turn you away in disgust, it matters very little)
  - Shared directory between the host and guest for code development
- - Firewall configured with UFW
-- PHP 5.4.5, compiled from source
- - FastCGI with PHP-FPM, including Unix socket configuration for talking to Nginx
- - APC, built from PECL
-- Nginx 1.2.2, compiled from Source
-- MySQL, installed from Ubuntu's package repository
-- SASS and Compass, for developing CSS
-- YUI Compressor, for compressing web assets
+ - Firewall configured with [UFW](https://wiki.ubuntu.com/UncomplicatedFirewall?action=show&redirect=UbuntuFirewall)
+- [PHP 5.4.5](http://www.php.net/), compiled from source
+ - FastCGI with [PHP-FPM](http://php-fpm.org/), including Unix socket configuration for talking to Nginx
+ - [APC](http://php.net/manual/en/book.apc.php), built from [PECL](http://pecl.php.net/)
+- [Nginx 1.2.2](http://nginx.org/), compiled from Source
+- [MySQL 5.5](http://dev.mysql.com/doc/refman/5.5/en/), installed from Ubuntu's package repository
+- [SASS](http://sass-lang.com/) and [Compass](http://compass-style.org/), for developing CSS
+- [YUI Compressor](http://developer.yahoo.com/yui/compressor/), for compressing web assets
 
-## ON THE HOST ##
-### Create the guest ###
+## ON THE HOST
+### Create the guest
 - Install VirtualBox: https://www.virtualbox.org/wiki/Downloads
 - Configure the host-only network:
  - Start up the VirtualBox Manager
@@ -52,10 +53,10 @@ vboxmanage startvm SomeNewVMName
 - At this point it might be worth while to create a backup of the guest's virtual disk to enable future cloning and rollbacks.  See the VirtualBox Manager for details on how to do this.
 
 
-## ON THE GUEST ##
+## ON THE GUEST
 Until the network interfaces are set up correctly, you'll need to do this part from the VirtualBox guest directly (that is, not over SSH).
 
-### Set up the network interfaces ###
+### Set up the network interfaces
 - Noted from `ifconfig` that the `eth0` and `lo` adapters are present but `eth1` isn't.  Did `ifconfig eth1 up` and it came up, but with only an ipv6 address.
 - Both adapters were configured for DHCP, but the virtualbox host-only DHCP server is disabled (see above).
 - Set up `eth1` with a static IP by adding this to `/etc/network/interfaces`:
@@ -75,7 +76,7 @@ broadcast 192.168.56.255
 vboxmanage startvm SomeVMName --type=headless
 ```
 
-### Set up firewall ###
+### Set up firewall
 ```
 sudo ufw default deny
 sudo ufw allow ssh
@@ -85,7 +86,7 @@ sudo ufw enable
 ```
 
 
-### Add VirtualBox shared mount ###
+### Add VirtualBox shared mount
 ```
 sudo mkdir /media/sf_shared_workspace
 ```
@@ -102,7 +103,7 @@ sudo mount /media/sf_shared_workspace
 ```
 
 
-### install nginx ###
+### install nginx
 - Fetch, make, and install:
 ```
 sudo apt-get install libc6 libpcre3 libpcre3-dev libpcrecpp0 libssl0.9.8 libssl-dev zlib1g zlib1g-dev lsb-base
@@ -142,7 +143,7 @@ sudo service nginx start
 ```
 
 
-### install php ###
+### install php
 - Fetch, make, and install:
 ```
 sudo apt-get install autoconf libxml2 libxml2-dev libcurl3 libcurl4-gnutls-dev libmagic-dev
@@ -202,7 +203,7 @@ sudo service php-fpm start
 ```
 
 
-### MYSQL ###
+### MYSQL
 - Install:
  DON'T DO THIS (because I'm not building from scratch just yet):
 ```
@@ -218,13 +219,13 @@ cd mysql-5.5.25a
  ```
 
 
-### set up development code symbolic link ###
+### set up development code symbolic link
 ```
 sudo ln -s /media/sf_shared_workspace /var/www
 ```
 
 
-### Install Compass/Sass ###
+### Install Compass/Sass
 ```
 sudo apt-get install ruby1.9.3
 sudo gem update
@@ -233,7 +234,7 @@ sudo ln -s /usr/local/bin/compass /usr/bin/compass
 ```
 
 
-### Install YUI Compressor ###
+### Install YUI Compressor
 - Install java runtime (required for yui compressor):
 ```
 sudo apt-get install default-jre
@@ -248,13 +249,13 @@ sudo mkdir /usr/share/yui-compressor
 sudo cp yuicompressor-2.4.7/build/yuicompressor-2.4.7.jar /usr/share/yui-compressor/yui-compressor.jar
 ```
 
-### Install Git (used by composer.phar) ###
+### Install Git (used by composer.phar)
 ```
 sudo apt-get install git
 ```
 
 
-# UPDATING #
+# UPDATING
 Periodically it'll be necessary to upgrade this machine without rebuilding it.  Here's how:
 - `sudo apt-get update; sudo apt-get dist-upgrade;`
 - php - make clean and recompile as above
@@ -264,7 +265,7 @@ Periodically it'll be necessary to upgrade this machine without rebuilding it.  
 - YUI-compressor - redownload and overwrite the jar file, as above
 
 
-# TODO #
+# TODO
 - mysql config
 - SSL cert
 - IPv6?
@@ -274,7 +275,7 @@ Periodically it'll be necessary to upgrade this machine without rebuilding it.  
 - groundhog git pull (this isn't actually necessary for VM dev machines, but i should research it for building in production)
 
 
-# NOTES #
+# NOTES
 - http://wiki.nginx.org/Configuration
 - http://www.howtoforge.com/installing-php-5.3-nginx-and-php-fpm-on-ubuntu-debian
 
