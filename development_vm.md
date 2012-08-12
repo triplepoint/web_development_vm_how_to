@@ -279,14 +279,3 @@ Periodically it'll be necessary to upgrade this machine without rebuilding it.  
 # NOTES
 - http://wiki.nginx.org/Configuration
 - http://www.howtoforge.com/installing-php-5.3-nginx-and-php-fpm-on-ubuntu-debian
-
-
-
-
-
-
-
-
-
-
-
