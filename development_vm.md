@@ -26,7 +26,8 @@ The basic features of this environment are:
   - IPv4 Network Mask `255.255.255.0`
   - Disabled DHCP Server
 - Download the Ubuntu 12.04 server minimal ISO from https://help.ubuntu.com/community/Installation/MinimalCD/#A64-bit_PC_.28amd64.2C_x86_64.29
-- from the Windows CLI, run this batch script to create the new virtual machine:
+- Edit the attached ```create_new_vm.bat``` script and supply reasonable configuration values.  
+- From the Windows CLI, run the ```create_new_bm.bat``` batch script with a chosen new Virtual Machine name to create the new virtual machine:
 ```
 create_new_vm.bat SomeNewVMName                   
 ```
