@@ -256,7 +256,8 @@ sudo apt-get install git
 git config --global user.name "Your Name Here"
 git config --global user.email "your_email@youremail.com"
 ```
-
+If you're using Github, it's likely you'll want to set up an SSH key for this machine.  For more information, see:
+https://help.github.com/articles/generating-ssh-keys
 
 # UPDATING
 Periodically it'll be necessary to upgrade this machine without rebuilding it.  Here's how:
