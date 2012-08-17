@@ -253,6 +253,8 @@ sudo cp yuicompressor-2.4.7/build/yuicompressor-2.4.7.jar /usr/share/yui-compres
 ### Install Git (used by composer.phar)
 ```
 sudo apt-get install git
+git config --global user.name "Your Name Here"
+git config --global user.email "your_email@youremail.com"
 ```
 
 
