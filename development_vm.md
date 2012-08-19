@@ -73,12 +73,12 @@ broadcast 192.168.56.255
 
 - Reboot the machine and verify that `ifconfig` now shows `eth1` with the ip address chosen above.  Instead of rebooting, we could probably do `sudo service networking restart` but didn't test that.)
 - At this point you should be able to ssh into the the guest from the host using the IP address chosen above (in my case, `192.168.56.11`).  On subsequent VM startups you should be able to start it headless with:
-```
+``` bash
 vboxmanage startvm SomeVMName --type=headless
 ```
 
 ### Set up firewall
-```
+``` bash
 sudo ufw default deny
 sudo ufw allow ssh
 sudo ufw allow http
@@ -88,7 +88,7 @@ sudo ufw enable
 
 
 ### Add VirtualBox shared mount
-```
+``` bash
 sudo mkdir /media/sf_shared_workspace
 ```
 
@@ -99,14 +99,14 @@ shared_workspace     /media/sf_shared_workspace vboxsf     defaults,uid=33,gid=3
 ```
 
 - Mount the shared disk
-```
+``` bash
 sudo mount /media/sf_shared_workspace
 ```
 
 
 ### install nginx
 - Fetch, make, and install:
-```
+``` bash
 sudo apt-get install libc6 libpcre3 libpcre3-dev libpcrecpp0 libssl0.9.8 libssl-dev zlib1g zlib1g-dev lsb-base
 wget http://nginx.org/download/nginx-1.2.2.tar.gz
 tar -xvf nginx-1.2.2.tar.gz
@@ -117,19 +117,19 @@ sudo make install
 ```
 
 - Install the init script (TODO I need to actually source this with wget from somewhere.)
-```
+``` bash
 cp nginx /etc/init.d/
 sudo chmod 755 /etc/init.d/nginx
 sudo update-rc.d nginx defaults
 ```
 
 - Create the nginx default log directory
-```
+``` bash
 sudo mkdir /var/log/nginx
 ```
 
 - Install the nginx config files (these are specific to the sites I'm developing. TODO source nginx.conf and the sites-available directory from somewhere safe):
-```
+``` bash
 sudo mkdir /etc/nginx/sites-available
 sudo mkdir /etc/nginx/sites-enabled
 cp nginx.conf /etc/nginx/
@@ -139,14 +139,14 @@ ln -s /etc/nginx/sites-available/groundhog /etc/nginx/sites-enabled/groundhog
 ```
 
 - start nginx
-```
+``` bash
 sudo service nginx start
 ```
 
 
 ### install php
 - Fetch, make, and install:
-```
+``` bash
 sudo apt-get install autoconf libxml2 libxml2-dev libcurl3 libcurl4-gnutls-dev libmagic-dev
 wget http://us3.php.net/get/php-5.4.5.tar.bz2/from/us2.php.net/mirror -O php-5.4.5.tar.bz2
 tar -xvf php-5.4.5.tar.bz2
@@ -157,12 +157,12 @@ sudo make install
 ```
 
 - Copy the generated ini file to the config directory:
-```
+``` bash
 sudo cp php.ini-production /etc/php.ini
 ```
 
 - Copy over the PHP-FPM config file:
-```
+``` bash
 sudo cp /etc/php-fpm.conf.default /etc/php-fpm.conf
 ```
 
@@ -172,19 +172,19 @@ sudo cp /etc/php-fpm.conf.default /etc/php-fpm.conf
  - changed the listen location: `listen = /tmp/php.socket`
 
 - Create the php-fpm log file:
-```
+``` bash
 sudo mkdir /var/log/php-fpm
 ```
 
 - Install the PHP init script:
-```
+``` bash
 sudo cp sapi/fpm/init.d.php-fpm /etc/init.d/php-fpm
 sudo chmod 755 /etc/init.d/php-fpm
 sudo update-rc.d php-fpm defaults
 ```
 
 - Install the APC and HTTP extensions:
-```
+``` bash
 sudo pecl update-channels
 sudo pecl install pecl_http apc-beta (answer with defaults)
 ```
@@ -199,7 +199,7 @@ sudo pecl install pecl_http apc-beta (answer with defaults)
 
 
 - start php-fpm:
-```
+``` bash
 sudo service php-fpm start
 ```
 
@@ -207,7 +207,7 @@ sudo service php-fpm start
 ### MYSQL
 - Install:
  DON'T DO THIS (because I'm not building from scratch just yet):
-```
+``` bash
 sudo apt-get install cmake
 wget http://dev.mysql.com/get/Downloads/MySQL-5.5/mysql-5.5.25a.tar.gz/from/http://cdn.mysql.com/ -O mysql-5.5.25a.tar.gz
 tar -xvf mysql-5.5.25a.tar.gz
@@ -215,19 +215,19 @@ cd mysql-5.5.25a
 ```
 
  Instead do this: (because screw it, I'm cheating on this one and using `apt-get`.  Building MySQL from source looks like a pain in the ass with no gain):
- ```
+ ``` bash
  sudo apt-get install mysql-server-5.5  
  ```
 
 
 ### set up development code symbolic link
-```
+``` bash
 sudo ln -s /media/sf_shared_workspace /var/www
 ```
 
 
 ### Install Compass/Sass
-```
+``` bash
 sudo apt-get install ruby1.9.3
 sudo gem update
 sudo gem install compass
@@ -237,12 +237,12 @@ sudo ln -s /usr/local/bin/compass /usr/bin/compass
 
 ### Install YUI Compressor
 - Install java runtime (required for yui compressor):
-```
+``` bash
 sudo apt-get install default-jre
 ```
 
 - Fetch and install the `yui-compressor` jar file
-```
+``` bash
 sudo apt-get install unzip
 wget http://yui.zenfs.com/releases/yuicompressor/yuicompressor-2.4.7.zip
 unzip yuicompressor-2.4.7.zip
@@ -251,29 +251,35 @@ sudo cp yuicompressor-2.4.7/build/yuicompressor-2.4.7.jar /usr/share/yui-compres
 ```
 
 ### Install Git (used by composer.phar)
-```
+``` bash
 sudo apt-get install git
 ```
 
 
 # UPDATING
 Periodically it'll be necessary to upgrade this machine without rebuilding it.  Here's how:
-- `sudo apt-get update; sudo apt-get dist-upgrade;`
-- php - make clean and recompile as above
-- nginx -- make clean and recompile as above
-- Mysql is handled by `apt-get` above
-- `sudo gem update`  for Compass and SASS
-- YUI-compressor - redownload and overwrite the jar file, as above
+- Apt Repository update (covers MySQL): 
+ ``` bash
+ sudo apt-get update; sudo apt-get dist-upgrade;
+ ```
+- php -- make clean and recompile as during the install above
+- nginx -- make clean and recompile as during the install above
+- Ruby Gem update for Compass and SASS:
+ ``` bash 
+ sudo gem update
+ ```  
+- YUI-compressor - redownload and overwrite the jar file, as during the install above
 
 
 # TODO
 - mysql config
+- phpmyadmin
 - SSL cert
 - IPv6?
 - on server errors, nginx just throws ugly 500 response
 - scriptify everything
+- project code git pull (this isn't actually necessary for VM dev machines, but I should research it for building in production)
 - Come up with the production server variant of all this (should be similar)
-- groundhog git pull (this isn't actually necessary for VM dev machines, but i should research it for building in production)
 
 
 # NOTES
