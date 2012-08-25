@@ -1,0 +1,44 @@
+server {
+    listen *:80 default;
+    server_name _;
+
+    root       /var/www;
+    access_log /var/log/nginx/access.log;
+    error_log  /var/log/nginx/error.log;
+
+    index index.php index.html;
+
+## Default location
+    location / {
+        autoindex on;
+    }
+
+## Images and static content is treated different
+    location ~* ^.+\.(jpg|jpeg|gif|css|png|js|ico|xml)$ {
+      access_log        off;
+      expires           30d;
+    }
+
+## Parse all .php file in the /var/www directory
+    location ~ \.php {       
+        # filter out arbitrary code execution (path crawling)
+        location ~ \..*/.*\.php$ {return 404;}
+
+        # Pull in the shared fast cgi parameters 
+        include /etc/nginx/fastcgi.conf;
+        include fastcgi_params;
+
+        # split the path info
+        fastcgi_split_path_info ^(.+\.php)(/.*)$;
+        fastcgi_param PATH_INFO $fastcgi_path_info;
+        fastcgi_param PATH_TRANSLATED $document_root$fastcgi_path_info;
+
+        # Pass the request to the open php-fpm socket
+        fastcgi_pass unix:/tmp/php.socket;
+    }
+
+## Disable viewing .htaccess & .htpassword
+    location ~ /\.ht {
+        deny all;
+    }
+}

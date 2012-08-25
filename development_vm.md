@@ -137,7 +137,7 @@ make install
 
 - Install the attached nginx-init script:
 ``` bash
-cp ~/howto_dev_config/nginx-init /etc/init.d/nginx
+cp ~/howto_dev_config/etc/init.d/nginx-init /etc/init.d/nginx
 chmod 755 /etc/init.d/nginx
 update-rc.d nginx defaults
 ```
@@ -151,13 +151,13 @@ mkdir /var/log/nginx
 ``` bash
 mkdir /etc/nginx/sites-available
 mkdir /etc/nginx/sites-enabled
-cp ~/howto_dev_config/nginx.conf /etc/nginx/
+cp ~/howto_dev_config/etc/nginx/nginx.conf /etc/nginx/
 ```
 
 - Install the project-specific configuration files:
 ``` bash
 cp ~/howto_dev_config/sites-available/* /etc/nginx/sites-available/*
-ln -s /etc/nginx/sites-available/catchall /etc/nginx/sites-enabled/catchall
+ln -s /etc/nginx/sites-available/default /etc/nginx/sites-enabled/default
 ln -s /etc/nginx/sites-available/groundhog /etc/nginx/sites-enabled/groundhog
 ```
 

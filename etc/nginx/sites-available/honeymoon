@@ -1,0 +1,15 @@
+server {
+  listen 80;
+ 
+  server_name honeymoon.jonathan-hanson.local;
+  root /var/www/honeymoon;
+ 
+  error_log /var/log/nginx/honeymoon.error.log;
+  access_log /var/log/nginx/honeymoon.access.log;
+ 
+  location / {
+    index index.html;
+  }
+
+}
+
