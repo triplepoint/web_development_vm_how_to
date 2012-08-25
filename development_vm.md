@@ -15,7 +15,7 @@ The basic features of this environment are:
 - [YUI Compressor](http://developer.yahoo.com/yui/compressor/), for compressing web assets
 
 ## ON THE HOST
-### Create the guest
+### Create the Guest
 - Install VirtualBox: https://www.virtualbox.org/wiki/Downloads
 - Configure the host-only network:
  - Start up the VirtualBox Manager
@@ -57,7 +57,7 @@ vboxmanage startvm SomeNewVMName
 ## ON THE GUEST
 Until the network interfaces are set up correctly, you'll need to do this part from the VirtualBox guest directly (that is, not over SSH).
 
-### Set up the network interfaces
+### Set Up the Network Interfaces
 - Noted from `ifconfig` that the `eth0` and `lo` adapters are present but `eth1` isn't.  Did `ifconfig eth1 up` and it came up, but with only an ipv6 address.
 - Both adapters were configured for DHCP, but the virtualbox host-only DHCP server is disabled (see above).
 - Set up `eth1` with a static IP by adding this to `/etc/network/interfaces`:
@@ -77,7 +77,7 @@ broadcast 192.168.56.255
 vboxmanage startvm SomeVMName --type=headless
 ```
 
-### Set up firewall
+### Set Up the Firewall
 ``` bash
 ufw default deny
 ufw allow ssh
@@ -87,7 +87,7 @@ ufw enable
 ```
 
 
-### Add VirtualBox shared mount
+### Add the VirtualBox Shared Mount
 ``` bash
 mkdir /media/sf_shared_workspace
 ```
@@ -104,7 +104,8 @@ mount /media/sf_shared_workspace
 ```
 
 
-### Install Git (used by composer.phar, and to fetch the configuration scripts)
+### Install Git
+Git is used later by composer.phar, and also to fetch these configuration files.  You'll likely also use it to push and pull project code.
 ``` bash
 apt-get install git
 git config --global user.name "Your Name Here"
@@ -114,13 +115,14 @@ If you're using Github, it's likely you'll want to set up an SSH key for this ma
 https://help.github.com/articles/generating-ssh-keys
 
 
-### Fetch this documentation, including the config scripts:
+### Fetch This Documentation:
+This documentation includes useful configuration scripts:
 ``` bash
 cd ~
 git clone git://github.com/triplepoint/howto_dev_config.git
 ```
 
-### install nginx
+### Install Nginx
 - Fetch, make, and install:
 ``` bash
 cd ~
@@ -165,7 +167,7 @@ service nginx start
 ```
 
 
-### install php
+### Install PHP
 - Fetch, make, and install.  Note that the test command is optional, but good practice:
 ``` bash
 cd ~
@@ -195,7 +197,7 @@ cp /etc/php-fpm.conf.default /etc/php-fpm.conf
  - set the error log location to `/var/log/php-fpm/php-fpm.log`
  - changed the listen location: `listen = /tmp/php.socket`
 
-- Create the php-fpm log file:
+- Create the PHP-FPM log file:
 ``` bash
 mkdir /var/log/php-fpm
 ```
@@ -222,19 +224,19 @@ pecl install pecl_http apc-beta (answer with defaults)
  ```
 
 
-- start php-fpm:
+- start PHP-FPM:
 ``` bash
 service php-fpm start
 ```
 
 
-### set up development code symbolic link
+### Set Up the Web Root Symbolic Link
 ``` bash
 ln -s /media/sf_shared_workspace /var/www
 ```
 
 
-### MYSQL
+### MySQL
 - Install:
  DON'T DO THIS (because I'm not building from scratch just yet):
 ``` bash
@@ -282,18 +284,18 @@ Periodically it'll be necessary to upgrade this machine without rebuilding it.  
  ``` bash
  apt-get update; apt-get dist-upgrade;
  ```
-- php -- make clean and recompile as during the install above
-- pecl
+- PHP -- make clean and recompile as during the install above
+- PECL
  ``` bash
  pecl update-channels
  pecl upgrade
  ```
-- nginx -- make clean and recompile as during the install above
+- Nginx -- make clean and recompile as during the install above
 - Ruby Gem update for Compass and SASS:
  ``` bash 
  gem update
  ```  
-- YUI-compressor - redownload and overwrite the jar file, as during the install above
+- YUI-Compressor - redownload and overwrite the jar file, as during the install above
 
 Once all upgrades are complete, the various services will need to be restarted
 ``` bash
