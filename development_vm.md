@@ -103,6 +103,7 @@ shared_workspace     /media/sf_shared_workspace vboxsf     defaults,uid=33,gid=3
 mount /media/sf_shared_workspace
 ```
 
+
 ### Install Git (used by composer.phar, and to fetch the configuration scripts)
 ``` bash
 apt-get install git
@@ -111,6 +112,7 @@ git config --global user.email "your_email@youremail.com"
 ```
 If you're using Github, it's likely you'll want to set up an SSH key for this machine.  For more information, see:
 https://help.github.com/articles/generating-ssh-keys
+
 
 ### Fetch this documentation, including the config scripts:
 ``` bash
@@ -226,6 +228,12 @@ service php-fpm start
 ```
 
 
+### set up development code symbolic link
+``` bash
+ln -s /media/sf_shared_workspace /var/www
+```
+
+
 ### MYSQL
 - Install:
  DON'T DO THIS (because I'm not building from scratch just yet):
@@ -240,12 +248,6 @@ cd mysql-5.5.25a
  ``` bash
  apt-get install mysql-server-5.5  
  ```
-
-
-### set up development code symbolic link
-``` bash
-ln -s /media/sf_shared_workspace /var/www
-```
 
 
 ### Install Compass/Sass
