@@ -107,10 +107,11 @@ sudo mount /media/sf_shared_workspace
 ### install nginx
 - Fetch, make, and install:
 ``` bash
+cd ~
 sudo apt-get install libc6 libpcre3 libpcre3-dev libpcrecpp0 libssl0.9.8 libssl-dev zlib1g zlib1g-dev lsb-base
-wget http://nginx.org/download/nginx-1.2.2.tar.gz
-tar -xvf nginx-1.2.2.tar.gz
-cd nginx-1.2.2
+wget http://nginx.org/download/nginx-1.3.5.tar.gz
+tar -xvf nginx-1.3.5.tar.gz
+cd nginx-1.3.5
 ./configure --prefix=/usr --sbin-path=/usr/sbin --pid-path=/var/run/nginx.pid --conf-path=/etc/nginx/nginx.conf --error-log-path=/var/log/nginx/error.log --http-log-path=/var/log/nginx/access.log --user=www-data --group=www-data --with-http_ssl_module
 make
 sudo make install
@@ -145,23 +146,26 @@ sudo service nginx start
 
 
 ### install php
-- Fetch, make, and install:
+- Fetch, make, and install.  Note that the test command is optional, but good practice:
 ``` bash
+cd ~
 sudo apt-get install autoconf libxml2 libxml2-dev libcurl3 libcurl4-gnutls-dev libmagic-dev
-wget http://us3.php.net/get/php-5.4.5.tar.bz2/from/us2.php.net/mirror -O php-5.4.5.tar.bz2
-tar -xvf php-5.4.5.tar.bz2
-cd php-5.4.5
+wget http://us3.php.net/get/php-5.4.6.tar.bz2/from/us2.php.net/mirror -O php-5.4.6.tar.bz2
+tar -xvf php-5.4.6.tar.bz2
+cd php-5.4.6
 ./configure --prefix=/usr --sysconfdir=/etc --with-config-file-path=/etc --enable-fpm --with-fpm-user=www-data --with-fpm-group=www-data --enable-mbstring --with-mysqli
 make
+make test
 sudo make install
 ```
 
 - Copy the generated ini file to the config directory:
+NOTE - If this is a rebuild and not a fresh install, the better process may be to diff the two files and see if anything important has changed.
 ``` bash
 sudo cp php.ini-production /etc/php.ini
 ```
 
-- Copy over the PHP-FPM config file:
+- Copy over the PHP-FPM config file: 
 ``` bash
 sudo cp /etc/php-fpm.conf.default /etc/php-fpm.conf
 ```
@@ -243,6 +247,7 @@ sudo apt-get install default-jre
 
 - Fetch and install the `yui-compressor` jar file
 ``` bash
+cd ~
 sudo apt-get install unzip
 wget http://yui.zenfs.com/releases/yuicompressor/yuicompressor-2.4.7.zip
 unzip yuicompressor-2.4.7.zip
@@ -266,6 +271,11 @@ Periodically it'll be necessary to upgrade this machine without rebuilding it.  
  sudo apt-get update; sudo apt-get dist-upgrade;
  ```
 - php -- make clean and recompile as during the install above
+- pecl
+ ``` bash
+ sudo pecl update-channels
+ sudo pecl upgrade
+ ```
 - nginx -- make clean and recompile as during the install above
 - Ruby Gem update for Compass and SASS:
  ``` bash 
@@ -273,6 +283,12 @@ Periodically it'll be necessary to upgrade this machine without rebuilding it.  
  ```  
 - YUI-compressor - redownload and overwrite the jar file, as during the install above
 
+Once all upgrades are complete, the various services will need to be restarted
+``` bash
+sudo service mysql restart
+sudo service php-fpm restart
+sudo service nginx restart
+```
 
 # TODO
 - mysql config
