@@ -103,6 +103,20 @@ shared_workspace     /media/sf_shared_workspace vboxsf     defaults,uid=33,gid=3
 mount /media/sf_shared_workspace
 ```
 
+### Install Git (used by composer.phar, and to fetch the configuration scripts)
+``` bash
+apt-get install git
+git config --global user.name "Your Name Here"
+git config --global user.email "your_email@youremail.com"
+```
+If you're using Github, it's likely you'll want to set up an SSH key for this machine.  For more information, see:
+https://help.github.com/articles/generating-ssh-keys
+
+### Fetch this documentation, including the config scripts:
+``` bash
+cd ~
+git clone git://github.com/triplepoint/howto_dev_config.git
+```
 
 ### install nginx
 - Fetch, make, and install:
@@ -119,7 +133,7 @@ make install
 
 - Install the attached nginx-init script:
 ``` bash
-cp nginx-init /etc/init.d/nginx
+cp ~/howto_dev_config/nginx-init /etc/init.d/nginx
 chmod 755 /etc/init.d/nginx
 update-rc.d nginx defaults
 ```
@@ -129,12 +143,16 @@ update-rc.d nginx defaults
 mkdir /var/log/nginx
 ```
 
-- Install the nginx config files (these are specific to the sites I'm developing. TODO source nginx.conf and the sites-available directory from somewhere safe):
+- Install the generic nginx config files:
 ``` bash
 mkdir /etc/nginx/sites-available
 mkdir /etc/nginx/sites-enabled
-cp nginx.conf /etc/nginx/
-cp sites-available/* /etc/nginx/sites-available/*
+cp ~/howto_dev_config/nginx.conf /etc/nginx/
+```
+
+- Install the project-specific configuration files:
+``` bash
+cp ~/howto_dev_config/sites-available/* /etc/nginx/sites-available/*
 ln -s /etc/nginx/sites-available/catchall /etc/nginx/sites-enabled/catchall
 ln -s /etc/nginx/sites-available/groundhog /etc/nginx/sites-enabled/groundhog
 ```
@@ -255,14 +273,6 @@ mkdir /usr/share/yui-compressor
 cp yuicompressor-2.4.7/build/yuicompressor-2.4.7.jar /usr/share/yui-compressor/yui-compressor.jar
 ```
 
-### Install Git (used by composer.phar)
-``` bash
-apt-get install git
-git config --global user.name "Your Name Here"
-git config --global user.email "your_email@youremail.com"
-```
-If you're using Github, it's likely you'll want to set up an SSH key for this machine.  For more information, see:
-https://help.github.com/articles/generating-ssh-keys
 
 # UPDATING
 Periodically it'll be necessary to upgrade this machine without rebuilding it.  Here's how:
