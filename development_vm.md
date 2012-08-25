@@ -71,7 +71,7 @@ network 192.168.56.0
 broadcast 192.168.56.255
 ```
 
-- Reboot the machine and verify that `ifconfig` now shows `eth1` with the ip address chosen above.  Instead of rebooting, we could probably do `sudo service networking restart` but didn't test that.)
+- Reboot the machine and verify that `ifconfig` now shows `eth1` with the ip address chosen above.  Instead of rebooting, we could probably do `service networking restart` but didn't test that.)
 - At this point you should be able to ssh into the the guest from the host using the IP address chosen above (in my case, `192.168.56.11`).  On subsequent VM startups you should be able to start it headless with:
 ``` bash
 vboxmanage startvm SomeVMName --type=headless
@@ -79,17 +79,17 @@ vboxmanage startvm SomeVMName --type=headless
 
 ### Set up firewall
 ``` bash
-sudo ufw default deny
-sudo ufw allow ssh
-sudo ufw allow http
-sudo ufw allow 443
-sudo ufw enable
+ufw default deny
+ufw allow ssh
+ufw allow http
+ufw allow 443
+ufw enable
 ```
 
 
 ### Add VirtualBox shared mount
 ``` bash
-sudo mkdir /media/sf_shared_workspace
+mkdir /media/sf_shared_workspace
 ```
 
 - Configure the mount by adding to `/etc/fstab`:
@@ -100,7 +100,7 @@ shared_workspace     /media/sf_shared_workspace vboxsf     defaults,uid=33,gid=3
 
 - Mount the shared disk
 ``` bash
-sudo mount /media/sf_shared_workspace
+mount /media/sf_shared_workspace
 ```
 
 
@@ -108,31 +108,31 @@ sudo mount /media/sf_shared_workspace
 - Fetch, make, and install:
 ``` bash
 cd ~
-sudo apt-get install libc6 libpcre3 libpcre3-dev libpcrecpp0 libssl0.9.8 libssl-dev zlib1g zlib1g-dev lsb-base
+apt-get install libc6 libpcre3 libpcre3-dev libpcrecpp0 libssl0.9.8 libssl-dev zlib1g zlib1g-dev lsb-base
 wget http://nginx.org/download/nginx-1.3.5.tar.gz
 tar -xvf nginx-1.3.5.tar.gz
 cd nginx-1.3.5
 ./configure --prefix=/usr --sbin-path=/usr/sbin --pid-path=/var/run/nginx.pid --conf-path=/etc/nginx/nginx.conf --error-log-path=/var/log/nginx/error.log --http-log-path=/var/log/nginx/access.log --user=www-data --group=www-data --with-http_ssl_module
 make
-sudo make install
+make install
 ```
 
 - Install the init script (TODO I need to actually source this with wget from somewhere.)
 ``` bash
 cp nginx /etc/init.d/
-sudo chmod 755 /etc/init.d/nginx
-sudo update-rc.d nginx defaults
+chmod 755 /etc/init.d/nginx
+update-rc.d nginx defaults
 ```
 
 - Create the nginx default log directory
 ``` bash
-sudo mkdir /var/log/nginx
+mkdir /var/log/nginx
 ```
 
 - Install the nginx config files (these are specific to the sites I'm developing. TODO source nginx.conf and the sites-available directory from somewhere safe):
 ``` bash
-sudo mkdir /etc/nginx/sites-available
-sudo mkdir /etc/nginx/sites-enabled
+mkdir /etc/nginx/sites-available
+mkdir /etc/nginx/sites-enabled
 cp nginx.conf /etc/nginx/
 cp sites-available/* /etc/nginx/sites-available/*
 ln -s /etc/nginx/sites-available/catchall /etc/nginx/sites-enabled/catchall
@@ -141,7 +141,7 @@ ln -s /etc/nginx/sites-available/groundhog /etc/nginx/sites-enabled/groundhog
 
 - start nginx
 ``` bash
-sudo service nginx start
+service nginx start
 ```
 
 
@@ -149,25 +149,25 @@ sudo service nginx start
 - Fetch, make, and install.  Note that the test command is optional, but good practice:
 ``` bash
 cd ~
-sudo apt-get install autoconf libxml2 libxml2-dev libcurl3 libcurl4-gnutls-dev libmagic-dev
+apt-get install autoconf libxml2 libxml2-dev libcurl3 libcurl4-gnutls-dev libmagic-dev
 wget http://us3.php.net/get/php-5.4.6.tar.bz2/from/us2.php.net/mirror -O php-5.4.6.tar.bz2
 tar -xvf php-5.4.6.tar.bz2
 cd php-5.4.6
 ./configure --prefix=/usr --sysconfdir=/etc --with-config-file-path=/etc --enable-fpm --with-fpm-user=www-data --with-fpm-group=www-data --enable-mbstring --with-mysqli
 make
 make test
-sudo make install
+make install
 ```
 
 - Copy the generated ini file to the config directory:
 NOTE - If this is a rebuild and not a fresh install, the better process may be to diff the two files and see if anything important has changed.
 ``` bash
-sudo cp php.ini-production /etc/php.ini
+cp php.ini-production /etc/php.ini
 ```
 
 - Copy over the PHP-FPM config file: 
 ``` bash
-sudo cp /etc/php-fpm.conf.default /etc/php-fpm.conf
+cp /etc/php-fpm.conf.default /etc/php-fpm.conf
 ```
 
  Note that this file has been modified after it was copied:
@@ -177,20 +177,20 @@ sudo cp /etc/php-fpm.conf.default /etc/php-fpm.conf
 
 - Create the php-fpm log file:
 ``` bash
-sudo mkdir /var/log/php-fpm
+mkdir /var/log/php-fpm
 ```
 
 - Install the PHP init script:
 ``` bash
-sudo cp sapi/fpm/init.d.php-fpm /etc/init.d/php-fpm
-sudo chmod 755 /etc/init.d/php-fpm
-sudo update-rc.d php-fpm defaults
+cp sapi/fpm/init.d.php-fpm /etc/init.d/php-fpm
+chmod 755 /etc/init.d/php-fpm
+update-rc.d php-fpm defaults
 ```
 
 - Install the APC and HTTP extensions:
 ``` bash
-sudo pecl update-channels
-sudo pecl install pecl_http apc-beta (answer with defaults)
+pecl update-channels
+pecl install pecl_http apc-beta (answer with defaults)
 ```
 
  NOTE that `apc-beta` was necessary above to get APC version 3.1.11 (in beta right now) which includes fixes for PHP 5.4 compatability.  This may not be necessary down the road, so keep an eye on it.  The production package name is `apc`.
@@ -204,7 +204,7 @@ sudo pecl install pecl_http apc-beta (answer with defaults)
 
 - start php-fpm:
 ``` bash
-sudo service php-fpm start
+service php-fpm start
 ```
 
 
@@ -212,7 +212,7 @@ sudo service php-fpm start
 - Install:
  DON'T DO THIS (because I'm not building from scratch just yet):
 ``` bash
-sudo apt-get install cmake
+apt-get install cmake
 wget http://dev.mysql.com/get/Downloads/MySQL-5.5/mysql-5.5.25a.tar.gz/from/http://cdn.mysql.com/ -O mysql-5.5.25a.tar.gz
 tar -xvf mysql-5.5.25a.tar.gz
 cd mysql-5.5.25a
@@ -220,44 +220,44 @@ cd mysql-5.5.25a
 
  Instead do this: (because screw it, I'm cheating on this one and using `apt-get`.  Building MySQL from source looks like a pain in the ass with no gain):
  ``` bash
- sudo apt-get install mysql-server-5.5  
+ apt-get install mysql-server-5.5  
  ```
 
 
 ### set up development code symbolic link
 ``` bash
-sudo ln -s /media/sf_shared_workspace /var/www
+ln -s /media/sf_shared_workspace /var/www
 ```
 
 
 ### Install Compass/Sass
 ``` bash
-sudo apt-get install ruby1.9.3
-sudo gem update
-sudo gem install compass
-sudo ln -s /usr/local/bin/compass /usr/bin/compass
+apt-get install ruby1.9.3
+gem update
+gem install compass
+ln -s /usr/local/bin/compass /usr/bin/compass
 ```
 
 
 ### Install YUI Compressor
 - Install java runtime (required for yui compressor):
 ``` bash
-sudo apt-get install default-jre
+apt-get install default-jre
 ```
 
 - Fetch and install the `yui-compressor` jar file
 ``` bash
 cd ~
-sudo apt-get install unzip
+apt-get install unzip
 wget http://yui.zenfs.com/releases/yuicompressor/yuicompressor-2.4.7.zip
 unzip yuicompressor-2.4.7.zip
-sudo mkdir /usr/share/yui-compressor
-sudo cp yuicompressor-2.4.7/build/yuicompressor-2.4.7.jar /usr/share/yui-compressor/yui-compressor.jar
+mkdir /usr/share/yui-compressor
+cp yuicompressor-2.4.7/build/yuicompressor-2.4.7.jar /usr/share/yui-compressor/yui-compressor.jar
 ```
 
 ### Install Git (used by composer.phar)
 ``` bash
-sudo apt-get install git
+apt-get install git
 git config --global user.name "Your Name Here"
 git config --global user.email "your_email@youremail.com"
 ```
@@ -268,26 +268,26 @@ https://help.github.com/articles/generating-ssh-keys
 Periodically it'll be necessary to upgrade this machine without rebuilding it.  Here's how:
 - Apt Repository update (covers MySQL): 
  ``` bash
- sudo apt-get update; sudo apt-get dist-upgrade;
+ apt-get update; apt-get dist-upgrade;
  ```
 - php -- make clean and recompile as during the install above
 - pecl
  ``` bash
- sudo pecl update-channels
- sudo pecl upgrade
+ pecl update-channels
+ pecl upgrade
  ```
 - nginx -- make clean and recompile as during the install above
 - Ruby Gem update for Compass and SASS:
  ``` bash 
- sudo gem update
+ gem update
  ```  
 - YUI-compressor - redownload and overwrite the jar file, as during the install above
 
 Once all upgrades are complete, the various services will need to be restarted
 ``` bash
-sudo service mysql restart
-sudo service php-fpm restart
-sudo service nginx restart
+service mysql restart
+service php-fpm restart
+service nginx restart
 ```
 
 # TODO
