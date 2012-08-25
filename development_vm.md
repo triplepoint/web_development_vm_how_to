@@ -117,9 +117,9 @@ make
 make install
 ```
 
-- Install the init script (TODO I need to actually source this with wget from somewhere.)
+- Install the attached nginx-init script:
 ``` bash
-cp nginx /etc/init.d/
+cp nginx-init /etc/init.d/nginx
 chmod 755 /etc/init.d/nginx
 update-rc.d nginx defaults
 ```
