@@ -9,7 +9,7 @@ The basic features of this environment are:
 - [PHP 5.4.6](http://www.php.net/), compiled from source
  - FastCGI with [PHP-FPM](http://php-fpm.org/), including Unix socket configuration for talking to Nginx
  - [APC](http://php.net/manual/en/book.apc.php), built from [PECL](http://pecl.php.net/)
-- [Nginx 1.3.5](http://nginx.org/), compiled from Source, with the [SPDY][http://www.chromium.org/spdy] patch
+- [Nginx 1.3.5](http://nginx.org/), compiled from Source, with the [SPDY](http://www.chromium.org/spdy) patch
 - [MySQL 5.5](http://dev.mysql.com/doc/refman/5.5/en/), installed from Ubuntu's package repository
 - [SASS](http://sass-lang.com/) and [Compass](http://compass-style.org/), for developing CSS
 - [YUI Compressor](http://developer.yahoo.com/yui/compressor/), for compressing web assets
