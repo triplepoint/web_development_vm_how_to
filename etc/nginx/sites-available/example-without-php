@@ -1,14 +1,14 @@
 server {
     listen      80;
-    server_name honeymoon.jonathan-hanson.local honeymoon.jonathan-hanson.org;
+    server_name somesite.local somesite.com;
 
     charset off;
 
-    access_log  /var/log/nginx/honeymoon.access.log;
-    error_log   /var/log/nginx/honeymoon.error.log;
+    access_log  /var/log/nginx/somesite.access.log;
+    error_log   /var/log/nginx/somesite.error.log;
 
     location / {
-        root /var/www/honeymoon;
+        root /var/www/somesite;
         index index.html;
     }
 
@@ -18,13 +18,13 @@ server {
     #
     #error_page   500 502 503 504  /50x.html;
     #location = /50x.html {
-    #    root              /var/www/groundhog/www;
+    #    root              /var/www/somesite;
     #}
 
     # Images and static content is treated different
     #
     location ~* ^.+\.(jpg|jpeg|gif|css|png|js|ico|xml)$ {
-        root              /var/www/honeymoon;
+        root              /var/www/somesite;
         access_log        off;
         expires           30d;
     }
