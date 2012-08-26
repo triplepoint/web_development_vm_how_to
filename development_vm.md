@@ -334,11 +334,10 @@ service nginx restart
 # TODO
 - mysql config
 - phpmyadmin
-- SSL cert
 - IPv6?
 - on server errors, nginx just throws ugly 500 response
 - scriptify everything
-- project code git pull (this isn't actually necessary for VM dev machines, but I should research it for building in production)
+- project code git pull (this isn't actually necessary for VM dev machines, but I should document it for building in production)
 - Come up with the production server variant of all this (should be similar)
 
 
