@@ -152,18 +152,49 @@ mkdir /var/log/nginx
 mkdir /etc/nginx/sites-available
 mkdir /etc/nginx/sites-enabled
 cp ~/howto_dev_config/etc/nginx/nginx.conf /etc/nginx/
+cp ~/howto_dev_config/sites-available/* /etc/nginx/sites-available/*
+ln -s /etc/nginx/sites-available/default /etc/nginx/sites-enabled/default
 ```
 
 - Install the project-specific configuration files:
 ``` bash
-cp ~/howto_dev_config/sites-available/* /etc/nginx/sites-available/*
-ln -s /etc/nginx/sites-available/default /etc/nginx/sites-enabled/default
-ln -s /etc/nginx/sites-available/groundhog /etc/nginx/sites-enabled/groundhog
+ln -s /etc/nginx/sites-available/example /etc/nginx/sites-enabled/example
 ```
 
 - start nginx
 ``` bash
 service nginx start
+```
+
+
+### SSL Certificates
+For Development, its appropriate to have self-signed SSL certs.  Depending on your project details, you may need more than one cert.
+This is more of an example than an exact codeblock to repeat:
+``` bash
+mkdir ~/certwork
+cd ~/certwork
+openssl genrsa -des3 -out project_name.key 4096
+# Enter a password to protect this key
+openssl req -new -key project_name.key -out project_name.csr
+# Enter the password from the key above
+# Answer the questions appropriately (ex, US, California, San Francisco, No Company, No Org, local_server_name.local, email@email.com, '', '' )
+# Note to leave the password blank.
+openssl x509 -req -days 3650 -in project_name.csr -signkey project_name.key -out project_name.crt
+# Enter the password from the key above
+openssl rsa -in project_name.key -out project_name.key.insecure
+# Enter the password from the key above
+mv project_name.key project_name.key.secure
+mv project_name.key.insecure project_name.key
+chown root:root *
+chmod 400 *
+mkdir /etc/project_name
+mkdir /etc/project_name/certs
+cp project_name.crt /etc/project_name/certs/project_name.crt
+cp project_name.key /etc/project_name/certs/project_name.key
+``` 
+Be sure to set the cert and key locations in your project's Nginx config file (see above).  Restart Nginx once the file is edited:
+``` bash
+sudo service nginx restart
 ```
 
 
