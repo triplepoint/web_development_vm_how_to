@@ -68,7 +68,8 @@ server {
 # HTTPS Site
 ## Redirect requests without a subdomain to the www version of the site
 server {
-    listen      443;
+    # Note the 'spdy' statement needs to be removed if the SPDY patch wasn't compiled into Nginx
+    listen      443 ssl spdy;
     server_name some_domain_name.*;
 
     ssl                  on;
@@ -85,7 +86,8 @@ server {
 }
 
 server {
-    listen       443;
+    # Note the 'spdy' statement needs to be removed if the SPDY patch wasn't compiled into Nginx 
+    listen       443 ssl spdy;
     server_name  *.some_domain_name.local *.some_domain_name.com;
 
     charset off;

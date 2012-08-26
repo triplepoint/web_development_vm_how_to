@@ -6,10 +6,10 @@ The basic features of this environment are:
  - [Windows 7](http://windows.microsoft.com/en-US/windows7/products/home) Host (but don't let that turn you away in disgust, it matters very little)
  - Shared directory between the host and guest for code development
  - Firewall configured with [UFW](https://wiki.ubuntu.com/UncomplicatedFirewall?action=show&redirect=UbuntuFirewall)
-- [PHP 5.4.5](http://www.php.net/), compiled from source
+- [PHP 5.4.6](http://www.php.net/), compiled from source
  - FastCGI with [PHP-FPM](http://php-fpm.org/), including Unix socket configuration for talking to Nginx
  - [APC](http://php.net/manual/en/book.apc.php), built from [PECL](http://pecl.php.net/)
-- [Nginx 1.2.2](http://nginx.org/), compiled from Source
+- [Nginx 1.3.5](http://nginx.org/), compiled from Source, with the [SPDY][http://www.chromium.org/spdy] patch
 - [MySQL 5.5](http://dev.mysql.com/doc/refman/5.5/en/), installed from Ubuntu's package repository
 - [SASS](http://sass-lang.com/) and [Compass](http://compass-style.org/), for developing CSS
 - [YUI Compressor](http://developer.yahoo.com/yui/compressor/), for compressing web assets
@@ -130,6 +130,9 @@ apt-get install libc6 libpcre3 libpcre3-dev libpcrecpp0 libssl0.9.8 libssl-dev z
 wget http://nginx.org/download/nginx-1.3.5.tar.gz
 tar -xvf nginx-1.3.5.tar.gz
 cd nginx-1.3.5
+# Feel free to skip the wget and patch commands if you don't want to build in SPDY
+wget http://nginx.org/patches/spdy/patch.spdy.txt
+patch -p0 < patch.spdy.txt
 ./configure --prefix=/usr --sbin-path=/usr/sbin --pid-path=/var/run/nginx.pid --conf-path=/etc/nginx/nginx.conf --error-log-path=/var/log/nginx/error.log --http-log-path=/var/log/nginx/access.log --user=www-data --group=www-data --with-http_ssl_module
 make
 make install
