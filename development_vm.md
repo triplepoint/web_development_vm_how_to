@@ -156,9 +156,10 @@ cp ~/howto_dev_config/sites-available/* /etc/nginx/sites-available/*
 ln -s /etc/nginx/sites-available/default /etc/nginx/sites-enabled/default
 ```
 
-- Install the project-specific configuration files:
+- Install the project-specific configuration files.  Note that you'll probably want to copy and edit this file instead of using it directly:
 ``` bash
-ln -s /etc/nginx/sites-available/example /etc/nginx/sites-enabled/example
+cp /etc/nginx/sites-available/example /etc/nginx/sites-available/project_name
+ln -s /etc/nginx/sites-available/project_name /etc/nginx/sites-enabled/project_name
 ```
 
 - start nginx
