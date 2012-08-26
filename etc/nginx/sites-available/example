@@ -2,13 +2,13 @@
 ## Redirect requests without a subdomain to the www version of the site
 server {
     listen 80;
-    server_name jonathan-hanson.*;
+    server_name some_domain_name.*;
     return 301 $scheme://www.$host$uri;
 }
 
 server {
     listen       80;
-    server_name  *.jonathan-hanson.local *.jonathan-hanson.org;
+    server_name  *.some_domain_name.local *.some_domain_name.com;
 
     charset off;
 
@@ -20,7 +20,7 @@ server {
     }
 
     location @rewritephp {
-        root /var/www/groundhog/www;
+        root /path/to/project/web/root;
         rewrite ^(.*)$ /__main.php$1 last;
     }
 
@@ -30,13 +30,13 @@ server {
     #
     #error_page   500 502 503 504  /50x.html;
     #location = /50x.html {
-    #    root              /var/www/groundhog/www;
+    #    root              /path/to/project/web/root;
     #}
 
     # Images and static content is treated different
     #
     location ~* ^.+\.(jpg|jpeg|gif|css|png|js|ico|xml)$ {
-        root              /var/www/groundhog/www;
+        root              /path/to/project/web/root;
         access_log        off;
         expires           30d;
     }
@@ -45,7 +45,7 @@ server {
     # pass the PHP scripts to FastCGI server listening on a unix port
     #
     location ~ \.php {
-        root /var/www/groundhog/www;
+        root /path/to/project/web/root;
            
         # filter out arbitrary code execution (path crawling)
         location ~ \..*/.*\.php$ {return 404;}
@@ -69,13 +69,13 @@ server {
 ## Redirect requests without a subdomain to the www version of the site
 server {
     listen 443;
-    server_name jonathan-hanson.*;
+    server_name some_domain_name.*;
     return 301 $scheme://www.$host$uri;
 }
 
 server {
     listen       443;
-    server_name  *.jonathan-hanson.local *.jonathan-hanson.org;
+    server_name  *.some_domain_name.local *.some_domain_name.com;
 
     charset off;
 
@@ -83,8 +83,8 @@ server {
     error_log   /var/log/nginx/error.log;
 
     ssl                  on;
-    ssl_certificate      cert.pem;
-    ssl_certificate_key  cert.key;
+    ssl_certificate      /path/to/cert/cert.pem;
+    ssl_certificate_key  /path/to/cert/cert.key;
 
     ssl_session_timeout  5m;
 
@@ -97,7 +97,7 @@ server {
     }
 
     location @rewritephp {
-        root /var/www/groundhog/www;
+        root /path/to/project/web/root;
         rewrite ^(.*)$ /__main.php$1 last;
     }
 
@@ -107,13 +107,13 @@ server {
     #
     #error_page   500 502 503 504  /50x.html;
     #location = /50x.html {
-    #    root              /var/www/groundhog/www;
+    #    root              /path/to/project/web/root;
     #}
 
     # Images and static content is treated different
     #
     location ~* ^.+\.(jpg|jpeg|gif|css|png|js|ico|xml)$ {
-        root              /var/www/groundhog/www;
+        root              /path/to/project/web/root;
         access_log        off;
         expires           30d;
     }
@@ -122,7 +122,7 @@ server {
     # pass the PHP scripts to FastCGI server listening on a unix port
     #
     location ~ \.php {
-        root /var/www/groundhog/www;
+        root /path/to/project/web/root;
            
         # filter out arbitrary code execution (path crawling)
         location ~ \..*/.*\.php$ {return 404;}
