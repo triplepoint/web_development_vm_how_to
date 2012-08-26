@@ -179,8 +179,8 @@ openssl genrsa -des3 -out project_name.key 4096
 # Enter a password to protect this key
 openssl req -new -key project_name.key -out project_name.csr
 # Enter the password from the key above
-# Answer the questions appropriately (ex, US, California, San Francisco, No Company, No Org, local_server_name.local, email@email.com, '', '' )
-# Note that the common name needs to be the domain you intend to access (ie, local_server_name.local)
+# Answer the questions appropriately (ex, 'US', 'California', 'San Francisco', 'No Company', 'No Org', '*.local_server_name.local', 'email@email.com', '', '' )
+# Note that the common name should be the domain you intend to access (ie, '*.local_server_name.local')
 # Note to leave the password blank.
 openssl rsa -in project_name.key -out project_name.nginx.key
 # Enter the password from the key above
