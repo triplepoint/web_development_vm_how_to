@@ -67,11 +67,12 @@ server {
 
 # HTTPS Site
 ## Redirect requests without a subdomain to the www version of the site
-server {
-    listen 443;
-    server_name some_domain_name.*;
-    return 301 $scheme://www.$host$uri;
-}
+# NOTE: this actually doesn't work, because of the vagueries of SSL.  Maybe SNI is a legit way to solve this?
+#server {
+#    listen 443;
+#    server_name some_domain_name.*;
+#    return 301 $scheme://www.$host$uri;
+#}
 
 server {
     listen       443;
@@ -83,8 +84,8 @@ server {
     error_log   /var/log/nginx/error.log;
 
     ssl                  on;
-    ssl_certificate      /etc/project_name/certs/project_name.pem;
-    ssl_certificate_key  /etc/project_name/certs/project_name.key;
+    ssl_certificate      /etc/ssl/certs/project_name.nginx.crt;
+    ssl_certificate_key  /etc/ssl/private/project_name.nginx.key;
 
     ssl_session_timeout  5m;
 

@@ -170,7 +170,8 @@ service nginx start
 
 ### SSL Certificates
 For Development, its appropriate to have self-signed SSL certs.  Depending on your project details, you may need more than one cert.
-This is more of an example than an exact codeblock to repeat:
+This is more of an example than an exact codeblock to repeat (ref http://adayinthepit.com/2012/03/21/self-signed-ssl-certificate-nginx-and-rightscale/):
+
 ``` bash
 mkdir ~/certwork
 cd ~/certwork
@@ -179,19 +180,13 @@ openssl genrsa -des3 -out project_name.key 4096
 openssl req -new -key project_name.key -out project_name.csr
 # Enter the password from the key above
 # Answer the questions appropriately (ex, US, California, San Francisco, No Company, No Org, local_server_name.local, email@email.com, '', '' )
+# Note that the common name needs to be the domain you intend to access (ie, local_server_name.local)
 # Note to leave the password blank.
-openssl x509 -req -days 3650 -in project_name.csr -signkey project_name.key -out project_name.crt
+openssl rsa -in project_name.key -out project_name.nginx.key
 # Enter the password from the key above
-openssl rsa -in project_name.key -out project_name.key.insecure
-# Enter the password from the key above
-mv project_name.key project_name.key.secure
-mv project_name.key.insecure project_name.key
-chown root:root *
-chmod 400 *
-mkdir /etc/project_name
-mkdir /etc/project_name/certs
-cp project_name.crt /etc/project_name/certs/project_name.crt
-cp project_name.key /etc/project_name/certs/project_name.key
+openssl x509 -req -days 3650 -in project_name.csr -signkey project_name.nginx.key -out project_name.nginx.crt
+cp project_name.nginx.crt /etc/ssl/certs/
+cp project_name.nginx.key /etc/ssl/private/
 ``` 
 Be sure to set the cert and key locations in your project's Nginx config file (see above).  Restart Nginx once the file is edited:
 ``` bash
