@@ -1,5 +1,6 @@
 server {
     listen      [::]:80;
+    #listen      80; # Use this instead to turn off IPv6
     server_name somesite.local somesite.com;
 
     charset off;

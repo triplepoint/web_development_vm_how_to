@@ -1,5 +1,6 @@
 server {
     listen       [::]:80 default;
+    #listen      80 default; # Use this instead to turn off IPv6
     server_name  "";
 
     charset off;
