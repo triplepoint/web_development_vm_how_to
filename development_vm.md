@@ -133,7 +133,7 @@ cd nginx-1.3.5
 # Feel free to skip the wget and patch commands if you don't want to build in SPDY
 wget http://nginx.org/patches/spdy/patch.spdy.txt
 patch -p0 < patch.spdy.txt
-./configure --prefix=/usr --sbin-path=/usr/sbin --pid-path=/var/run/nginx.pid --conf-path=/etc/nginx/nginx.conf --error-log-path=/var/log/nginx/error.log --http-log-path=/var/log/nginx/access.log --user=www-data --group=www-data --with-http_ssl_module
+./configure --prefix=/usr --sbin-path=/usr/sbin --pid-path=/var/run/nginx.pid --conf-path=/etc/nginx/nginx.conf --error-log-path=/var/log/nginx/error.log --http-log-path=/var/log/nginx/access.log --user=www-data --group=www-data --with-http_ssl_module --with-ipv6
 make
 make install
 ```
@@ -311,20 +311,20 @@ cp yuicompressor-2.4.7/build/yuicompressor-2.4.7.jar /usr/share/yui-compressor/y
 # UPDATING
 Periodically it'll be necessary to upgrade this machine without rebuilding it.  Here's how:
 - Apt Repository update (covers MySQL): 
- ``` bash
- apt-get update; apt-get dist-upgrade;
- ```
+``` bash
+apt-get update; apt-get dist-upgrade;
+```
 - PHP -- make clean and recompile as during the install above
 - PECL
- ``` bash
- pecl update-channels
- pecl upgrade
- ```
+``` bash
+pecl update-channels
+pecl upgrade
+```
 - Nginx -- make clean and recompile as during the install above
 - Ruby Gem update for Compass and SASS:
- ``` bash 
- gem update
- ```  
+``` bash 
+gem update
+```  
 - YUI-Compressor - redownload and overwrite the jar file, as during the install above
 
 Once all upgrades are complete, the various services will need to be restarted
@@ -337,7 +337,6 @@ service nginx restart
 # TODO
 - mysql config
 - phpmyadmin
-- IPv6?
 - on server errors, nginx just throws ugly 500 response
 - scriptify everything
 - project code git pull (this isn't actually necessary for VM dev machines, but I should document it for building in production)
