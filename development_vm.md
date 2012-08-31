@@ -337,6 +337,7 @@ service nginx restart
 # TODO
 - mysql config
 - phpmyadmin
+- the eth1 interface doesn't have a static IPV6 address.  Need to research how to do that.
 - on server errors, nginx just throws ugly 500 response
 - scriptify everything
 - project code git pull (this isn't actually necessary for VM dev machines, but I should document it for building in production)
