@@ -50,6 +50,14 @@ vboxmanage startvm SomeNewVMName
 192.168.56.11          beer.jonathan-hanson.local
 192.168.56.11          gas.jonathan-hanson.local
 ```
+If you intend to use IPv6, find the IPv6 zone ID for the VirtualBox Host-Only network by doing the following and reading the 'IDx' column for the 'VirtualBox Host-Only Network':
+```
+netsh interface ipv6 show interfaces
+``` 
+Then, (let's say it was 37) in `C:\Windows\System32\drivers\etc\hosts` you can append the zone ID to the virtual host's IPv6 IP address (see below) and add lines like:
+```
+fe80::38:b%37         ipv6.jonathan-hanson.local
+```
 
 - At this point it might be worth while to create a backup of the guest's virtual disk to enable future cloning and rollbacks.  See the VirtualBox Manager for details on how to do this.
 
@@ -65,13 +73,17 @@ Until the network interfaces are set up correctly, you'll need to do this part f
 # The host-only virtualbox interface
 auto eth1
 iface eth1 inet static
-address 192.168.56.11
-netmask 255.255.255.0
-network 192.168.56.0
-broadcast 192.168.56.255
+    address 192.168.56.11
+    netmask 255.255.255.0
+    network 192.168.56.0
+    broadcast 192.168.56.255
+
+iface eth1 inet6 static
+    address fe80::0038:000B
+    netmask 64
 ```
 
-- Reboot the machine and verify that `ifconfig` now shows `eth1` with the ip address chosen above.  Instead of rebooting, we could probably do `service networking restart` but didn't test that.)
+- Reboot the machine and verify that `ifconfig` now shows `eth1` with the ip address chosen above.  
 - At this point you should be able to ssh into the the guest from the host using the IP address chosen above (in my case, `192.168.56.11`).  On subsequent VM startups you should be able to start it headless with:
 ``` bash
 vboxmanage startvm SomeVMName --type=headless
