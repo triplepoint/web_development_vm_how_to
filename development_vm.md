@@ -327,10 +327,12 @@ Periodically it'll be necessary to upgrade this machine without rebuilding it.  
 apt-get update; apt-get dist-upgrade;
 ```
 - PHP -- make clean and recompile as during the install above
-- PECL
+- PECL and PEAR
 ``` bash
 pecl update-channels
 pecl upgrade
+pear update-channels
+pear upgrade
 ```
 - Nginx -- make clean and recompile as during the install above
 - Ruby Gem update for Compass and SASS:
