@@ -3,14 +3,14 @@
 server {
     listen      [::]:80;
     #listen      80; # Use this instead to turn off IPv6
-    server_name some_domain_name.*;
+    server_name some_domain_name.*;  # CHANGE THIS
     return 301 $scheme://www.$host$uri;
 }
 
 server {
     listen       [::]:80;
     #listen      80; # Use this instead to turn off IPv6
-    server_name  *.some_domain_name.local *.some_domain_name.com;
+    server_name  *.some_domain_name.local *.some_domain_name.com;   # CHANGE THIS
 
     charset off;
 
@@ -23,7 +23,7 @@ server {
 
     location @rewritephp {
         root /path/to/project/web/root;
-        rewrite ^(.*)$ /__main.php$1 last;
+        rewrite ^(.*)$ /__main.php$1 last;    # CHANGE THIS, IF __main.php IS NOT THE DESIRED REWRITE TARGET
     }
 
     #error_page  404              /404.html;
@@ -73,11 +73,11 @@ server {
     # Note the 'spdy' statement needs to be removed if the SPDY patch wasn't compiled into Nginx
     listen      [::]:443 ssl spdy;
     #listen      443 ssl spdy; # Use this instead to turn off IPv6
-    server_name some_domain_name.*;
+    server_name some_domain_name.*; # CHANGE THIS
 
     ssl                  on;
-    ssl_certificate      /etc/ssl/certs/project_name.nginx.crt;
-    ssl_certificate_key  /etc/ssl/private/project_name.nginx.key;
+    ssl_certificate      /etc/ssl/certs/project_name.nginx.crt;    # CHANGE THIS
+    ssl_certificate_key  /etc/ssl/private/project_name.nginx.key;  # CHANGE THIS
 
     ssl_session_timeout  5m;
 
@@ -92,7 +92,7 @@ server {
     # Note the 'spdy' statement needs to be removed if the SPDY patch wasn't compiled into Nginx 
     listen       [::]:443 ssl spdy;
     #listen      443 ssl spdy; # Use this instead to turn off IPv6
-    server_name  *.some_domain_name.local *.some_domain_name.com;
+    server_name  *.some_domain_name.local *.some_domain_name.com;   # CHANGE THIS
 
     charset off;
 
@@ -100,8 +100,8 @@ server {
     error_log   /var/log/nginx/error.log;
 
     ssl                  on;
-    ssl_certificate      /etc/ssl/certs/project_name.nginx.crt;
-    ssl_certificate_key  /etc/ssl/private/project_name.nginx.key;
+    ssl_certificate      /etc/ssl/certs/project_name.nginx.crt;     # CHANGE THIS
+    ssl_certificate_key  /etc/ssl/private/project_name.nginx.key;   # CHANGE THIS
 
     ssl_session_timeout  5m;
 

@@ -1,12 +1,58 @@
 server {
     listen      [::]:80;
     #listen      80; # Use this instead to turn off IPv6
-    server_name somesite.local somesite.com;
+    server_name somesite.local somesite.com;     # CHANGE THIS
 
     charset off;
 
-    access_log  /var/log/nginx/somesite.access.log;
-    error_log   /var/log/nginx/somesite.error.log;
+    access_log  /var/log/nginx/somesite.access.log;   # CHANGE THIS
+    error_log   /var/log/nginx/somesite.error.log;    # CHANGE THIS
+
+    location / {
+        root /var/www/somesite;
+        index index.html;
+    }
+
+    #error_page  404              /404.html;
+
+    # redirect server error pages to the static page /50x.html
+    #
+    #error_page   500 502 503 504  /50x.html;
+    #location = /50x.html {
+    #    root              /var/www/somesite;
+    #}
+
+    # Images and static content is treated different
+    #
+    location ~* ^.+\.(jpg|jpeg|gif|css|png|js|ico|xml)$ {
+        root              /var/www/somesite;
+        access_log        off;
+        expires           30d;
+    }
+}
+
+
+# This can be removed if SSL isn't required
+server {
+    # Note the 'spdy' statement needs to be removed if the SPDY patch wasn't compiled into Nginx 
+    listen       [::]:443 ssl spdy;
+    #listen      443 ssl spdy; # Use this instead to turn off IPv6
+    server_name  somesite.local somesite.com;     # CHANGE THIS
+
+    charset off;
+
+    access_log  /var/log/nginx/somesite.access.log;                # CHANGE THIS
+    error_log   /var/log/nginx/somesite.error.log;                 # CHANGE THIS
+
+    ssl                  on;
+    ssl_certificate      /etc/ssl/certs/project_name.nginx.crt;     # CHANGE THIS
+    ssl_certificate_key  /etc/ssl/private/project_name.nginx.key;   # CHANGE THIS
+
+    ssl_session_timeout  5m;
+
+    ssl_protocols  SSLv2 SSLv3 TLSv1;
+    ssl_ciphers  HIGH:!aNULL:!MD5;
+    ssl_prefer_server_ciphers   on;
 
     location / {
         root /var/www/somesite;
