@@ -1,79 +1,13 @@
 # HTTP Site
 ## Redirect requests without a subdomain to the www version of the site
 server {
+    # Note the 'spdy' parameter needs to be removedfrom the ssl listeners if the SPDY patch wasn't compiled into Nginx
+    listen      80;
     listen      [::]:80;
-    #listen      80; # Use this instead to turn off IPv6
-    server_name some_domain_name.*;  # CHANGE THIS
-    return 301 $scheme://www.$host$uri;
-}
-
-server {
-    listen       [::]:80;
-    #listen      80; # Use this instead to turn off IPv6
-    server_name  *.some_domain_name.local *.some_domain_name.com;   # CHANGE THIS
-
-    charset off;
-
-    access_log  /var/log/nginx/access.log;
-    error_log   /var/log/nginx/error.log;
-
-    location / {
-        try_files $uri @rewritephp;
-    }
-
-    location @rewritephp {
-        root /path/to/project/web/root;
-        rewrite ^(.*)$ /__main.php$1 last;    # CHANGE THIS, IF __main.php IS NOT THE DESIRED REWRITE TARGET
-    }
-
-    #error_page  404              /404.html;
-
-    # redirect server error pages to the static page /50x.html
-    #
-    #error_page   500 502 503 504  /50x.html;
-    #location = /50x.html {
-    #    root              /path/to/project/web/root;
-    #}
-
-    # Images and static content is treated different
-    #
-    location ~* ^.+\.(jpg|jpeg|gif|css|png|js|ico|xml)$ {
-        root              /path/to/project/web/root;
-        access_log        off;
-        expires           30d;
-    }
-
-
-    # pass the PHP scripts to FastCGI server listening on a unix port
-    #
-    location ~ \.php {
-        root /path/to/project/web/root;
-           
-        # filter out arbitrary code execution (path crawling)
-        location ~ \..*/.*\.php$ {return 404;}
-
-        # Pull in the shared fast cgi parameters 
-        include /etc/nginx/fastcgi.conf;
-        include fastcgi_params;
-
-        # split the path info
-        fastcgi_split_path_info ^(.+\.php)(/.*)$;
-        fastcgi_param PATH_INFO $fastcgi_path_info;
-        fastcgi_param PATH_TRANSLATED $document_root$fastcgi_path_info;
-
-        # Pass the request to the open php-fpm socket
-        fastcgi_pass unix:/tmp/php.socket;
-    }
-}
-
-
-# HTTPS Site
-## Redirect requests without a subdomain to the www version of the site
-server {
-    # Note the 'spdy' statement needs to be removed if the SPDY patch wasn't compiled into Nginx
+    listen      443 ssl spdy;
     listen      [::]:443 ssl spdy;
-    #listen      443 ssl spdy; # Use this instead to turn off IPv6
-    server_name some_domain_name.*; # CHANGE THIS
+
+    server_name some_domain_name.*;  # CHANGE THIS
 
     ssl                  on;
     ssl_certificate      /etc/ssl/certs/project_name.nginx.crt;    # CHANGE THIS
@@ -89,9 +23,12 @@ server {
 }
 
 server {
-    # Note the 'spdy' statement needs to be removed if the SPDY patch wasn't compiled into Nginx 
-    listen       [::]:443 ssl spdy;
-    #listen      443 ssl spdy; # Use this instead to turn off IPv6
+    # Note the 'spdy' parameter needs to be removedfrom the ssl listeners if the SPDY patch wasn't compiled into Nginx
+    listen      80;
+    listen      [::]:80;
+    listen      443 ssl spdy;
+    listen      [::]:443 ssl spdy;
+
     server_name  *.some_domain_name.local *.some_domain_name.com;   # CHANGE THIS
 
     charset off;
@@ -100,8 +37,8 @@ server {
     error_log   /var/log/nginx/error.log;
 
     ssl                  on;
-    ssl_certificate      /etc/ssl/certs/project_name.nginx.crt;     # CHANGE THIS
-    ssl_certificate_key  /etc/ssl/private/project_name.nginx.key;   # CHANGE THIS
+    ssl_certificate      /etc/ssl/certs/project_name.nginx.crt;    # CHANGE THIS
+    ssl_certificate_key  /etc/ssl/private/project_name.nginx.key;  # CHANGE THIS
 
     ssl_session_timeout  5m;
 
@@ -115,7 +52,7 @@ server {
 
     location @rewritephp {
         root /path/to/project/web/root;
-        rewrite ^(.*)$ /__main.php$1 last;
+        rewrite ^(.*)$ /__main.php$1 last;    # CHANGE THIS, IF __main.php IS NOT THE DESIRED REWRITE TARGET
     }
 
     #error_page  404              /404.html;

@@ -1,6 +1,6 @@
 server {
-    listen       [::]:80 default ipv6only=off;
-    #listen      80 default; # Use this instead to turn off IPv6
+    listen       80 default;
+    listen       [::]:80 default;
     server_name  "";
 
     charset off;
