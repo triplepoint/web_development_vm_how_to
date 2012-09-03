@@ -25,7 +25,7 @@ server {
 
     # Images and static content is treated different
     #
-    location ~* ^.+\.(jpg|jpeg|gif|css|png|js|ico|xml)$ {
+    location ~* ^.+\.(jpg|jpeg|gif|css|png|js|ico|xml|svg)$ {
         root              /var/www;
         access_log        off;
         expires           30d;
