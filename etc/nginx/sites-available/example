@@ -1,7 +1,7 @@
 # HTTP Site
 ## Redirect requests without a subdomain to the www version of the site
 server {
-    # Note the 'spdy' parameter needs to be removedfrom the ssl listeners if the SPDY patch wasn't compiled into Nginx
+    # Note the 'spdy' parameter needs to be removed from the ssl listeners if the SPDY patch wasn't compiled into Nginx
     listen      80;
     listen      [::]:80;
     listen      443 ssl spdy;
@@ -23,7 +23,7 @@ server {
 }
 
 server {
-    # Note the 'spdy' parameter needs to be removedfrom the ssl listeners if the SPDY patch wasn't compiled into Nginx
+    # Note the 'spdy' parameter needs to be removed from the ssl listeners if the SPDY patch wasn't compiled into Nginx
     listen      80;
     listen      [::]:80;
     listen      443 ssl spdy;
