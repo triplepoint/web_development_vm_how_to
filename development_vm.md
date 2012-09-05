@@ -1,5 +1,5 @@
 # BUILD A NEW DEVELOPMENT VIRTUAL MACHINE 
-The goal here is to build a development virtual machine that can support PHP web development.  While I'm aiming to keep this as generally usable as possible, there are places where I install specific tools or configure them specifically to support my projects.  Be aware that there will need to be some improvization on your part along the way if you want this to work for you.
+The goal here is to build a development virtual machine that can support PHP web development.  While I'm aiming to keep this generally useful to anyone doing PHP web development, there are places where I install tools or make configuration choices that specifically support my projects.  Be aware that there will need to be some improvization on your part if you want this guide to work for you.
 
 The basic features of this environment are:
 - [Minimal Ubuntu 12.04 Server](https://help.ubuntu.com/community/Installation/MinimalCD) as a [VirtualBox](https://www.virtualbox.org/) guest
