@@ -22,7 +22,7 @@ server {
     ssl_prefer_server_ciphers   on;
 
     location / {
-        root /var/www/somesite;
+        root /var/www/somesite;                  # CHANGE THIS
         index index.html;
     }
 
@@ -32,13 +32,13 @@ server {
     #
     #error_page   500 502 503 504  /50x.html;
     #location = /50x.html {
-    #    root              /var/www/somesite;
-    #}
+    #    root              /var/www/somesite;          # CHANGE THIS
+    #} 
 
     # Images and static content is treated different
     #
     location ~* ^.+\.(jpg|jpeg|gif|css|png|js|ico|xml)$ {
-        root              /var/www/somesite;
+        root              /var/www/somesite;             # CHANGE THIS
         access_log        off;
         expires           30d;
     }

@@ -49,7 +49,7 @@ server {
     }
 
     location @rewritephp {
-        root /path/to/project/web/root;
+        root /path/to/project/web/root;       # CHANGE THIS
         rewrite ^(.*)$ /__main.php$1 last;    # CHANGE THIS, IF __main.php IS NOT THE DESIRED REWRITE TARGET
     }
 
@@ -74,7 +74,7 @@ server {
     # pass the PHP scripts to FastCGI server listening on a unix port
     #
     location ~ \.php {
-        root /path/to/project/web/root;
+        root /path/to/project/web/root;                         # CHANGE THIS
            
         # filter out arbitrary code execution (path crawling)
         location ~ \..*/.*\.php$ {return 404;}
