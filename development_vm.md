@@ -131,7 +131,7 @@ https://help.github.com/articles/generating-ssh-keys
 This documentation includes useful configuration scripts:
 ``` bash
 cd ~
-git clone git://github.com/triplepoint/howto_dev_config.git
+git clone git://github.com/triplepoint/web_development_vm_how_to.git
 ```
 
 ### Install Nginx
@@ -152,7 +152,7 @@ make install
 
 - Install the attached nginx-init script:
 ``` bash
-cp ~/howto_dev_config/etc/init.d/nginx-init /etc/init.d/nginx
+cp ~/web_development_vm_how_to/etc/init.d/nginx-init /etc/init.d/nginx
 chmod 755 /etc/init.d/nginx
 update-rc.d nginx defaults
 ```
@@ -166,8 +166,8 @@ mkdir /var/log/nginx
 ``` bash
 mkdir /etc/nginx/sites-available
 mkdir /etc/nginx/sites-enabled
-cp ~/howto_dev_config/etc/nginx/nginx.conf /etc/nginx/
-cp ~/howto_dev_config/sites-available/* /etc/nginx/sites-available/*
+cp ~/web_development_vm_how_to/etc/nginx/nginx.conf /etc/nginx/
+cp ~/web_development_vm_how_to/sites-available/* /etc/nginx/sites-available/*
 ln -s /etc/nginx/sites-available/default /etc/nginx/sites-enabled/default
 ```
 
