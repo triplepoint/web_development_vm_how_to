@@ -12,7 +12,6 @@ server {
     access_log  /var/log/nginx/somesite.access.log;   # CHANGE THIS
     error_log   /var/log/nginx/somesite.error.log;    # CHANGE THIS
 
-    ssl                  on;
     ssl_certificate      /etc/ssl/certs/project_name.nginx.crt;     # CHANGE THIS
     ssl_certificate_key  /etc/ssl/private/project_name.nginx.key;   # CHANGE THIS
 

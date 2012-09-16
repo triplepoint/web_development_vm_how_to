@@ -9,7 +9,6 @@ server {
 
     server_name some_domain_name.*;  # CHANGE THIS
 
-    ssl                  on;
     ssl_certificate      /etc/ssl/certs/project_name.nginx.crt;    # CHANGE THIS
     ssl_certificate_key  /etc/ssl/private/project_name.nginx.key;  # CHANGE THIS
 
@@ -36,7 +35,6 @@ server {
     access_log  /var/log/nginx/access.log;
     error_log   /var/log/nginx/error.log;
 
-    ssl                  on;
     ssl_certificate      /etc/ssl/certs/project_name.nginx.crt;    # CHANGE THIS
     ssl_certificate_key  /etc/ssl/private/project_name.nginx.key;  # CHANGE THIS
 
@@ -61,13 +59,13 @@ server {
     #
     #error_page   500 502 503 504  /50x.html;
     #location = /50x.html {
-    #    root              /path/to/project/web/root;
+    #    root              /path/to/project/web/root;       # CHANGE THIS
     #}
 
     # Images and static content is treated different
     #
     location ~* ^.+\.(jpg|jpeg|gif|css|png|js|ico|xml|svg)$ {
-        root              /path/to/project/web/root;
+        root              /path/to/project/web/root;        # CHANGE THIS
         access_log        off;
         expires           30d;
     }
