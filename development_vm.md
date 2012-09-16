@@ -167,6 +167,7 @@ mkdir /var/log/nginx
 mkdir /etc/nginx/sites-available
 mkdir /etc/nginx/sites-enabled
 cp ~/web_development_vm_how_to/etc/nginx/nginx.conf /etc/nginx/
+cp ~/web_development_vm_how_to/etc/nginx/sites-available/* /etc/nginx/sites-available
 ln -s /etc/nginx/sites-available/default /etc/nginx/sites-enabled/default
 ```
 
