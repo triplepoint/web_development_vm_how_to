@@ -6,10 +6,10 @@ The basic features of this environment are:
  - [Windows 7](http://windows.microsoft.com/en-US/windows7/products/home) Host (but don't let that turn you away in disgust, it matters very little)
  - Shared directory between the host and guest for code development
  - Firewall configured with [UFW](https://wiki.ubuntu.com/UncomplicatedFirewall?action=show&redirect=UbuntuFirewall)
-- [PHP 5.4.6](http://www.php.net/), compiled from source
+- [PHP 5.4.7](http://www.php.net/), compiled from source
  - FastCGI with [PHP-FPM](http://php-fpm.org/), including Unix socket configuration for talking to Nginx
  - [APC](http://php.net/manual/en/book.apc.php), built from [PECL](http://pecl.php.net/)
-- [Nginx 1.3.5](http://nginx.org/), compiled from Source, with the [SPDY](http://www.chromium.org/spdy) patch
+- [Nginx 1.3.6](http://nginx.org/), compiled from Source, with the [SPDY](http://www.chromium.org/spdy) patch
 - [MySQL 5.5](http://dev.mysql.com/doc/refman/5.5/en/), installed from Ubuntu's package repository
 - [SASS](http://sass-lang.com/) and [Compass](http://compass-style.org/), for developing CSS
 - [YUI Compressor](http://developer.yahoo.com/yui/compressor/), for compressing web assets
@@ -139,9 +139,9 @@ git clone git://github.com/triplepoint/web_development_vm_how_to.git
 ``` bash
 cd ~
 apt-get install libc6 libpcre3 libpcre3-dev libpcrecpp0 libssl0.9.8 libssl-dev zlib1g zlib1g-dev lsb-base
-wget http://nginx.org/download/nginx-1.3.5.tar.gz
-tar -xvf nginx-1.3.5.tar.gz
-cd nginx-1.3.5
+wget http://nginx.org/download/nginx-1.3.6.tar.gz
+tar -xvf nginx-1.3.6.tar.gz
+cd nginx-1.3.6
 # Feel free to skip the wget and patch commands if you don't want to build in SPDY
 wget http://nginx.org/patches/spdy/patch.spdy.txt
 patch -p0 < patch.spdy.txt
@@ -214,9 +214,9 @@ sudo service nginx restart
 ``` bash
 cd ~
 apt-get install autoconf libxml2 libxml2-dev libcurl3 libcurl4-gnutls-dev libmagic-dev
-wget http://us3.php.net/get/php-5.4.6.tar.bz2/from/us2.php.net/mirror -O php-5.4.6.tar.bz2
-tar -xvf php-5.4.6.tar.bz2
-cd php-5.4.6
+wget http://us3.php.net/get/php-5.4.7.tar.bz2/from/us2.php.net/mirror -O php-5.4.7.tar.bz2
+tar -xvf php-5.4.7.tar.bz2
+cd php-5.4.7
 ./configure --prefix=/usr --sysconfdir=/etc --with-config-file-path=/etc --enable-fpm --with-fpm-user=www-data --with-fpm-group=www-data --enable-mbstring --with-mysqli
 make
 make test
