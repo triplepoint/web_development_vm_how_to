@@ -217,7 +217,7 @@ apt-get install autoconf libxml2 libxml2-dev libcurl3 libcurl4-gnutls-dev libmag
 wget http://us3.php.net/get/php-5.4.7.tar.bz2/from/us2.php.net/mirror -O php-5.4.7.tar.bz2
 tar -xvf php-5.4.7.tar.bz2
 cd php-5.4.7
-./configure --prefix=/usr --sysconfdir=/etc --with-config-file-path=/etc --enable-fpm --with-fpm-user=www-data --with-fpm-group=www-data --enable-mbstring --with-mysqli
+./configure --prefix=/usr --sysconfdir=/etc --with-config-file-path=/etc --enable-fpm --with-fpm-user=www-data --with-fpm-group=www-data --enable-mbstring --with-mysqli --with-openssl
 make
 make test
 make install
