@@ -26,7 +26,7 @@ The basic features of this environment are:
         - IPv4 Address `192.168.56.1`
         - IPv4 Network Mask `255.255.255.0`
         - Disabled DHCP Server
-- Download the Ubuntu 12.04 server minimal ISO from [their download page][ubuntu_minimal]
+- Download the [Ubuntu 12.04 server minimal ISO][ubuntu_minimal]
 - Edit the [`create_new_vm.bat`][create_new_vm_bat] script attached to these instructions and supply reasonable configuration values.  
 - From the Windows CLI, run the [`create_new_vm.bat`][create_new_vm_bat] batch script with a chosen new Virtual Machine name to create the new virtual machine:
 
@@ -35,13 +35,13 @@ The basic features of this environment are:
     ```
     - This just sets up a new VM, disk, mounts the ubuntu iso and starts the VM
     - Two NICs, one set up for host-only the other one for NAT (see script for details)
-    - One shared directory, named `shared_workspace`, from `E:\Users\jhanson\shared_workspace`
+    - One shared directory, named `shared_workspace`, from `E:\Users\username\shared_workspace`
 - start the virtual machine with:
 
     ``` dos
     vboxmanage startvm SomeNewVMName
     ```
-- Follow all the onscreen Ubuntu setup, accepting defaults.  When it comes to selecting packages, select only the `OpenSSH server`.
+- Follow all the onscreen Ubuntu setup, accepting defaults.  When it comes to selecting packages, select only the `OpenSSH server`
 - Choose an IP address for the guest (I chose `192.168.56.11` below) and set up the Windows hosts file by editing `C:\Windows\System32\drivers\etc\hosts` and adding (note these domains are specific to my configuration):
 
     ```
@@ -87,7 +87,7 @@ Until the network interfaces are set up correctly, you'll need to do this part f
         address fe80::0038:000B
         netmask 64
     ```
-- Reboot the machine and verify that `ifconfig` now shows `eth1` with the ip address chosen above.  
+- Reboot the machine and verify that `ifconfig` now shows `eth1` with the ip address chosen above
 - At this point you should be able to ssh into the the guest from the host using the IP address chosen above (in my case, `192.168.56.11`).  On subsequent VM startups you should be able to start it headless with:
 
     ``` bash
@@ -108,10 +108,11 @@ ufw enable
 ### Add the VirtualBox Shared Mount
 We'll be editing code on the host machine and sharing it to the guest VM with a shared mount.
 
-``` bash
-mkdir /media/sf_shared_workspace
-```
+- Create the directory which will be the mount point for the share
 
+    ``` bash
+    mkdir /media/sf_shared_workspace
+    ```
 - Configure the mount by adding to `/etc/fstab`:
 
     ```
@@ -134,7 +135,7 @@ git config --global user.email "your_email@youremail.com"
 ```
 If you're using Github, it's likely you'll want to set up an SSH key for this machine.  For more information, see [Github's documentation on SSH keys][github_ssh].
 
-### Fetch This Documentation:
+### Fetch This Documentation
 This documentation includes useful configuration scripts, so we'll fetch it into the VM for easy access:
 
 ``` bash
@@ -148,12 +149,15 @@ git clone git://github.com/triplepoint/web_development_vm_how_to.git
     ``` bash
     cd ~
     apt-get install libc6 libpcre3 libpcre3-dev libpcrecpp0 libssl0.9.8 libssl-dev zlib1g zlib1g-dev lsb-base
+    
     wget http://nginx.org/download/nginx-1.3.6.tar.gz
     tar -xvf nginx-1.3.6.tar.gz
     cd nginx-1.3.6
+    
     # Feel free to skip the wget and patch commands if you don't want to build in SPDY
     wget http://nginx.org/patches/spdy/patch.spdy.txt
     patch -p0 < patch.spdy.txt
+    
     ./configure --prefix=/usr --sbin-path=/usr/sbin --pid-path=/var/run/nginx.pid --conf-path=/etc/nginx/nginx.conf --error-log-path=/var/log/nginx/error.log --http-log-path=/var/log/nginx/access.log --user=www-data --group=www-data --with-http_ssl_module --with-ipv6
     make
     make install
@@ -196,6 +200,7 @@ For Development, its appropriate to have self-signed SSL certs.  Depending on yo
 This is more of an example than an exact codeblock to be repeated. See [adayinthepit.com's article on self-signed SSL certificates][adayinthepit_ssl_certs]:
 
 - Generate the certificate files
+
     ``` bash
     mkdir ~/certwork
     cd ~/certwork
