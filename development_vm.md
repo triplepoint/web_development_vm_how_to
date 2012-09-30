@@ -1,4 +1,5 @@
 # BUILD A NEW DEVELOPMENT VIRTUAL MACHINE 
+## Introduction
 The goal here is to build a development virtual machine that can support PHP web development.  While I'm aiming to keep this generally useful to anyone doing PHP web development, there are places where I install tools or make configuration choices that specifically support my projects.  Be aware that there will need to be some improvization on your part if you want this guide to work for you.
 
 The basic features of this environment are:
@@ -15,7 +16,7 @@ The basic features of this environment are:
 - [SASS] and [Compass], for developing CSS
 - [YUI Compressor][yui_comp], for compressing web assets
 
-## ON THE HOST
+## On the Host
 ### Create the Guest
 - Install VirtualBox from their [download page][vbox_dl]
 - Configure the host-only network
@@ -64,7 +65,7 @@ The basic features of this environment are:
 - At this point it might be worth while to create a backup of the guest's virtual disk to enable future cloning and rollbacks.  See the [VirtualBox Media Manager][vbox_clone] for details on how to do this.
 
 
-## ON THE GUEST
+## On the Guest
 Until the network interfaces are set up correctly, you'll need to do this part from the VirtualBox guest directly (that is, not over SSH).
 
 ### Set Up the Network Interfaces
