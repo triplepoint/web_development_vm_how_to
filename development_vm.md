@@ -338,7 +338,7 @@ ln -s /usr/local/bin/compass /usr/bin/compass
     cp yuicompressor-2.4.7/build/yuicompressor-2.4.7.jar /usr/share/yui-compressor/yui-compressor.jar
     ```
 
-# UPDATING
+# Updating
 Periodically it'll be necessary to upgrade this machine without rebuilding it.  Here's how:
 - Apt Repository update (covers MySQL): 
 
@@ -370,18 +370,17 @@ service php-fpm restart
 service nginx restart
 ```
 
-# TODO
+# Todo
 - mysql config
-- phpmyadmin
-- the eth1 interface doesn't have a static IPV6 address.  Need to research how to do that.
+- phpmyadmin (this should probably live on a separate VM)
+- the `eth1` interface doesn't have a static IPV6 address.  Need to research how to do that.
 - look into an ssl cert for the default nginx config (not just per project)
 - on server errors, nginx just throws ugly 500 response
-- scriptify everything
-- project code git pull (this isn't actually necessary for VM dev machines, but I should document it for building in production)
+- scriptify everything (puppet, chef, vagrant?)
 - Come up with the production server variant of all this (should be similar)
 
 
-# NOTES
+# Notes and References
 - [Nginx configuration documentation][nginx_config_doc]
 - [How-to Forge article on PHP-FPM on Nginx][how_to_forge_phpfpm_nginx]
 
