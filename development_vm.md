@@ -8,7 +8,7 @@ The basic features of this environment are:
     - [Windows 7][win7] Host (but don't let that turn you away in disgust, it matters very little)
     - Shared directory between the host and guest for code development
     - Firewall configured with [UFW]
-- [PHP 5.4.7][php], compiled from source
+- [PHP 5.4.8][php], compiled from source
     - FastCGI with [PHP-FPM], including Unix socket configuration for talking to [Nginx]
     - [APC], built from [PECL]
 - [Nginx 1.3.6][nginx], compiled from Source, with the [SPDY] patch
@@ -230,10 +230,10 @@ This is more of an example than an exact codeblock to be repeated. See [adayinth
     ``` bash
     cd ~
     apt-get install autoconf libxml2 libxml2-dev libcurl3 libcurl4-gnutls-dev libmagic-dev
-    wget http://us3.php.net/get/php-5.4.7.tar.bz2/from/us2.php.net/mirror -O php-5.4.7.tar.bz2
-    tar -xvf php-5.4.7.tar.bz2
-    cd php-5.4.7
-    ./configure --prefix=/usr --sysconfdir=/etc --with-config-file-path=/etc --enable-fpm --with-fpm-user=www-data --with-fpm-group=www-data --enable-mbstring --with-mysqli --with-openssl
+    wget http://us3.php.net/get/php-5.4.8.tar.bz2/from/us2.php.net/mirror -O php-5.4.8.tar.bz2
+    tar -xvf php-5.4.8.tar.bz2
+    cd php-5.4.8
+    ./configure --prefix=/usr --sysconfdir=/etc --with-config-file-path=/etc --enable-fpm --with-fpm-user=www-data --with-fpm-group=www-data --enable-mbstring --with-mysqli --with-openssl --with-zlib
     make
     make test
     make install
