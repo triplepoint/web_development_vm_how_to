@@ -271,10 +271,11 @@ This is more of an example than an exact codeblock to be repeated. See [adayinth
 
     ``` bash
     pecl update-channels
-    pecl install pecl_http apc-beta (answer with defaults)
+    # when prompted, answer with defaults
+    pecl install pecl_http apc-beta 
     ```
 
-    *NOTE* that `apc-beta` was necessary above to get APC version 3.1.11 (in beta right now) which includes fixes for PHP 5.4 compatability.  This may not be necessary down the road, so keep an eye on it.  The production package name is `apc`.
+    *NOTE* that `apc-beta` was necessary above to get APC version 3.1.11+ (in beta right now) which includes fixes for PHP 5.4 compatability.  This may not be necessary down the road, so keep an eye on it.  The production package name is `apc`.
 
     append to `/etc/php.ini`:
 
