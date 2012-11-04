@@ -267,12 +267,12 @@ This is more of an example than an exact codeblock to be repeated. See [adayinth
     chmod 755 /etc/init.d/php-fpm
     update-rc.d php-fpm defaults
     ```
-- Install the APC and HTTP extensions
+- Install the PECL extensions: APC, HTTP, XDebug
 
     ``` bash
     pecl update-channels
     # when prompted, answer with defaults
-    pecl install pecl_http apc-beta 
+    pecl install pecl_http apc-beta xdebug
     ```
 
     *NOTE* that `apc-beta` was necessary above to get APC version 3.1.11+ (in beta right now) which includes fixes for PHP 5.4 compatability.  This may not be necessary down the road, so keep an eye on it.  The production package name is `apc`.
@@ -282,6 +282,7 @@ This is more of an example than an exact codeblock to be repeated. See [adayinth
     ```
     extension=http.so
     extension=apc.so
+    zend_extension="/usr/lib/php/extensions/no-debug-non-zts-20100525/xdebug.so"
     ```
 - start PHP-FPM
 
