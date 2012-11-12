@@ -41,7 +41,7 @@ firewall :
 	ufw enable
     
 nginx :
-	apt-get update && apt-get install libc6 libpcre3 libpcre3-dev libpcrecpp0 libssl0.9.8 libssl-dev zlib1g zlib1g-dev lsb-base
+	apt-get update && apt-get install -y libc6 libpcre3 libpcre3-dev libpcrecpp0 libssl0.9.8 libssl-dev zlib1g zlib1g-dev lsb-base
 	
 	wget http://nginx.org/download/nginx-$(NGINX_VERSION).tar.gz
 	tar -xvf nginx-$(NGINX_VERSION).tar.gz
@@ -90,7 +90,7 @@ self_signed_cert :
 	#cp project_name.nginx.key /etc/ssl/private/
 
 php :
-	apt-get update && apt-get install autoconf libxml2 libxml2-dev libcurl3 libcurl4-gnutls-dev libmagic-dev
+	apt-get update && apt-get install -y autoconf libxml2 libxml2-dev libcurl3 libcurl4-gnutls-dev libmagic-dev
 	
 	wget http://us3.php.net/get/php-$(PHP_VERSION).tar.bz2/from/us2.php.net/mirror -O $(PHP_VERSION).tar.bz2
 	tar -xvf $(PHP_VERSION).tar.bz2
@@ -128,17 +128,17 @@ php :
 	ln -s /vagrant_development /var/www
 
 mysql :
-	apt-get update && apt-get install mysql-server-5.5
+	apt-get update && apt-get install -y mysql-server-5.5
 
 
 compass :
-	apt-get update && apt-get install ruby1.9.3
+	apt-get update && apt-get install -y ruby1.9.3
 	gem update && gem install compass
 	ln -s /usr/local/bin/compass /usr/bin/compass
 
 
 yui_compressor :
-	apt-get update && apt-get install unzip default-jre
+	apt-get update && apt-get install -y unzip default-jre
 	wget http://yui.zenfs.com/releases/yuicompressor/yuicompressor-2.4.7.zip
 	unzip yuicompressor-2.4.7.zip
 	mkdir /usr/share/yui-compressor
