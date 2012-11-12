@@ -8,6 +8,8 @@
 SHELL                 := /usr/bin/env bash
 
 ### Git configuration
+### NOTE: these values configure git's global user attributes,
+### and should probably be set to something more useful for you.
 GIT_USER_FULL_NAME     = "Jonathan Hanson"
 GIT_USER_EMAIL_ADDRESS = "jonathan@jonathan-hanson.org"
 
@@ -19,7 +21,7 @@ PHP_VERSION = 5.4.8
 
 
 
-list_makes :
+list :
 	@echo "This makefile is capable of building multiple versions of a the web development server.  Please"
 	@echo "choose one by running \`make <type>\` with one of the types listed below."
 	@echo
@@ -27,7 +29,9 @@ list_makes :
 	@echo "    development_server"
 	@echo
 
-development_server : firewall config_git nginx self_signed_cert php mysql compass yui_compressor
+development_server : firewall nginx self_signed_cert php mysql compass yui_compressor config_git
+    
+    
     
 firewall :
 	ufw default deny
@@ -35,11 +39,6 @@ firewall :
 	ufw allow http
 	ufw allow 443
 	ufw enable
-    
-config_git :
-	git config --global user.name $(GIT_USER_FULL_NAME)
-	git config --global user.email $(GIT_USER_EMAIL_ADDRESS)
-    
     
 nginx :
 	apt-get update && apt-get install libc6 libpcre3 libpcre3-dev libpcrecpp0 libssl0.9.8 libssl-dev zlib1g zlib1g-dev lsb-base
@@ -145,4 +144,7 @@ yui_compressor :
 	mkdir /usr/share/yui-compressor
 	cp yuicompressor-2.4.7/build/yuicompressor-2.4.7.jar /usr/share/yui-compressor/yui-compressor.jar
 
-	
+
+config_git :
+	git config --global user.name $(GIT_USER_FULL_NAME)
+	git config --global user.email $(GIT_USER_EMAIL_ADDRESS)

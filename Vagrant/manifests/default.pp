@@ -1,7 +1,13 @@
+###
+# This Puppet manifest clones the PHP server
+# configuration file from github and then executes
+# the makefile contained in that repository in order
+# to build the development server.
+#
+###
 
 $how_to_git_user_name = 'triplepoint'
 $how_to_git_repo_name = 'web_development_vm_how_to'
-
 
 $how_to_git_url       = "git://github.com/${how_to_git_user_name}/${how_to_git_repo_name}.git"
 
@@ -14,7 +20,7 @@ package { 'git-core':
 }
 
 exec { "/usr/bin/git clone ${how_to_git_url}":
-    cwd     => "/usr/src/",
+    cwd     => '/usr/src/',
     creates => "/usr/src/${how_to_git_repo_name}",
     require => Package['git-core']
 }
