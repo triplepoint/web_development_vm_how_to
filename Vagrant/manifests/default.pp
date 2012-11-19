@@ -1,6 +1,6 @@
 ###
 # This Puppet manifest clones the PHP server
-# configuration file from github and then executes
+# configuration files from github and then executes
 # the makefile contained in that repository in order
 # to build the development server.
 #

@@ -2,6 +2,14 @@
 # This makefile more or less automates the procedures set out at
 # https://github.com/triplepoint/web_development_vm_how_to
 #
+# TODO:
+# - nginx spdy patch is broke for some reason
+# - nginx sites-available files are not properly organized
+# - self-signed cert isn't being done at all
+# - php pecl extensions aren't being done (because of interactive ui stuff)
+# - my project-specific stuff isn't being done
+# - mysql isn't installing properly because of weird repository issues
+# - the instruction-book manual markdown file probably needs to be revised to be more in line with this makefile
 ###
 
 ### Global configuration
