@@ -3,11 +3,8 @@
 # https://github.com/triplepoint/web_development_vm_how_to
 #
 # TODO:
-# - nginx sites-available files are not properly organized
-# - my project-specific stuff isn't being done
 # - self-signed cert isn't being done at all
 # - mysql install wants input for the root password
-# - nginx spdy patch is broke for some reason
 # - the instruction-book manual markdown file probably needs to be revised to be more in line with this makefile
 ###
 
@@ -66,8 +63,8 @@ nginx :
 	# \
 	cd nginx-$(NGINX_VERSION) && \
 	# \
-	#wget http://nginx.org/patches/spdy/patch.spdy.txt && \
-	#patch -p0 < patch.spdy.txt && \
+	wget http://nginx.org/patches/spdy/patch.spdy.txt && \
+	patch -p0 < patch.spdy.txt && \
 	# \
 	./configure --prefix=/usr --sbin-path=/usr/sbin --pid-path=/var/run/nginx.pid --conf-path=/etc/nginx/nginx.conf --error-log-path=/var/log/nginx/error.log --http-log-path=/var/log/nginx/access.log --user=www-data --group=www-data --with-http_ssl_module --with-ipv6  && \
 	$(MAKE) && \
