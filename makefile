@@ -45,7 +45,7 @@ development_server : package_update firewall nginx self_signed_cert php mysql co
 
 
 package_update :
-	apt-get update && apt-get -y upgrade
+	apt-get update
 
 
 firewall :
