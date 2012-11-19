@@ -7,8 +7,8 @@
 # - nginx sites-available files are not properly organized
 # - self-signed cert isn't being done at all
 # - php pecl extensions aren't being done (because of interactive ui stuff)
-# - my project-specific stuff isn't being done
 # - mysql install wants input for the root password
+# - my project-specific stuff isn't being done
 # - the instruction-book manual markdown file probably needs to be revised to be more in line with this makefile
 ###
 
@@ -54,7 +54,7 @@ firewall :
 	ufw allow ssh
 	ufw allow http
 	ufw allow 443
-	ufw enable
+	ufw --force enable
 
 
 nginx :
