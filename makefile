@@ -3,11 +3,11 @@
 # https://github.com/triplepoint/web_development_vm_how_to
 #
 # TODO:
-# - nginx spdy patch is broke for some reason
 # - nginx sites-available files are not properly organized
+# - my project-specific stuff isn't being done
 # - self-signed cert isn't being done at all
 # - mysql install wants input for the root password
-# - my project-specific stuff isn't being done
+# - nginx spdy patch is broke for some reason
 # - the instruction-book manual markdown file probably needs to be revised to be more in line with this makefile
 ###
 
