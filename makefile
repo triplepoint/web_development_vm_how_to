@@ -3,7 +3,6 @@
 # https://github.com/triplepoint/web_development_vm_how_to
 #
 # TODO:
-# - mysql install wants input for the root password
 # - the instruction-book manual markdown file probably needs to be revised to be more in line with this makefile
 ###
 
@@ -83,9 +82,6 @@ nginx :
 	cp $(TOOL_DIR)/etc/nginx/sites-available/* /etc/nginx/sites-available
 	ln -s /etc/nginx/sites-available/default /etc/nginx/sites-enabled/default
 
-	#cp /etc/nginx/sites-available/example /etc/nginx/sites-available/project_name && \
-	#ln -s /etc/nginx/sites-available/project_name /etc/nginx/sites-enabled/project_name && \
-
 	service nginx start
 
 
@@ -130,7 +126,7 @@ php :
 
 
 mysql :
-	apt-get install -y mysql-server-5.5
+	DEBIAN_FRONTEND=noninteractive apt-get install -y mysql-server-5.5
 
 
 compass :
