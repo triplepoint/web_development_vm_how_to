@@ -3,7 +3,6 @@
 # https://github.com/triplepoint/web_development_vm_how_to
 #
 # TODO:
-# - self-signed cert isn't being done at all
 # - mysql install wants input for the root password
 # - the instruction-book manual markdown file probably needs to be revised to be more in line with this makefile
 ###
@@ -38,7 +37,7 @@ target-list :
 	@echo
 
 
-development_server : package_update firewall nginx self_signed_cert php mysql compass yui_compressor config_git
+development_server : package_update firewall nginx php mysql compass yui_compressor config_git
 
 
 package_update :
@@ -88,24 +87,6 @@ nginx :
 	#ln -s /etc/nginx/sites-available/project_name /etc/nginx/sites-enabled/project_name && \
 
 	service nginx start
-
-
-self_signed_cert :
-	mkdir -p $(WORKING_DIR) && cd $(WORKING_DIR) && \
-	#openssl genrsa -des3 -out project_name.key 4096 && \
-	## Enter a password to protect this key \
-	#openssl req -new -key project_name.key -out project_name.csr && \
-	## Enter the password from the key above \
-	## Answer the questions appropriately (ex, 'US', 'California', 'San Francisco', 'No Company', 'No Org', '*.local_server_name.local', 'email@email.com', '', '' ) \
-	## Note that the common name should be the domain you intend to access (ie, '*.local_server_name.local') \
-	## Note to leave the password blank. \
-	#openssl rsa -in project_name.key -out project_name.nginx.key && \
-	## Enter the password from the key above \
-	#openssl x509 -req -days 3650 -in project_name.csr -signkey project_name.nginx.key -out project_name.nginx.crt && \
-	#cp project_name.nginx.crt /etc/ssl/certs/ && \
-	#cp project_name.nginx.key /etc/ssl/private/ && \
-	# \
-	rm -rf $(WORKING_DIR)
 
 
 php :
