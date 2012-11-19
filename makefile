@@ -8,13 +8,13 @@
 # - self-signed cert isn't being done at all
 # - php pecl extensions aren't being done (because of interactive ui stuff)
 # - my project-specific stuff isn't being done
-# - mysql isn't installing properly because of weird repository issues
+# - mysql install wants input for the root password
 # - the instruction-book manual markdown file probably needs to be revised to be more in line with this makefile
 ###
 
 ### Global configuration
 SHELL := /usr/bin/env bash
-WORKING_DIR = "/tmp/vagrant_make"
+WORKING_DIR = "/tmp/makework"
 TOOL_DIR = $(CURDIR)
 
 ### Git configuration
@@ -42,7 +42,11 @@ target-list :
 	@echo
 
 
-development_server : firewall nginx self_signed_cert php mysql compass yui_compressor config_git
+development_server : package_update firewall nginx self_signed_cert php mysql compass yui_compressor config_git
+
+
+package_update :
+	apt-get update && apt-get upgrade
 
 
 firewall :
@@ -54,7 +58,7 @@ firewall :
 
 
 nginx :
-	apt-get update && apt-get install -y libc6 libpcre3 libpcre3-dev libpcrecpp0 libssl0.9.8 libssl-dev zlib1g zlib1g-dev lsb-base
+	apt-get install -y libc6 libpcre3 libpcre3-dev libpcrecpp0 libssl0.9.8 libssl-dev zlib1g zlib1g-dev lsb-base
 
 	mkdir -p $(WORKING_DIR) && cd $(WORKING_DIR) && \
 	# \
@@ -109,7 +113,7 @@ self_signed_cert :
 
 
 php :
-	apt-get update && apt-get install -y autoconf libxml2 libxml2-dev libcurl3 libcurl4-gnutls-dev libmagic-dev
+	apt-get install -y autoconf libxml2 libxml2-dev libcurl3 libcurl4-gnutls-dev libmagic-dev
 
 	mkdir -p $(WORKING_DIR) && cd $(WORKING_DIR) && \
 	# \
@@ -149,17 +153,17 @@ php :
 
 
 mysql :
-	apt-get update && apt-get install -y mysql-server-5.5
+	apt-get install -y mysql-server-5.5
 
 
 compass :
-	apt-get update && apt-get install -y ruby
+	apt-get install -y ruby
 	gem install compass
 	ln -s /usr/local/bin/compass /usr/bin/compass
 
 
 yui_compressor :
-	apt-get update && apt-get install -y unzip default-jre
+	apt-get install -y unzip default-jre
 
 	mkdir -p $(WORKING_DIR) && cd $(WORKING_DIR) && \
 	# \
