@@ -6,7 +6,6 @@
 # - nginx spdy patch is broke for some reason
 # - nginx sites-available files are not properly organized
 # - self-signed cert isn't being done at all
-# - php pecl extensions aren't being done (because of interactive ui stuff)
 # - mysql install wants input for the root password
 # - my project-specific stuff isn't being done
 # - the instruction-book manual markdown file probably needs to be revised to be more in line with this makefile
@@ -141,11 +140,11 @@ php :
 
 	mkdir -p /var/log/php-fpm
 
-	#pecl update-channels
-	#pecl install pecl_http apc-beta xdebug
-	#echo 'extension=http.so' >> /etc/php.ini
-	#echo 'extension=apc.so' >> /etc/php.ini
-	#echo 'zend_extension="/usr/lib/php/extensions/no-debug-non-zts-20100525/xdebug.so"' >> /etc/php.ini
+	pecl update-channels
+	printf "\n" | pecl install pecl_http apc-beta xdebug
+	echo 'extension=http.so' >> /etc/php.ini
+	echo 'extension=apc.so' >> /etc/php.ini
+	echo 'zend_extension="/usr/lib/php/extensions/no-debug-non-zts-20100525/xdebug.so"' >> /etc/php.ini
 
 	service php-fpm start
 
