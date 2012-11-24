@@ -72,8 +72,6 @@ www_directory_symlink :
 
 git :
 	apt-get install -y git-core
-	git config --global user.name $(GIT_USER_FULL_NAME)
-	git config --global user.email $(GIT_USER_EMAIL_ADDRESS)
 
 
 nginx :
