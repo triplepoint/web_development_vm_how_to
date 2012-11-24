@@ -127,7 +127,7 @@ php :
 	service php-fpm start
 
 
-php_www_directory_symlink
+php_www_directory_symlink :
 	ln -s /vagrant_development /var/www
 
 
