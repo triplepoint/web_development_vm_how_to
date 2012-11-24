@@ -9,7 +9,7 @@
 
 ### Global configuration
 SHELL := /usr/bin/env bash
-WORKING_DIR = "/tmp/makework"
+WORKING_DIR = /tmp/makework
 TOOL_DIR = $(CURDIR)
 
 ### Git configuration
@@ -25,7 +25,7 @@ NGINX_VERSION = 1.3.8
 PHP_VERSION = 5.4.9
 
 ### Symlink target for /var/www
-WWW_DIRECTORY_SYMLINK_TARGET = "/vagrant_development"
+WWW_DIRECTORY_SYMLINK_TARGET = /vagrant_development
 
 ### YUI Compressor
 YUI_COMPRESSOR_VERSION = 2.4.7
@@ -49,6 +49,9 @@ development_server : package_update firewall www_directory_symlink git nginx ngi
 
 
 production_server : package_update firewall git nginx php mysql
+
+
+###############################################################
 
 
 package_update :
@@ -153,7 +156,7 @@ php :
 
 mysql :
 	DEBIAN_FRONTEND=noninteractive apt-get install -y mysql-server-5.5
-	# TODO - security configuration for mysql
+	# TODO - access configuration for mysql
 
 
 yui_compressor :

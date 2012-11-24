@@ -1,4 +1,4 @@
-# BUILD A NEW DEVELOPMENT VIRTUAL MACHINE 
+# BUILD A NEW DEVELOPMENT VIRTUAL MACHINE
 ## Introduction
 The goal here is to build a development virtual machine that can support PHP web development.  While I'm aiming to keep this generally useful to anyone doing PHP web development, there are places where I install tools or make configuration choices that specifically support my projects.  Be aware that there will need to be some improvization on your part if you want this guide to work for you.
 
@@ -28,11 +28,11 @@ The basic features of this environment are:
         - IPv4 Network Mask `255.255.255.0`
         - Disabled DHCP Server
 - Download the [Ubuntu 12.04 server minimal ISO][ubuntu_minimal]
-- Edit the [`create_new_vm.bat`][create_new_vm_bat] script attached to these instructions and supply reasonable configuration values.  
+- Edit the [`create_new_vm.bat`][create_new_vm_bat] script attached to these instructions and supply reasonable configuration values.
 - From the Windows CLI, run the [`create_new_vm.bat`][create_new_vm_bat] batch script with a chosen new Virtual Machine name to create the new virtual machine:
 
     ``` dos
-    create_new_vm.bat SomeNewVMName                   
+    create_new_vm.bat SomeNewVMName
     ```
     - This just sets up a new VM, disk, mounts the ubuntu iso and starts the VM
     - Two NICs, one set up for host-only the other one for NAT (see script for details)
@@ -56,7 +56,7 @@ The basic features of this environment are:
 
     ``` dos
     netsh interface ipv6 show interfaces
-    ``` 
+    ```
     Then, (let's say it was 37) in `C:\Windows\System32\drivers\etc\hosts` you can append the zone ID to the virtual host's IPv6 IP address (see below) and add lines like:
 
     ```
@@ -70,9 +70,9 @@ Until the network interfaces are set up correctly, you'll need to do this part f
 
 ### Set Up the Network Interfaces
 - I noted from `ifconfig` that the `eth0` and `lo` adapters are present at this point, but `eth1` isn't.  I did `ifconfig eth1 up` and it came up, but with only an ipv6 address, which is incorrect.
-    
+
     It turns out both adapters were configured for DHCP, but the Virtualbox host-only DHCP server is disabled (see above).
-    
+
     Set up `eth1` with a static IP by adding this to `/etc/network/interfaces`:
 
     ```
@@ -130,7 +130,7 @@ We'll be editing code on the host machine and sharing it to the guest VM with a 
 Git is used later by composer.phar, and also to fetch these configuration files.  You'll likely also use it to push and pull project code.
 
 ``` bash
-apt-get install git
+apt-get install git-core
 git config --global user.name "Your Name Here"
 git config --global user.email "your_email@youremail.com"
 ```
@@ -150,15 +150,15 @@ git clone git://github.com/triplepoint/web_development_vm_how_to.git
     ``` bash
     cd ~
     apt-get install libc6 libpcre3 libpcre3-dev libpcrecpp0 libssl0.9.8 libssl-dev zlib1g zlib1g-dev lsb-base
-    
+
     wget http://nginx.org/download/nginx-1.3.7.tar.gz
     tar -xvf nginx-1.3.7.tar.gz
     cd nginx-1.3.7
-    
+
     # Feel free to skip the wget and patch commands if you don't want to build in SPDY
     wget http://nginx.org/patches/spdy/patch.spdy.txt
     patch -p0 < patch.spdy.txt
-    
+
     ./configure --prefix=/usr --sbin-path=/usr/sbin --pid-path=/var/run/nginx.pid --conf-path=/etc/nginx/nginx.conf --error-log-path=/var/log/nginx/error.log --http-log-path=/var/log/nginx/access.log --user=www-data --group=www-data --with-http_ssl_module --with-ipv6
     make
     make install
@@ -217,7 +217,7 @@ This is more of an example than an exact codeblock to be repeated. See [adayinth
     openssl x509 -req -days 3650 -in project_name.csr -signkey project_name.nginx.key -out project_name.nginx.crt
     cp project_name.nginx.crt /etc/ssl/certs/
     cp project_name.nginx.key /etc/ssl/private/
-    ``` 
+    ```
 - Be sure to set the cert and key locations in your project's Nginx config file (see above).  Restart Nginx once the file is edited
 
     ``` bash
@@ -245,7 +245,7 @@ This is more of an example than an exact codeblock to be repeated. See [adayinth
     ``` bash
     cp php.ini-production /etc/php.ini
     ```
-- Copy over the PHP-FPM config file: 
+- Copy over the PHP-FPM config file:
 
     ``` bash
     cp /etc/php-fpm.conf.default /etc/php-fpm.conf
@@ -308,9 +308,9 @@ ln -s /media/sf_shared_workspace /var/www
     ```
 
     Instead do this: (because screw it, I'm cheating on this one and using `apt-get`.  Building MySQL from source looks like a pain in the ass with no gain):
- 
+
     ``` bash
-    apt-get install mysql-server-5.5  
+    apt-get install mysql-server-5.5
     ```
 
 ### Install Compass/Sass
@@ -342,7 +342,7 @@ ln -s /usr/local/bin/compass /usr/bin/compass
 
 # Updating
 Periodically it'll be necessary to upgrade this machine without rebuilding it.  Here's how:
-- Apt Repository update (covers MySQL): 
+- Apt Repository update (covers MySQL):
 
     ``` bash
     apt-get update; apt-get dist-upgrade;
@@ -359,9 +359,9 @@ Periodically it'll be necessary to upgrade this machine without rebuilding it.  
 - Nginx - `make clean` and recompile as during the install above
 - Ruby Gem update for Compass and SASS:
 
-    ``` bash 
+    ``` bash
     gem update
-    ```  
+    ```
 - YUI-Compressor - redownload and overwrite the jar file, as during the install above
 
 Once all upgrades are complete, the various services will need to be restarted
@@ -397,9 +397,9 @@ service nginx restart
 [PECL]: http://pecl.php.net/
 [nginx]: http://nginx.org/ "Nginx"
 [SPDY]: http://www.chromium.org/spdy "SPDY"
-[SASS]: http://sass-lang.com/ 
+[SASS]: http://sass-lang.com/
 [Compass]: http://compass-style.org/
-[yui_comp]: http://developer.yahoo.com/yui/compressor/ 
+[yui_comp]: http://developer.yahoo.com/yui/compressor/
 [vbox_dl]: https://www.virtualbox.org/wiki/Downloads "Virtualbox Download Page"
 [create_new_vm_bat]: https://github.com/triplepoint/web_development_vm_how_to/blob/master/create_new_vm.bat "Create script for new virtual machines"
 [vbox_clone]: http://www.virtualbox.org/manual/ch05.html#cloningvdis "Virtualbox Manual: Cloning disk images"
