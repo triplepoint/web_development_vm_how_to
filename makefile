@@ -36,7 +36,7 @@ target-list :
 	@echo
 
 
-development_server : package_update firewall nginx nginx_default_server php php_www_directory_symlink mysql compass yui_compressor config_git
+development_server : package_update firewall www_directory_symlink nginx nginx_default_server php mysql compass yui_compressor config_git
 
 
 package_update :
@@ -49,6 +49,10 @@ firewall :
 	ufw allow http
 	ufw allow 443
 	ufw --force enable
+
+
+www_directory_symlink :
+	ln -s /vagrant_development /var/www
 
 
 nginx :
@@ -125,10 +129,6 @@ php :
 	echo 'zend_extension="/usr/lib/php/extensions/no-debug-non-zts-20100525/xdebug.so"' >> /etc/php.ini
 
 	service php-fpm start
-
-
-php_www_directory_symlink :
-	ln -s /vagrant_development /var/www
 
 
 mysql :
