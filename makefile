@@ -21,7 +21,7 @@ GIT_USER_EMAIL_ADDRESS = "jonathan@jonathan-hanson.org"
 NGINX_VERSION = 1.3.8
 
 ### PHP Configuration
-PHP_VERSION = 5.4.8
+PHP_VERSION = 5.4.9
 
 
 all : target-list
@@ -86,7 +86,7 @@ nginx :
 
 nginx_default_server :
 	ln -s /etc/nginx/sites-available/default /etc/nginx/sites-enabled/default
-	service nginx reload
+	service nginx restart
 
 
 php :
