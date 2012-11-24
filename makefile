@@ -124,6 +124,7 @@ php :
 
 	rm -rf $(WORKING_DIR)
 
+	# Set up PHP FPM to work with Nginx as configured above
 	cp /etc/php-fpm.conf.default /etc/php-fpm.conf
 	sed -i 's/;pid = /pid = /g' /etc/php-fpm.conf
 	sed -i 's/;error_log = log\/php-fpm.log/error_log = \/var\/log\/php-fpm\/php-fpm.log/g' /etc/php-fpm.conf
@@ -131,6 +132,7 @@ php :
 
 	mkdir -p /var/log/php-fpm
 
+	# install the PECL extensions
 	pecl update-channels
 	printf "\n" | pecl install pecl_http apc-beta xdebug
 	echo 'extension=http.so' >> /etc/php.ini
