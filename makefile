@@ -6,6 +6,7 @@
 # - https://github.com/triplepoint/web_development_vm_how_to probably needs to be revised to be more in line with this makefile
 ###
 
+
 ### Global configuration
 SHELL := /usr/bin/env bash
 WORKING_DIR = "/tmp/makework"
@@ -26,6 +27,9 @@ PHP_VERSION = 5.4.9
 ### Symlink target for /var/www
 WWW_DIRECTORY_SYMLINK_TARGET = "/vagrant_development"
 
+### YUI Compressor
+YUI_COMPRESSOR_VERSION = 2.4.7
+
 
 
 all : target-list
@@ -37,10 +41,14 @@ target-list :
 	@echo
 	@echo "Available types:"
 	@echo "    development_server"
+	@echo "    production_server"
 	@echo
 
 
-development_server : package_update firewall www_directory_symlink config_git nginx nginx_default_server php mysql compass yui_compressor
+development_server : package_update firewall www_directory_symlink git nginx nginx_default_server php mysql yui_compressor compass
+
+
+production_server : package_update firewall git nginx php mysql
 
 
 package_update :
@@ -59,7 +67,8 @@ www_directory_symlink :
 	ln -s $(WWW_DIRECTORY_SYMLINK_TARGET) /var/www
 
 
-config_git :
+git :
+	apt-get install -y git-core
 	git config --global user.name $(GIT_USER_FULL_NAME)
 	git config --global user.email $(GIT_USER_EMAIL_ADDRESS)
 
@@ -144,12 +153,7 @@ php :
 
 mysql :
 	DEBIAN_FRONTEND=noninteractive apt-get install -y mysql-server-5.5
-
-
-compass :
-	apt-get install -y ruby
-	gem install compass
-	ln -s /usr/local/bin/compass /usr/bin/compass
+	# TODO - security configuration for mysql
 
 
 yui_compressor :
@@ -157,9 +161,15 @@ yui_compressor :
 
 	mkdir -p $(WORKING_DIR) && cd $(WORKING_DIR) && \
 	# \
-	wget http://yui.zenfs.com/releases/yuicompressor/yuicompressor-2.4.7.zip && \
-	unzip yuicompressor-2.4.7.zip && \
+	wget http://yui.zenfs.com/releases/yuicompressor/yuicompressor-$(YUI_COMPRESSOR_VERSION).zip && \
+	unzip yuicompressor-$(YUI_COMPRESSOR_VERSION).zip && \
 	mkdir -p /usr/share/yui-compressor && \
-	cp yuicompressor-2.4.7/build/yuicompressor-2.4.7.jar /usr/share/yui-compressor/yui-compressor.jar
+	cp yuicompressor-$(YUI_COMPRESSOR_VERSION)/build/yuicompressor-$(YUI_COMPRESSOR_VERSION).jar /usr/share/yui-compressor/yui-compressor.jar
 
 	rm -rf $(WORKING_DIR)
+
+
+compass :
+	apt-get install -y ruby
+	gem install compass
+	ln -s /usr/local/bin/compass /usr/bin/compass
