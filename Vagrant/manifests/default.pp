@@ -27,7 +27,7 @@ exec { 'git_clone':
 }
 
 exec { 'make_server':
-    command   => 'make development_server >> makelog.log',
+    command   => 'make development_server &> makelog.log',
     path      => ['/usr/bin', '/bin', '/usr/local/bin', '/usr/sbin', '/sbin', '/usr/local/sbin'],
     cwd       => "/usr/src/${how_to_git_repo_name}",
     timeout   => 0,
