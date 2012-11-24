@@ -3,7 +3,7 @@
 # https://github.com/triplepoint/web_development_vm_how_to
 #
 # TODO:
-# - the instruction-book manual markdown file probably needs to be revised to be more in line with this makefile
+# - https://github.com/triplepoint/web_development_vm_how_to probably needs to be revised to be more in line with this makefile
 ###
 
 ### Global configuration
@@ -36,7 +36,7 @@ target-list :
 	@echo
 
 
-development_server : package_update firewall nginx nginx_default_server php mysql compass yui_compressor config_git
+development_server : package_update firewall nginx nginx_default_server php php_www_directory_symlink mysql compass yui_compressor config_git
 
 
 package_update :
@@ -86,7 +86,7 @@ nginx :
 
 nginx_default_server :
 	ln -s /etc/nginx/sites-available/default /etc/nginx/sites-enabled/default
-	service nginx start
+	service nginx reload
 
 
 php :
@@ -126,6 +126,8 @@ php :
 
 	service php-fpm start
 
+
+php_www_directory_symlink
 	ln -s /vagrant_development /var/www
 
 

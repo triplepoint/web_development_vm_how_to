@@ -14,6 +14,9 @@ Vagrant::Config.run do |config|
 	# you wish to share to the virtual machine mounted at its /vagrant_development path
     config.vm.share_folder "v-development", "/vagrant_development", "../../"
 
-    config.vm.provision :puppet
-
+    config.vm.provision :puppet do |puppet|
+        puppet.options = [
+            '--verbose'
+        ]
+    end
 end
