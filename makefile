@@ -23,6 +23,10 @@ NGINX_VERSION = 1.3.8
 ### PHP Configuration
 PHP_VERSION = 5.4.9
 
+### Symlink target for /var/www
+WWW_DIRECTORY_SYMLINK_TARGET = "/vagrant_development"
+
+
 
 all : target-list
 
@@ -36,7 +40,7 @@ target-list :
 	@echo
 
 
-development_server : package_update firewall www_directory_symlink nginx nginx_default_server php mysql compass yui_compressor config_git
+development_server : package_update firewall www_directory_symlink config_git nginx nginx_default_server php mysql compass yui_compressor
 
 
 package_update :
@@ -52,7 +56,12 @@ firewall :
 
 
 www_directory_symlink :
-	ln -s /vagrant_development /var/www
+	ln -s $(WWW_DIRECTORY_SYMLINK_TARGET) /var/www
+
+
+config_git :
+	git config --global user.name $(GIT_USER_FULL_NAME)
+	git config --global user.email $(GIT_USER_EMAIL_ADDRESS)
 
 
 nginx :
@@ -152,8 +161,3 @@ yui_compressor :
 	cp yuicompressor-2.4.7/build/yuicompressor-2.4.7.jar /usr/share/yui-compressor/yui-compressor.jar
 
 	rm -rf $(WORKING_DIR)
-
-
-config_git :
-	git config --global user.name $(GIT_USER_FULL_NAME)
-	git config --global user.email $(GIT_USER_EMAIL_ADDRESS)
