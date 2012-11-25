@@ -125,7 +125,7 @@ php :
 	$(MAKE) install && \
 	# \
 	cp php.ini-production /etc/php.ini && \
-	sed -i 's/;date.timezone =/date.timezone = UTC/g' /etc/php.ini
+	sed -i 's/;date.timezone =/date.timezone = UTC/g' /etc/php.ini && \
 	# \
 	cp sapi/fpm/init.d.php-fpm /etc/init.d/php-fpm && \
 	chmod 755 /etc/init.d/php-fpm && \
