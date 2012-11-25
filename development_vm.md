@@ -239,6 +239,9 @@ git clone git://github.com/triplepoint/web_development_vm_how_to.git
     ``` bash
     cp php.ini-production /etc/php.ini
     ```
+    *NOTE* - This file needs to be modified after it's copied:
+    - Uncomment and set the `date.timezone` directive to UTC: `date.timezone = UTC`
+
 - Install the PHP init script
 
     ``` bash
@@ -252,10 +255,10 @@ git clone git://github.com/triplepoint/web_development_vm_how_to.git
     cp /etc/php-fpm.conf.default /etc/php-fpm.conf
     ```
 
-    *NOTE* - this file has been modified after it was copied:
-    - uncommented the pid directive: `pid = run/php-fpm.pid`
-    - set the error log location to `/var/log/php-fpm/php-fpm.log`
-    - changed the listen location: `listen = /tmp/php.socket`
+    *NOTE* - this file needs to be modified after it's copied:
+    - uncomment the pid directive: `pid = run/php-fpm.pid`
+    - uncomment and set the `error_log` location to `/var/log/php-fpm/php-fpm.log`: `error_log = /var/log/php-fpm/php-fpm.log`
+    - changed the `listen` location: `listen = /tmp/php.socket`
 - Create the PHP-FPM log file:
 
     ``` bash
