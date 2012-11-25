@@ -2,19 +2,35 @@
 ## Introduction
 The goal here is to build a development virtual machine that can support PHP web development.  While I'm aiming to keep this generally useful to anyone doing PHP web development, there are places where I install tools or make configuration choices that specifically support my projects.  Be aware that there will need to be some improvization on your part if you want this guide to work for you.
 
-The basic features of this environment are:
+The basic features of this development environment are:
 
-- [Minimal Ubuntu 12.04 Server][ubuntu_minimal] as a [VirtualBox] guest
-    - [Windows 7][win7] Host (but don't let that turn you away in disgust, it matters very little)
+- [Minimal Ubuntu 12.04 "Precise" Server][ubuntu_minimal] as a [VirtualBox] guest
+    - [Windows 7][win7] Host (but don't let that turn you away in disgust, it matters very little and these instructions are more or less accurate for other host OSes)
     - Shared directory between the host and guest for code development
     - Firewall configured with [UFW]
-- [PHP 5.4.8][php], compiled from source
+- [PHP 5.4.9][php], compiled from source
     - FastCGI with [PHP-FPM], including Unix socket configuration for talking to [Nginx]
-    - [APC], built from [PECL]
-- [Nginx 1.3.7][nginx], compiled from Source, with the [SPDY] patch
-- [MySQL 5.5](http://dev.mysql.com/doc/refman/5.5/en/), installed from Ubuntu's package repository
+    - [APC], built from source via [PECL]
+    - [XDebug], built from source via [PECL]
+- [Nginx 1.3.8][nginx], compiled from Source, with the [SPDY] patch
+- [MySQL 5.5][mysql], installed from Ubuntu's apt package repository
 - [SASS] and [Compass], for developing CSS
 - [YUI Compressor][yui_comp], for compressing web assets
+
+## Notes on automation
+The instructions in this guide should be very close to the automated [Vagrant] build provided along with this document.  It should be possible for you to build this environment automatically by:
+- Installing [Vagrant]
+- Install VirtualBox from their [download page][vbox_dl]
+- Checking out this guide's repository somewhere convenient, and then:
+
+    ``` dos
+    cd /wherever/you/put/this/repo/Vagrant
+    vagrant up
+    ```
+The `makefile` packaged along with this guide together with the simple Puppet maninfest in `Vagrant/manifests` should then go through this guide's process of building the development environment automatically.  You can then SSH into the dev machine at `192.168.56.11` with the username:password `vagrant`:`vagrant`.
+
+The rest of this guide documents the manual way to build this development environment.  While there are likely a few differences between the resulting machines, hopefully they're simple cosmetic differences.
+
 
 ## On the Host
 ### Create the Guest
@@ -43,14 +59,12 @@ The basic features of this environment are:
     vboxmanage startvm SomeNewVMName
     ```
 - Follow all the onscreen Ubuntu setup, accepting defaults.  When it comes to selecting packages, select only the `OpenSSH server`
-- Choose an IP address for the guest (I chose `192.168.56.11` below) and set up the Windows hosts file by editing `C:\Windows\System32\drivers\etc\hosts` and adding (note these domains are specific to my configuration):
+- Choose an IP address for the guest (I chose `192.168.56.11` below) and set up the Windows hosts file by editing `C:\Windows\System32\drivers\etc\hosts` and adding (note these domains are specific to my configuration, yours are likely different):
 
     ```
     # Development VM
     192.168.56.11          jonathan-hanson.local
     192.168.56.11          www.jonathan-hanson.local
-    192.168.56.11          beer.jonathan-hanson.local
-    192.168.56.11          gas.jonathan-hanson.local
     ```
     If you intend to use IPv6, find the IPv6 zone ID for the VirtualBox Host-Only network by doing the following and reading the 'IDx' column for the 'VirtualBox Host-Only Network':
 
@@ -67,6 +81,7 @@ The basic features of this environment are:
 
 ## On the Guest
 Until the network interfaces are set up correctly, you'll need to do this part from the VirtualBox guest directly (that is, not over SSH).
+
 
 ### Set Up the Network Interfaces
 - I noted from `ifconfig` that the `eth0` and `lo` adapters are present at this point, but `eth1` isn't.  I did `ifconfig eth1 up` and it came up, but with only an ipv6 address, which is incorrect.
@@ -125,9 +140,15 @@ We'll be editing code on the host machine and sharing it to the guest VM with a 
     ``` bash
     mount /media/sf_shared_workspace
     ```
+- Set Up the Web Root Symbolic Link
+
+    ``` bash
+    ln -s /media/sf_shared_workspace /var/www
+    ```
+
 
 ### Install Git
-Git is used later by composer.phar, and also to fetch these configuration files.  You'll likely also use it to push and pull project code.
+Git is used later by composer.phar, and also to fetch these configuration files.
 
 ``` bash
 apt-get install git-core
@@ -136,24 +157,26 @@ git config --global user.email "your_email@youremail.com"
 ```
 If you're using Github, it's likely you'll want to set up an SSH key for this machine.  For more information, see [Github's documentation on SSH keys][github_ssh].
 
+
 ### Fetch This Documentation
 This documentation includes useful configuration scripts, so we'll fetch it into the VM for easy access:
 
 ``` bash
-cd ~
+cd /usr/src/
 git clone git://github.com/triplepoint/web_development_vm_how_to.git
 ```
+
 
 ### Install Nginx
 - Fetch, make, and install:
 
     ``` bash
-    cd ~
+    cd /usr/src/
     apt-get install libc6 libpcre3 libpcre3-dev libpcrecpp0 libssl0.9.8 libssl-dev zlib1g zlib1g-dev lsb-base
 
-    wget http://nginx.org/download/nginx-1.3.7.tar.gz
-    tar -xvf nginx-1.3.7.tar.gz
-    cd nginx-1.3.7
+    wget http://nginx.org/download/nginx-1.3.8.tar.gz
+    tar -xvf nginx-1.3.8.tar.gz
+    cd nginx-1.3.8
 
     # Feel free to skip the wget and patch commands if you don't want to build in SPDY
     wget http://nginx.org/patches/spdy/patch.spdy.txt
@@ -166,7 +189,7 @@ git clone git://github.com/triplepoint/web_development_vm_how_to.git
 - Install the attached nginx-init script:
 
     ``` bash
-    cp ~/web_development_vm_how_to/etc/init.d/nginx-init /etc/init.d/nginx
+    cp /usr/src/web_development_vm_how_to/etc/init.d/nginx-init /etc/init.d/nginx
     chmod 755 /etc/init.d/nginx
     update-rc.d nginx defaults
     ```
@@ -180,15 +203,13 @@ git clone git://github.com/triplepoint/web_development_vm_how_to.git
     ``` bash
     mkdir /etc/nginx/sites-available
     mkdir /etc/nginx/sites-enabled
-    cp ~/web_development_vm_how_to/etc/nginx/nginx.conf /etc/nginx/
-    cp ~/web_development_vm_how_to/etc/nginx/sites-available/* /etc/nginx/sites-available
-    ln -s /etc/nginx/sites-available/default /etc/nginx/sites-enabled/default
+    cp /usr/src/web_development_vm_how_to/etc/nginx/nginx.conf /etc/nginx/
+    cp /usr/src/web_development_vm_how_to/etc/nginx/sites-available/* /etc/nginx/sites-available
     ```
-- Install the project-specific configuration files.  Note that you'll probably want to copy and edit this file instead of using it directly:
+- Set up the default site
 
     ``` bash
-    cp /etc/nginx/sites-available/example /etc/nginx/sites-available/project_name
-    ln -s /etc/nginx/sites-available/project_name /etc/nginx/sites-enabled/project_name
+    ln -s /etc/nginx/sites-available/default /etc/nginx/sites-enabled/default
     ```
 - start Nginx
 
@@ -196,43 +217,16 @@ git clone git://github.com/triplepoint/web_development_vm_how_to.git
     service nginx start
     ```
 
-### SSL Certificates
-For Development, its appropriate to have self-signed SSL certs.  Depending on your project details, you may need more than one cert.
-This is more of an example than an exact codeblock to be repeated. See [adayinthepit.com's article on self-signed SSL certificates][adayinthepit_ssl_certs]:
-
-- Generate the certificate files
-
-    ``` bash
-    mkdir ~/certwork
-    cd ~/certwork
-    openssl genrsa -des3 -out project_name.key 4096
-    # Enter a password to protect this key
-    openssl req -new -key project_name.key -out project_name.csr
-    # Enter the password from the key above
-    # Answer the questions appropriately (ex, 'US', 'California', 'San Francisco', 'No Company', 'No Org', '*.local_server_name.local', 'email@email.com', '', '' )
-    # Note that the common name should be the domain you intend to access (ie, '*.local_server_name.local')
-    # Note to leave the password blank.
-    openssl rsa -in project_name.key -out project_name.nginx.key
-    # Enter the password from the key above
-    openssl x509 -req -days 3650 -in project_name.csr -signkey project_name.nginx.key -out project_name.nginx.crt
-    cp project_name.nginx.crt /etc/ssl/certs/
-    cp project_name.nginx.key /etc/ssl/private/
-    ```
-- Be sure to set the cert and key locations in your project's Nginx config file (see above).  Restart Nginx once the file is edited
-
-    ``` bash
-    sudo service nginx restart
-    ```
 
 ### Install PHP
 - Fetch, make, and install.  Note that the test command is optional, but good practice:
 
     ``` bash
-    cd ~
+    cd /usr/src/
     apt-get install autoconf libxml2 libxml2-dev libcurl3 libcurl4-gnutls-dev libmagic-dev
-    wget http://us3.php.net/get/php-5.4.8.tar.bz2/from/us2.php.net/mirror -O php-5.4.8.tar.bz2
-    tar -xvf php-5.4.8.tar.bz2
-    cd php-5.4.8
+    wget http://us3.php.net/get/php-5.4.9.tar.bz2/from/us2.php.net/mirror -O php-5.4.9.tar.bz2
+    tar -xvf php-5.4.9.tar.bz2
+    cd php-5.4.9
     ./configure --prefix=/usr --sysconfdir=/etc --with-config-file-path=/etc --enable-fpm --with-fpm-user=www-data --with-fpm-group=www-data --enable-mbstring --with-mysqli --with-openssl --with-zlib
     make
     make test
@@ -244,6 +238,13 @@ This is more of an example than an exact codeblock to be repeated. See [adayinth
 
     ``` bash
     cp php.ini-production /etc/php.ini
+    ```
+- Install the PHP init script
+
+    ``` bash
+    cp sapi/fpm/init.d.php-fpm /etc/init.d/php-fpm
+    chmod 755 /etc/init.d/php-fpm
+    update-rc.d php-fpm defaults
     ```
 - Copy over the PHP-FPM config file:
 
@@ -259,13 +260,6 @@ This is more of an example than an exact codeblock to be repeated. See [adayinth
 
     ``` bash
     mkdir /var/log/php-fpm
-    ```
-- Install the PHP init script
-
-    ``` bash
-    cp sapi/fpm/init.d.php-fpm /etc/init.d/php-fpm
-    chmod 755 /etc/init.d/php-fpm
-    update-rc.d php-fpm defaults
     ```
 - Install the PECL extensions: APC, HTTP, XDebug
 
@@ -290,11 +284,6 @@ This is more of an example than an exact codeblock to be repeated. See [adayinth
     service php-fpm start
     ```
 
-### Set Up the Web Root Symbolic Link
-
-``` bash
-ln -s /media/sf_shared_workspace /var/www
-```
 
 ### MySQL
 - Install
@@ -313,15 +302,6 @@ ln -s /media/sf_shared_workspace /var/www
     apt-get install mysql-server-5.5
     ```
 
-### Install Compass/Sass
-
-``` bash
-apt-get install ruby1.9.3
-gem update
-gem install compass
-ln -s /usr/local/bin/compass /usr/bin/compass
-```
-
 
 ### Install YUI Compressor
 - Install Java runtime (required for yui compressor):
@@ -332,13 +312,24 @@ ln -s /usr/local/bin/compass /usr/bin/compass
 - Fetch and install the `yui-compressor` jar file
 
     ``` bash
-    cd ~
+    cd /usr/src/
     apt-get install unzip
     wget http://yui.zenfs.com/releases/yuicompressor/yuicompressor-2.4.7.zip
     unzip yuicompressor-2.4.7.zip
     mkdir /usr/share/yui-compressor
     cp yuicompressor-2.4.7/build/yuicompressor-2.4.7.jar /usr/share/yui-compressor/yui-compressor.jar
     ```
+
+
+### Install Compass/Sass
+
+``` bash
+apt-get install ruby1.9.3
+gem update
+gem install compass
+ln -s /usr/local/bin/compass /usr/bin/compass
+```
+
 
 # Updating
 Periodically it'll be necessary to upgrade this machine without rebuilding it.  Here's how:
@@ -372,6 +363,59 @@ service php-fpm restart
 service nginx restart
 ```
 
+
+# Setting up projects
+This guide is primarily aimed at setting up a generic development server, and project-specific configuration is probably too specific to get into here.
+However, here's a few bits and pieces that may be useful in setting up a project.
+
+## Example makefile
+There's a project makefile example attached to this documenation at `project.makefile.example`.  It would be appropriate to copy this file to something like `install\makefile` in your project code and edit it to make it appropriate for your project.  After that you can run:
+
+``` bash
+make install_dev
+```
+What follows below is more or less the manual version of what the example makefile above would do.
+
+
+## Nginx config file
+There are example nginx config files available with this documentation in `etc/nginx/sites-available`.  It would be appropriate to copy one of these into /etc/nginx/sites-available with your project's name, and then edit it for your specific project.  AFter that you could symlink it into `sites-enabled` like so:
+``` bash
+cp etc/nginx/sites-available/example /etc/nginx/sites-available/my_project_name
+### edit /etc/nginx/sites-available/my_project_name to make it suitable for your project
+ln -s /etc/nginx/sites-available/my_project_name /etc/nginx/sites-enabled/my_project_name
+```
+
+## SSL Certificates
+For Development, its appropriate to have self-signed SSL certs.  Depending on your project details, you may need more than one cert.
+This is more of an example than an exact codeblock to be repeated. See [adayinthepit.com's article on self-signed SSL certificates][adayinthepit_ssl_certs]:
+
+- Generate the certificate files
+
+    ``` bash
+    mkdir /usr/src/certwork
+    cd /usr/src/certwork
+    openssl genrsa -des3 -out project_name.key 4096
+    # Enter a password to protect this key
+    openssl req -new -key project_name.key -out project_name.csr
+    # Enter the password from the key above
+    # Answer the questions appropriately (ex, 'US', 'California', 'San Francisco', 'No Company', 'No Org', '*.local_server_name.local', 'email@email.com', '', '' )
+    # Note that the common name should be the domain you intend to access (ie, '*.local_server_name.local')
+    # Note to leave the password blank.
+    openssl rsa -in project_name.key -out project_name.nginx.key
+    # Enter the password from the key above
+    openssl x509 -req -days 3650 -in project_name.csr -signkey project_name.nginx.key -out project_name.nginx.crt
+    cp project_name.nginx.crt /etc/ssl/certs/
+    cp project_name.nginx.key /etc/ssl/private/
+    ```
+- Be sure to set the cert and key locations in your project's Nginx config file (see above).
+
+## Restart Nginx
+Remember that any time you modify nginx config you need to restart it:
+``` bash
+service nginx restart
+```
+
+
 # Todo
 - mysql config
 - phpmyadmin (this should probably live on a separate VM)
@@ -394,10 +438,13 @@ service nginx restart
 [php]: http://www.php.net/ "PHP"
 [PHP-FPM]: http://php-fpm.org/ "PHP FastCGI Process Manager"
 [APC]: http://php.net/manual/en/book.apc.php "Advanced PHP Cache"
+[XDebug]: http://xdebug.org/ "XDebug Extension for PHP"
 [PECL]: http://pecl.php.net/
+[mysql]: http://dev.mysql.com/doc/refman/5.5/en/
 [nginx]: http://nginx.org/ "Nginx"
 [SPDY]: http://www.chromium.org/spdy "SPDY"
 [SASS]: http://sass-lang.com/
+[Vagrant]: http://vagrantup.com/
 [Compass]: http://compass-style.org/
 [yui_comp]: http://developer.yahoo.com/yui/compressor/
 [vbox_dl]: https://www.virtualbox.org/wiki/Downloads "Virtualbox Download Page"

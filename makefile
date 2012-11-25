@@ -2,8 +2,6 @@
 # This makefile more or less automates the procedures set out at
 # https://github.com/triplepoint/web_development_vm_how_to
 #
-# TODO:
-# - https://github.com/triplepoint/web_development_vm_how_to probably needs to be revised to be more in line with this makefile
 ###
 
 
