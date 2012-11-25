@@ -1,0 +1,87 @@
+## The name of this project.  Used to pick config file names, etc.
+PROJECT_NAME = someprojectname   ## TODO - change this to something appropriate
+
+## THe domain name that the generated self-signed-cert should cover.
+CERT_DOMAIN = *.somedomain.local         ## TODO - change this to something appropriate
+
+## The cert file name root that the cert files are generated with
+CERT_FILE_NAME = $(PROJECT_NAME)
+
+## The password used to generate the cert files
+CERT_PASSWORD = selfsignedpassword
+
+
+
+### Global configuration
+SHELL := /usr/bin/env bash
+WORKING_DIR = /tmp/makework
+TOOL_DIR = $(CURDIR)
+
+
+
+all : target-list
+
+
+target-list :
+    @echo "This makefile installs this project into a server"
+    @echo
+    @echo "Available targets:"
+    @echo "    install"
+    @echo "    install_dev"
+    @echo
+
+
+install : nginx_conf install_composer composer_install_dependencies db_init nginx_restart
+
+
+install_dev : nginx_conf self_signed_cert install_composer composer_install_dependencies_dev db_init nginx_restart
+
+
+########################################################################
+
+
+nginx_conf :
+    cp $(TOOL_DIR)/$(PROJECT_NAME).nginx /etc/nginx/sites-available/$(PROJECT_NAME)
+    ln -s /etc/nginx/sites-available/$(PROJECT_NAME) /etc/nginx/sites-enabled/$(PROJECT_NAME)
+
+
+nginx_restart :
+    service nginx reload
+
+
+# Be aware that certs generated this way are not very secure
+self_signed_cert :
+    mkdir -p $(WORKING_DIR) && cd $(WORKING_DIR) && \
+    # \
+    openssl genrsa -des3 -passout pass:$(CERT_PASSWORD) -out $(CERT_FILE_NAME).key 4096 && \
+    # \
+    openssl req -new -passin pass:$(CERT_PASSWORD) -passout pass:$(CERT_PASSWORD) -key $(CERT_FILE_NAME).key -out $(CERT_FILE_NAME).csr \
+    -subj "/C=US/ST=Calfornia/L=San Francisco/O=No Company/CN=$(CERT_DOMAIN)" && \
+    # \
+    openssl rsa -passin pass:$(CERT_PASSWORD) -in $(CERT_FILE_NAME).key -out $(CERT_FILE_NAME).nginx.key && \
+    # \
+    openssl x509 -req -passin pass:$(CERT_PASSWORD) -in $(CERT_FILE_NAME).csr -signkey $(CERT_FILE_NAME).nginx.key -out $(CERT_FILE_NAME).nginx.crt -days 365 && \
+    # \
+    cp $(CERT_FILE_NAME).nginx.crt /etc/ssl/certs/ && \
+    cp $(CERT_FILE_NAME).nginx.key /etc/ssl/private/
+
+    rm -rf $(WORKING_DIR)
+
+
+install_composer :
+    cd ../ && \
+    wget http://getcomposer.org/installer -O composer.phar
+
+
+composer_install_dependencies :
+    cd ../ && \
+    ./composer.phar install --verbose
+
+
+composer_install_dependencies_dev :
+    cd ../ && \
+    ./composer.phar install --verbose --dev
+
+
+db_init :
+    echo "Here's where any database initialization stuff might be called"
