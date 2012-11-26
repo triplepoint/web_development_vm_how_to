@@ -10,7 +10,7 @@ Vagrant::Config.run do |config|
 
     config.vm.network :hostonly, "192.168.56.11"
 
-	# Note that the dierctory in the 3rd argument here should be the working directory on your host that
+	# Note that the directory in the 3rd argument here should be the working directory on your host that
 	# you wish to share to the virtual machine mounted at its /vagrant_development path
     config.vm.share_folder "v-development", "/vagrant_development", "../../"
 
