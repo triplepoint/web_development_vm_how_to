@@ -12,7 +12,7 @@ The basic features of this development environment are:
     - FastCGI with [PHP-FPM], including Unix socket configuration for talking to [Nginx]
     - [APC], built from source via [PECL]
     - [XDebug], built from source via [PECL]
-- [Nginx 1.3.8][nginx], compiled from Source, with the [SPDY] patch
+- [Nginx 1.3.9][nginx], compiled from Source, with the [SPDY] patch
 - [MySQL 5.5][mysql], installed from Ubuntu's apt package repository
 - [SASS] and [Compass], for developing CSS
 - [YUI Compressor][yui_comp], for compressing web assets
@@ -174,9 +174,9 @@ git clone git://github.com/triplepoint/web_development_vm_how_to.git
     cd /usr/src/
     apt-get install libc6 libpcre3 libpcre3-dev libpcrecpp0 libssl0.9.8 libssl-dev zlib1g zlib1g-dev lsb-base
 
-    wget http://nginx.org/download/nginx-1.3.8.tar.gz
-    tar -xvf nginx-1.3.8.tar.gz
-    cd nginx-1.3.8
+    wget http://nginx.org/download/nginx-1.3.9.tar.gz
+    tar -xvf nginx-1.3.9.tar.gz
+    cd nginx-1.3.9
 
     # Feel free to skip the wget and patch commands if you don't want to build in SPDY
     wget http://nginx.org/patches/spdy/patch.spdy.txt

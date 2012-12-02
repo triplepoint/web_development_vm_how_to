@@ -17,7 +17,7 @@ GIT_USER_FULL_NAME     = "Jonathan Hanson"
 GIT_USER_EMAIL_ADDRESS = "jonathan@jonathan-hanson.org"
 
 ### Nginx Configuration
-NGINX_VERSION = 1.3.8
+NGINX_VERSION = 1.3.9
 
 ### PHP Configuration
 PHP_VERSION = 5.4.9
