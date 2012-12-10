@@ -314,7 +314,7 @@ git clone git://github.com/triplepoint/web_development_vm_how_to.git
     chown -R mysql:mysql /usr/share/mysql
     cd /usr/share/mysql/ && scripts/mysql_install_db --user=mysql
     chown -R root /usr/share/mysql
-    chown -R mysql data
+    chown -R mysql /usr/share/mysql/data
     ```
 - Set up the MySQL config file
 
