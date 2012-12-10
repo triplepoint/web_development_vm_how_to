@@ -299,9 +299,9 @@ git clone git://github.com/triplepoint/web_development_vm_how_to.git
 
     ``` bash
     apt-get install build-essential cmake libaio-dev libncurses5-dev
-    wget http://dev.mysql.com/get/Downloads/MySQL-5.5/mysql-5.5.25a.tar.gz/from/http://cdn.mysql.com/ -O mysql-5.5.25a.tar.gz
-    tar -xvf mysql-5.5.25a.tar.gz
-    cd mysql-5.5.25a
+    wget http://cdn.mysql.com/Downloads/MySQL-5.6/mysql-5.6.8-rc.tar.gz -O mysql-5.6.8-rc.tar.gz
+    tar -xvf mysql-5.6.8-rc.tar.gz
+    cd mysql-5.6.8-rc
 
     mkdir build && cd build
     cmake -DCMAKE_INSTALL_PREFIX=/usr/share/mysql -DSYSCONFDIR=/etc ..
