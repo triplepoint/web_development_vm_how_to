@@ -153,16 +153,16 @@ php : get_php_source
 	# \
 	cd php-$(PHP_VERSION) && \
 	# \
-	./configure 						/
-		--prefix=/usr 					/
-		--sysconfdir=/etc 				/
-		--with-config-file-path=/etc 	/
-		--enable-fpm 					/
-		--with-fpm-user=www-data 		/
-		--with-fpm-group=www-data 		/
-		--enable-mbstring 				/
-		--with-mysqli 					/
-		--with-openssl 					/
+	./configure 						\
+		--prefix=/usr 					\
+		--sysconfdir=/etc 				\
+		--with-config-file-path=/etc 	\
+		--enable-fpm 					\
+		--with-fpm-user=www-data 		\
+		--with-fpm-group=www-data 		\
+		--enable-mbstring 				\
+		--with-mysqli 					\
+		--with-openssl 					\
 		--with-zlib && \
 	$(MAKE) && \
 	$(MAKE) install && \
