@@ -233,6 +233,8 @@ mysql : get_mysql_source #mysql_user
 	chmod 755 /etc/init.d/mysqld
 	update-rc.d mysqld defaults
 
+	service mysqld start
+
 java_runtime :
 	apt-get install -y unzip default-jre
 
@@ -240,7 +242,7 @@ java_runtime :
 get_yui_compressor_source :
 	@if [ ! -f $(SOURCE_DOWNLOAD_DIR)/yuicompressor-$(YUI_COMPRESSOR_VERSION).zip ]; then \
 		mkdir -p $(SOURCE_DOWNLOAD_DIR) && cd $(SOURCE_DOWNLOAD_DIR) && \
-		wget http://yui.zenfs.com/releases/yuicompressor/yuicompressor-$(YUI_COMPRESSOR_VERSION).zip; \
+		wget https://github.com/downloads/yui/yuicompressor/yuicompressor-$(YUI_COMPRESSOR_VERSION).zip; \
 	fi
 
 
@@ -249,6 +251,7 @@ yui_compressor : java_runtime get_yui_compressor_source
 	# \
 	cp $(SOURCE_DOWNLOAD_DIR)/yuicompressor-$(YUI_COMPRESSOR_VERSION).zip . && \
 	unzip yuicompressor-$(YUI_COMPRESSOR_VERSION).zip && \
+	# \
 	mkdir -p /usr/share/yui-compressor && \
 	cp yuicompressor-$(YUI_COMPRESSOR_VERSION)/build/yuicompressor-$(YUI_COMPRESSOR_VERSION).jar /usr/share/yui-compressor/yui-compressor.jar
 
