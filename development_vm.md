@@ -12,8 +12,8 @@ The basic features of this development environment are:
     - FastCGI with [PHP-FPM], including Unix socket configuration for talking to [Nginx]
     - [APC], built from source via [PECL]
     - [XDebug], built from source via [PECL]
-- [Nginx 1.3.9][nginx], compiled from Source, with the [SPDY] patch
-- [MySQL 5.5][mysql], installed from Ubuntu's apt package repository
+- [Nginx 1.3.9][nginx], compiled from source, with the [SPDY] patch
+- [MySQL 5.6 RC][mysql], compiled from source
 - [SASS] and [Compass], for developing CSS
 - [YUI Compressor][yui_comp], for compressing web assets
 
