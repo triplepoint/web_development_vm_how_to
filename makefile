@@ -78,14 +78,14 @@ git :
 get_nginx_source :
 	@if [ ! -f $(SOURCE_DOWNLOAD_DIR)/nginx-$(NGINX_VERSION).tar.gz ]; then \
 		mkdir -p $(SOURCE_DOWNLOAD_DIR) && cd $(SOURCE_DOWNLOAD_DIR) && \
-		wget http://nginx.org/download/nginx-$(NGINX_VERSION).tar.gz;
+		wget http://nginx.org/download/nginx-$(NGINX_VERSION).tar.gz; \
 	fi
 
 
 get_nginx_spdy_patch_source :
 	@if [ ! -f $(SOURCE_DOWNLOAD_DIR)/patch.spdy.txt ]; then \
 		mkdir -p $(SOURCE_DOWNLOAD_DIR) && cd $(SOURCE_DOWNLOAD_DIR) && \
-		wget http://nginx.org/patches/spdy/patch.spdy.txt;
+		wget http://nginx.org/patches/spdy/patch.spdy.txt; \
 	fi
 
 
@@ -139,7 +139,7 @@ nginx_default_server :
 get_php_source :
 	@if [ ! -f $(SOURCE_DOWNLOAD_DIR)/php-$(PHP_VERSION).tar.bz2 ]; then \
 		mkdir -p $(SOURCE_DOWNLOAD_DIR) && cd $(SOURCE_DOWNLOAD_DIR) && \
-		wget http://us3.php.net/get/php-$(PHP_VERSION).tar.bz2/from/us2.php.net/mirror -O php-$(PHP_VERSION).tar.bz2;
+		wget http://us3.php.net/get/php-$(PHP_VERSION).tar.bz2/from/us2.php.net/mirror -O php-$(PHP_VERSION).tar.bz2; \
 	fi
 
 
@@ -240,7 +240,7 @@ java_runtime :
 get_yui_compressor_source :
 	@if [ ! -f $(SOURCE_DOWNLOAD_DIR)/yuicompressor-$(YUI_COMPRESSOR_VERSION).zip ]; then \
 		mkdir -p $(SOURCE_DOWNLOAD_DIR) && cd $(SOURCE_DOWNLOAD_DIR) && \
-		wget http://yui.zenfs.com/releases/yuicompressor/yuicompressor-$(YUI_COMPRESSOR_VERSION).zip;
+		wget http://yui.zenfs.com/releases/yuicompressor/yuicompressor-$(YUI_COMPRESSOR_VERSION).zip; \
 	fi
 
 
