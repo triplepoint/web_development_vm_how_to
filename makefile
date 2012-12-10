@@ -231,7 +231,7 @@ mysql : get_mysql_source mysql_user
 	chown -R mysql:mysql /usr/share/mysql
 	cd /usr/share/mysql/ && scripts/mysql_install_db --user=mysql
 	chown -R root /usr/share/mysql
-	chown -R mysql data
+	chown -R mysql /usr/share/mysql/data
 
 	# Set up the MySQL config file
 	cp /usr/share/mysql/support-files/my-default.cnf /etc/my.cnf
