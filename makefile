@@ -102,7 +102,16 @@ nginx : get_nginx_source get_nginx_spdy_patch_source
 	cp $(SOURCE_DOWNLOAD_DIR)/patch.spdy.txt . && \
 	patch -p0 < patch.spdy.txt && \
 	# \
-	./configure --prefix=/usr --sbin-path=/usr/sbin --pid-path=/var/run/nginx.pid --conf-path=/etc/nginx/nginx.conf --error-log-path=/var/log/nginx/error.log --http-log-path=/var/log/nginx/access.log --user=www-data --group=www-data --with-http_ssl_module --with-ipv6  && \
+	./configure 									\
+		--prefix=/usr 								\
+		--sbin-path=/usr/sbin 						\
+		--pid-path=/var/run/nginx.pid 				\
+		--conf-path=/etc/nginx/nginx.conf 			\
+		--error-log-path=/var/log/nginx/error.log 	\
+		--http-log-path=/var/log/nginx/access.log 	\
+		--user=www-data --group=www-data 			\
+		--with-http_ssl_module 						\
+		--with-ipv6  && \
 	$(MAKE) && \
 	$(MAKE) install
 
@@ -144,7 +153,17 @@ php : get_php_source
 	# \
 	cd php-$(PHP_VERSION) && \
 	# \
-	./configure --prefix=/usr --sysconfdir=/etc --with-config-file-path=/etc --enable-fpm --with-fpm-user=www-data --with-fpm-group=www-data --enable-mbstring --with-mysqli --with-openssl --with-zlib && \
+	./configure
+		--prefix=/usr 					/
+		--sysconfdir=/etc 				/
+		--with-config-file-path=/etc 	/
+		--enable-fpm 					/
+		--with-fpm-user=www-data 		/
+		--with-fpm-group=www-data 		/
+		--enable-mbstring 				/
+		--with-mysqli 					/
+		--with-openssl 					/
+		--with-zlib && \
 	$(MAKE) && \
 	$(MAKE) install && \
 	# \
@@ -188,7 +207,7 @@ get_mysql_source :
 
 
 mysql : #get_mysql_source #mysql_user
-	#### Here's how it would look to build from source (incomplete):
+	### Here's how it would look to build from source (incomplete):
 	#apt-get install -y build-essential cmake libaio-dev libncurses5-dev
 	#
 	#mkdir -p $(WORKING_DIR) && cd $(WORKING_DIR) && \
@@ -199,7 +218,9 @@ mysql : #get_mysql_source #mysql_user
 	#cd mysql-$(MYSQL_VERSION) && \
 	#mkdir bld && cd bld && \
 	##\
-	#cmake -DBUILD_CONFIG=mysql_release .. && \
+	#cmake \
+	#	-DBUILD_CONFIG=mysql_release 				\
+	#	.. && \
 	#$(MAKE) && \
 	#$(MAKE) install
 	#
