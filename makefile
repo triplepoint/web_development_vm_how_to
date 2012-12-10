@@ -206,29 +206,32 @@ get_mysql_source :
 	fi
 
 
-mysql : #get_mysql_source #mysql_user
+mysql : get_mysql_source #mysql_user
 	### Here's how it would look to build from source (incomplete):
-	#apt-get install -y build-essential cmake libaio-dev libncurses5-dev
-	#
-	#mkdir -p $(WORKING_DIR) && cd $(WORKING_DIR) && \
-	## \
-	#cp $(SOURCE_DOWNLOAD_DIR)/mysql-$(MYSQL_VERSION).tar.gz . && \
-	#tar -xvf mysql-$(MYSQL_VERSION).tar.gz && \
-	## \
-	#cd mysql-$(MYSQL_VERSION) && \
-	#mkdir bld && cd bld && \
-	##\
-	#cmake \
-	#	-DBUILD_CONFIG=mysql_release 				\
-	#	.. && \
-	#$(MAKE) && \
-	#$(MAKE) install
-	#
-	#-rm -rf $(WORKING_DIR)
+	apt-get install -y build-essential cmake libaio-dev libncurses5-dev
 
-	### Here's how it would look if we were installing from an Apt repository:
-	DEBIAN_FRONTEND=noninteractive apt-get install -y mysql-server-5.5
+	mkdir -p $(WORKING_DIR) && cd $(WORKING_DIR) && \
+	# \
+	cp $(SOURCE_DOWNLOAD_DIR)/mysql-$(MYSQL_VERSION).tar.gz . && \
+	tar -xvf mysql-$(MYSQL_VERSION).tar.gz && \
+	# \
+	cd mysql-$(MYSQL_VERSION) && \
+	mkdir build && cd build && \
+	#\
+	cmake \
+		-DCMAKE_INSTALL_PREFIX=/usr/share/mysql       \
+        -DSYSCONFDIR=/etc                             \
+		.. && \
+	$(MAKE) && \
+	$(MAKE) install
 
+	-rm -rf $(WORKING_DIR)
+
+	cp /usr/share/mysql/support-files/my-default.cnf /etc/my.cnf
+
+	cp /usr/share/mysql/support-files/mysql.server /etc/init.d/mysqld
+	chmod 755 /etc/init.d/mysqld
+	update-rc.d mysqld defaults
 
 java_runtime :
 	apt-get install -y unzip default-jre
