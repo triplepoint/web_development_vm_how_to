@@ -195,8 +195,8 @@ php : get_php_source
 
 
 mysql_user :
-	groupadd -g 40 mysql && \
-	useradd -c "MySQL Server" -d /dev/null -g mysql -s /bin/false -u 40 mysql
+	groupadd mysql && \
+	useradd -c "MySQL Server" -r -g mysql mysql
 
 
 get_mysql_source :
@@ -206,7 +206,7 @@ get_mysql_source :
 	fi
 
 
-mysql : get_mysql_source #mysql_user
+mysql : get_mysql_source mysql_user
 	### Here's how it would look to build from source (incomplete):
 	apt-get install -y build-essential cmake libaio-dev libncurses5-dev
 
@@ -227,12 +227,21 @@ mysql : get_mysql_source #mysql_user
 
 	-rm -rf $(WORKING_DIR)
 
+	# Set up the system tables
+	chown -R mysql:mysql /usr/share/mysql
+	cd /usr/share/mysql/ && scripts/mysql_install_db --user=mysql
+	chown -R root /usr/share/mysql
+	chown -R mysql data
+
+	# Set up the MySQL config file
 	cp /usr/share/mysql/support-files/my-default.cnf /etc/my.cnf
 
+	# Set up the init.d files
 	cp /usr/share/mysql/support-files/mysql.server /etc/init.d/mysqld
 	chmod 755 /etc/init.d/mysqld
 	update-rc.d mysqld defaults
 
+	# Start MySQL
 	service mysqld start
 
 java_runtime :

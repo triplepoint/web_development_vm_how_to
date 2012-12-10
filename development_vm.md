@@ -289,21 +289,51 @@ git clone git://github.com/triplepoint/web_development_vm_how_to.git
 
 
 ### MySQL
-- Install
- *DON'T DO THIS* (because I'm not building from scratch until I've got a good reason to):
+- Add the MySQL User
 
     ``` bash
-    apt-get install cmake
+    groupadd mysql
+    useradd -c "MySQL Server" -r -g mysql mysql
+    ```
+- Install
+
+    ``` bash
+    apt-get install build-essential cmake libaio-dev libncurses5-dev
     wget http://dev.mysql.com/get/Downloads/MySQL-5.5/mysql-5.5.25a.tar.gz/from/http://cdn.mysql.com/ -O mysql-5.5.25a.tar.gz
     tar -xvf mysql-5.5.25a.tar.gz
     cd mysql-5.5.25a
-    ```
 
-    Instead do this: (because screw it, I'm cheating on this one and using `apt-get`.  Building MySQL from source looks like a pain in the ass with no gain):
+    mkdir build && cd build
+    cmake -DCMAKE_INSTALL_PREFIX=/usr/share/mysql -DSYSCONFDIR=/etc ..
+    make
+    make install
+    ```
+- Set up the system tables
 
     ``` bash
-    apt-get install mysql-server-5.5
+    chown -R mysql:mysql /usr/share/mysql
+    cd /usr/share/mysql/ && scripts/mysql_install_db --user=mysql
+    chown -R root /usr/share/mysql
+    chown -R mysql data
     ```
+- Set up the MySQL config file
+
+    ``` bash
+    cp /usr/share/mysql/support-files/my-default.cnf /etc/my.cnf
+    ```
+- Set up the MySQL init script
+
+    ``` bash
+    cp /usr/share/mysql/support-files/mysql.server /etc/init.d/mysqld
+    chmod 755 /etc/init.d/mysqld
+    update-rc.d mysqld defaults
+    ```
+- Start MySQL
+
+    ``` bash
+    service mysqld start
+    ```
+
 
 
 ### Install YUI Compressor
@@ -317,7 +347,7 @@ git clone git://github.com/triplepoint/web_development_vm_how_to.git
     ``` bash
     cd /usr/src/
     apt-get install unzip
-    wget http://yui.zenfs.com/releases/yuicompressor/yuicompressor-2.4.7.zip
+    wget https://github.com/downloads/yui/yuicompressor/yuicompressor-2.4.7.zip
     unzip yuicompressor-2.4.7.zip
     mkdir /usr/share/yui-compressor
     cp yuicompressor-2.4.7/build/yuicompressor-2.4.7.jar /usr/share/yui-compressor/yui-compressor.jar
