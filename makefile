@@ -153,7 +153,7 @@ php : get_php_source
 	# \
 	cd php-$(PHP_VERSION) && \
 	# \
-	./configure
+	./configure 						/
 		--prefix=/usr 					/
 		--sysconfdir=/etc 				/
 		--with-config-file-path=/etc 	/
@@ -218,7 +218,7 @@ mysql : get_mysql_source #mysql_user
 	cd mysql-$(MYSQL_VERSION) && \
 	mkdir build && cd build && \
 	#\
-	cmake \
+	cmake                                  		 	  \
 		-DCMAKE_INSTALL_PREFIX=/usr/share/mysql       \
         -DSYSCONFDIR=/etc                             \
 		.. && \
