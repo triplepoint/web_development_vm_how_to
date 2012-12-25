@@ -2,6 +2,7 @@
 # This makefile more or less automates the procedures set out at
 # https://github.com/triplepoint/web_development_vm_how_to
 #
+# Please refer to that guide for more information.
 ###
 
 
@@ -12,11 +13,6 @@ TOOL_DIR = $(CURDIR)
 SOURCE_DOWNLOAD_DIR = $(TOOL_DIR)/source_downloads
 
 
-### Git configuration
-### NOTE: these values configure git's global user attributes,
-### and should probably be set to something more useful for you.
-GIT_USER_FULL_NAME     = "Jonathan Hanson"
-GIT_USER_EMAIL_ADDRESS = "jonathan@jonathan-hanson.org"
 
 ### Nginx Configuration
 NGINX_VERSION = 1.3.9
@@ -29,7 +25,8 @@ WWW_DIRECTORY_SYMLINK_TARGET = /vagrant_development
 
 ### MySQL Configuration
 # Note that the URL this is sourced from is a needlessly-complex URL scheme at mysql.com  Any version other
-# than a 5.6.x version will likely require the URL to be reviewed and modified
+# than a 5.6.x version will likely require the URL to be reviewed and modified.  See down below for where this
+# is used in the URL fragment
 MYSQL_VERSION = 5.6.9-rc
 
 ### YUI Compressor
@@ -38,7 +35,7 @@ YUI_COMPRESSOR_VERSION = 2.4.7
 
 target-list :
 	@echo "This makefile is capable of building multiple versions of a the web development server.  Please"
-	@echo "choose one by running make <type> with one of the types listed below."
+	@echo "choose one by running 'make <type>' with one of the types listed below."
 	@echo
 	@echo "Available types:"
 	@echo "    development_server"
@@ -46,10 +43,10 @@ target-list :
 	@echo
 
 
-development_server : package_update firewall www_directory_symlink git nginx nginx_default_server php mysql yui_compressor compass
+development_server : package_update firewall www_directory_symlink install_git nginx nginx_default_server php mysql yui_compressor compass
 
 
-production_server : package_update firewall git nginx php mysql
+production_server : package_update firewall install_git nginx php mysql
 
 
 ###############################################################
@@ -71,7 +68,7 @@ www_directory_symlink :
 	-ln -s $(WWW_DIRECTORY_SYMLINK_TARGET) /var/www
 
 
-git :
+install_git :
 	apt-get install -y git-core
 
 

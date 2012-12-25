@@ -1,4 +1,4 @@
-# BUILD A NEW DEVELOPMENT VIRTUAL MACHINE
+# Build a Development Virtual Machine
 ## Introduction
 The goal here is to build a development virtual machine that can support PHP web development.  While I'm aiming to keep this generally useful to anyone doing PHP web development, there are places where I install tools or make configuration choices that specifically support my projects.  Be aware that there will need to be some improvization on your part if you want this guide to work for you.
 
@@ -17,7 +17,7 @@ The basic features of this development environment are:
 - [SASS] and [Compass], for developing CSS
 - [YUI Compressor][yui_comp], for compressing web assets
 
-## Notes on automation
+## Notes on Automation
 The instructions in this guide should be very close to the automated [Vagrant] build provided along with this document.  It should be possible for you to build this environment automatically by:
 - Installing [Vagrant]
 - Install VirtualBox from their [download page][vbox_dl]
@@ -27,7 +27,7 @@ The instructions in this guide should be very close to the automated [Vagrant] b
     cd /wherever/you/put/this/repo/Vagrant
     vagrant up
     ```
-The `makefile` packaged along with this guide together with the simple Puppet maninfest in `Vagrant/manifests` should then go through this guide's process of building the development environment automatically.  You can then SSH into the dev machine at `192.168.56.11` with the username:password `vagrant`:`vagrant`.
+The `makefile` packaged along with this guide together with the simple Puppet manifest in `Vagrant/manifests` should then go through this guide's process of building the development environment automatically.  You can then SSH into the dev machine at `192.168.56.11` with the username:password `vagrant`:`vagrant`.
 
 The rest of this guide documents the manual way to build this development environment.  While there are likely a few differences between the resulting machines, hopefully they're simple cosmetic differences.
 
@@ -44,19 +44,33 @@ The rest of this guide documents the manual way to build this development enviro
         - IPv4 Network Mask `255.255.255.0`
         - Disabled DHCP Server
 - Download the [Ubuntu 12.04 server minimal ISO][ubuntu_minimal]
-- Edit the [`create_new_vm.bat`][create_new_vm_bat] script attached to these instructions and supply reasonable configuration values.
-- From the Windows CLI, run the [`create_new_vm.bat`][create_new_vm_bat] batch script with a chosen new Virtual Machine name to create the new virtual machine:
+- From the host's command line, create and configure the new virtual machine (be careful to modify the commands appropriately for suitable names and file paths):
 
     ``` dos
-    create_new_vm.bat SomeNewVMName
+    # Create the new disk - make sure the filename path and VM name are modified appropriately
+    VboxManage createhd --filename "E:\Users\username\VirtualBox VMs\new_vm_name\new_vm_name.vdi" --size 10240 --format VDI --variant Standard
+
+    # Create the new vm - make sure the VM name is modified appropriately
+    VboxManage createvm --name "new_vm_name" --ostype Ubuntu_64 --register
+    VboxManage modifyvm "new_vm_name" --memory 2048 --vram 12 --acpi on --ioapic on --cpus 1 --rtcuseutc on --boot1 dvd --boot2 disk --boot3 none --boot4 none --audio none
+    VboxManage modifyvm "new_vm_name" --nic1 nat --nictype1 82540EM
+    VboxManage modifyvm "new_vm_name" --nic2 hostonly --nictype2 82540EM --hostonlyadapter2 "VirtualBox Host-Only Ethernet Adapter"
+
+    # Create the HD controller and attach the disk - make sure the medium path and VM name are modified appropriately
+    VBoxManage storagectl "new_vm_name" --name "SATA Controller" --add sata --controller IntelAHCI
+    VBoxManage storageattach "new_vm_name" --storagectl "SATA Controller" --port 0 --device 0 --type hdd --medium "E:\Users\username\VirtualBox VMs\new_vm_name\new_vm_name.vdi"
+
+    # Create the DVD drive controller and attach the CD ROM ISO - make sure the medium path is where you downloaded the ISO above, and that the VM name is modified appropriately
+    VBoxManage storagectl "new_vm_name" --name "IDE Controller" --add ide
+    VBoxManage storageattach "new_vm_name" --storagectl "IDE Controller" --port 0 --device 0 --type dvddrive --medium "E:\Users\username\Downloads\mini.iso"
+
+    # Shared folders - verify the VM name, and pick an appropriate hostpath directory to share between the host and guest
+    VBoxManage sharedfolder add "new_vm_name" --name "shared_workspace" --hostpath "E:\Users\username\workspace"
     ```
-    - This just sets up a new VM, disk, mounts the ubuntu iso and starts the VM
-    - Two NICs, one set up for host-only the other one for NAT (see script for details)
-    - One shared directory, named `shared_workspace`, from `E:\Users\username\shared_workspace`
 - start the virtual machine with:
 
     ``` dos
-    vboxmanage startvm SomeNewVMName
+    VBoxManage startvm new_vm_name
     ```
 - Follow all the onscreen Ubuntu setup, accepting defaults.  When it comes to selecting packages, select only the `OpenSSH server`
 - Choose an IP address for the guest (I chose `192.168.56.11` below) and set up the Windows hosts file by editing `C:\Windows\System32\drivers\etc\hosts` and adding (note these domains are specific to my configuration, yours are likely different):
@@ -481,7 +495,6 @@ service nginx restart
 [Compass]: http://compass-style.org/
 [yui_comp]: http://developer.yahoo.com/yui/compressor/
 [vbox_dl]: https://www.virtualbox.org/wiki/Downloads "Virtualbox Download Page"
-[create_new_vm_bat]: https://github.com/triplepoint/web_development_vm_how_to/blob/master/create_new_vm.bat "Create script for new virtual machines"
 [vbox_clone]: http://www.virtualbox.org/manual/ch05.html#cloningvdis "Virtualbox Manual: Cloning disk images"
 [github_ssh]: https://help.github.com/articles/generating-ssh-keys
 [adayinthepit_ssl_certs]: http://adayinthepit.com/2012/03/21/self-signed-ssl-certificate-nginx-and-rightscale/

@@ -1,13 +1,31 @@
-## The name of this project.  Used to pick config file names, etc.
-PROJECT_NAME = someprojectname   ## TODO - change this to something appropriate
+###
+# This makefile is intended to be a template for custom makefiles which
+# set up individual web projects after the server itself is built.  But, the more
+# specific a guide gets, the more likely that it'll need significant rework in order
+# for someone else to use it, and this guide is definitely very specific
+# to the kind of projects I typically use.
+#
+# In particular, note that the project is assumed to be using Composer, and that the
+# Composer.phar file is not present and needs to be fetched.
+#
+# So please, read this through to the end, and understand the why's.  I've attempted
+# to call attention with a TODO note to places you'll definitely need to revise, but do
+# understand that these are likely not the only changes you'll need to make.
+###
 
-## THe domain name that the generated self-signed-cert should cover.
-CERT_DOMAIN = *.somedomain.local         ## TODO - change this to something appropriate
+
+## The name of this project.  Used to pick config file names, etc.
+PROJECT_NAME = someprojectname           ## TODO - change this to something appropriate, with no spaces or punctuation (think file names without the extension)
+
+## The domain name that the generated self-signed-cert should cover.
+CERT_DOMAIN = *.somedomain.local         ## TODO - can be wildcard like the shown example.
 
 ## The cert file name root that the cert files are generated with
 CERT_FILE_NAME = $(PROJECT_NAME)
 
-## The password used to generate the cert files
+## The password used to generate the cert files - note that this is
+# obviously a secure thing if you ever intend to use the self-signed cert in a
+# publicly available site
 CERT_PASSWORD = selfsignedpassword
 
 
@@ -84,4 +102,6 @@ composer_install_dependencies_dev :
 
 
 db_init :
-    echo "Here's where any database initialization stuff might be called"
+    ## TODO - Your project's database initialization will likely be so custom that it's not
+    # worth even showing an example here.  Speculating, I'd guess you'd call an external
+    # .sql script.  At least, that's what I would do.
