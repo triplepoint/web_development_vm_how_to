@@ -8,11 +8,11 @@ The basic features of this development environment are:
     - [Windows 7][win7] Host (but don't let that turn you away in disgust, it matters very little and these instructions are more or less accurate for other host OSes)
     - Shared directory between the host and guest for code development
     - Firewall configured with [UFW]
-- [PHP 5.4.9][php], compiled from source
+- [PHP 5.4 stable][php], compiled from source
     - FastCGI with [PHP-FPM], including Unix socket configuration for talking to [Nginx]
     - [APC], built from source via [PECL]
     - [XDebug], built from source via [PECL]
-- [Nginx 1.3.9][nginx], compiled from source, with the [SPDY] patch
+- [Nginx 1.3 development][nginx], compiled from source, with the [SPDY] patch
 - [MySQL 5.6 RC][mysql], compiled from source
 - [SASS] and [Compass], for developing CSS
 - [YUI Compressor][yui_comp], for compressing web assets
@@ -224,9 +224,9 @@ git clone git://github.com/triplepoint/web_development_vm_how_to.git
     ``` bash
     cd /usr/src/
     apt-get install autoconf libxml2 libxml2-dev libcurl3 libcurl4-gnutls-dev libmagic-dev
-    wget http://us3.php.net/get/php-5.4.9.tar.bz2/from/us2.php.net/mirror -O php-5.4.9.tar.bz2
-    tar -xvf php-5.4.9.tar.bz2
-    cd php-5.4.9
+    wget http://us3.php.net/get/php-5.4.10.tar.bz2/from/us2.php.net/mirror -O php-5.4.10.tar.bz2
+    tar -xvf php-5.4.10.tar.bz2
+    cd php-5.4.10
     ./configure --prefix=/usr --sysconfdir=/etc --with-config-file-path=/etc --enable-fpm --with-fpm-user=www-data --with-fpm-group=www-data --enable-mbstring --with-mysqli --with-openssl --with-zlib
     make
     make test
@@ -299,9 +299,9 @@ git clone git://github.com/triplepoint/web_development_vm_how_to.git
 
     ``` bash
     apt-get install build-essential cmake libaio-dev libncurses5-dev
-    wget http://cdn.mysql.com/Downloads/MySQL-5.6/mysql-5.6.8-rc.tar.gz -O mysql-5.6.8-rc.tar.gz
-    tar -xvf mysql-5.6.8-rc.tar.gz
-    cd mysql-5.6.8-rc
+    wget http://cdn.mysql.com/Downloads/MySQL-5.6/mysql-5.6.9-rc.tar.gz -O mysql-5.6.9-rc.tar.gz
+    tar -xvf mysql-5.6.9-rc.tar.gz
+    cd mysql-5.6.9-rc
 
     mkdir build && cd build
     cmake -DCMAKE_INSTALL_PREFIX=/usr/share/mysql -DSYSCONFDIR=/etc ..

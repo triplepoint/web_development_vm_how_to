@@ -22,7 +22,7 @@ GIT_USER_EMAIL_ADDRESS = "jonathan@jonathan-hanson.org"
 NGINX_VERSION = 1.3.9
 
 ### PHP Configuration
-PHP_VERSION = 5.4.9
+PHP_VERSION = 5.4.10
 
 ### Symlink target for /var/www
 WWW_DIRECTORY_SYMLINK_TARGET = /vagrant_development
@@ -30,7 +30,7 @@ WWW_DIRECTORY_SYMLINK_TARGET = /vagrant_development
 ### MySQL Configuration
 # Note that the URL this is sourced from is a needlessly-complex URL scheme at mysql.com  Any version other
 # than a 5.6.x version will likely require the URL to be reviewed and modified
-MYSQL_VERSION = 5.6.8-rc
+MYSQL_VERSION = 5.6.9-rc
 
 ### YUI Compressor
 YUI_COMPRESSOR_VERSION = 2.4.7
