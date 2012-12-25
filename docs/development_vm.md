@@ -487,7 +487,7 @@ service nginx restart
 [APC]: http://php.net/manual/en/book.apc.php "Advanced PHP Cache"
 [XDebug]: http://xdebug.org/ "XDebug Extension for PHP"
 [PECL]: http://pecl.php.net/
-[mysql]: http://dev.mysql.com/doc/refman/5.5/en/
+[mysql]: http://dev.mysql.com/doc/refman/5.6/en/
 [nginx]: http://nginx.org/ "Nginx"
 [SPDY]: http://www.chromium.org/spdy "SPDY"
 [SASS]: http://sass-lang.com/
