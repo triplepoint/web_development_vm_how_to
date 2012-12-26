@@ -188,9 +188,9 @@ git clone git://github.com/triplepoint/web_development_vm_how_to.git
     cd /usr/src/
     apt-get install libc6 libpcre3 libpcre3-dev libpcrecpp0 libssl0.9.8 libssl-dev zlib1g zlib1g-dev lsb-base
 
-    wget http://nginx.org/download/nginx-1.3.9.tar.gz
-    tar -xvf nginx-1.3.9.tar.gz
-    cd nginx-1.3.9
+    wget http://nginx.org/download/nginx-1.3.10.tar.gz
+    tar -xvf nginx-1.3.10.tar.gz
+    cd nginx-1.3.10
 
     # Feel free to skip the wget and patch commands if you don't want to build in SPDY
     wget http://nginx.org/patches/spdy/patch.spdy.txt
