@@ -164,7 +164,7 @@ php : get_php_source
 	$(MAKE) && \
 	$(MAKE) install && \
 	# \
-	cp $(TOOL_DIR)/etc/php.ini /etc/php.ini
+	cp $(TOOL_DIR)/etc/php.ini /etc/php.ini && \
 	# \
 	# \ cp php.ini-production /etc/php.ini && \
 	# \ sed -i 's/;date.timezone =/date.timezone = UTC/g' /etc/php.ini && \
