@@ -246,15 +246,14 @@ git clone git://github.com/triplepoint/web_development_vm_how_to.git
     make test
     make install
     ```
-- Copy the generated ini file to the config directory
-
-    *NOTE* - If this is a rebuild and not a fresh install, the better process may be to diff the two files and see if anything important has changed.
+- Copy the provided php.ini file to the config directory
 
     ``` bash
-    cp php.ini-production /etc/php.ini
+    cp /usr/src/web_development_vm_how_to/etc/php.ini /etc/php.ini
     ```
-    *NOTE* - This file needs to be modified after it's copied:
-    - Uncomment and set the `date.timezone` directive to UTC: `date.timezone = UTC`
+    *NOTE* - This provided php.ini file is a stripped down custom version.  The PHP-provided default versions are present in the
+    php source as `php.ini-production` and `php.ini-development`.   Feel free to copy one of those instead, but note that the date.timezone
+    will need to be set to avoid warnings.
 
 - Install the PHP init script
 
@@ -273,10 +272,11 @@ git clone git://github.com/triplepoint/web_development_vm_how_to.git
     - uncomment the pid directive: `pid = run/php-fpm.pid`
     - uncomment and set the `error_log` location to `/var/log/php-fpm/php-fpm.log`: `error_log = /var/log/php-fpm/php-fpm.log`
     - changed the `listen` location: `listen = /tmp/php.socket`
-- Create the PHP-FPM log file:
+- Create the PHP-FPM and PHP log directories:
 
     ``` bash
     mkdir /var/log/php-fpm
+    mkdir /var/log/php
     ```
 - Install the PECL extensions: APC, HTTP, XDebug
 
@@ -285,10 +285,9 @@ git clone git://github.com/triplepoint/web_development_vm_how_to.git
     # when prompted, answer with defaults
     pecl install pecl_http apc-beta xdebug
     ```
-
     *NOTE* that `apc-beta` was necessary above to get APC version 3.1.11+ (in beta right now) which includes fixes for PHP 5.4 compatability.  This may not be necessary down the road, so keep an eye on it.  The production package name is `apc`.
 
-    append to `/etc/php.ini`:
+    append to `/etc/php.ini` (skip this step if you're using the custom php.ini provided above):
 
     ```
     extension=http.so

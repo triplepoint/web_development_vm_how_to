@@ -164,8 +164,10 @@ php : get_php_source
 	$(MAKE) && \
 	$(MAKE) install && \
 	# \
-	cp php.ini-production /etc/php.ini && \
-	sed -i 's/;date.timezone =/date.timezone = UTC/g' /etc/php.ini && \
+	cp $(TOOL_DIR)/etc/php.ini /etc/php.ini
+	# \
+	# \ cp php.ini-production /etc/php.ini && \
+	# \ sed -i 's/;date.timezone =/date.timezone = UTC/g' /etc/php.ini && \
 	# \
 	cp sapi/fpm/init.d.php-fpm /etc/init.d/php-fpm && \
 	chmod 755 /etc/init.d/php-fpm && \
@@ -180,13 +182,16 @@ php : get_php_source
 	sed -i 's/listen = 127.0.0.1:9000/listen = \/tmp\/php.socket/g' /etc/php-fpm.conf
 
 	mkdir -p /var/log/php-fpm
+	mkdir -p /var/log/php
 
 	# install the PECL extensions
 	pecl update-channels
 	printf "\n" | pecl install pecl_http apc-beta xdebug
-	echo 'extension=http.so' >> /etc/php.ini
-	echo 'extension=apc.so' >> /etc/php.ini
-	echo 'zend_extension="/usr/lib/php/extensions/no-debug-non-zts-20100525/xdebug.so"' >> /etc/php.ini
+
+	# ### These commands are only necessary if you're modifying the default php.ini.
+	# echo 'extension=http.so' >> /etc/php.ini
+	# echo 'extension=apc.so' >> /etc/php.ini
+	# echo 'zend_extension="/usr/lib/php/extensions/no-debug-non-zts-20100525/xdebug.so"' >> /etc/php.ini
 
 	service php-fpm start
 
