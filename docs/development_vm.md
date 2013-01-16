@@ -169,7 +169,7 @@ apt-get install git-core
 git config --global user.name "Your Name Here"
 git config --global user.email "your_email@youremail.com"
 ```
-If you're using Github, it's likely you'll want to set up an SSH key for this machine.  For more information, see [Github's documentation on SSH keys][github_ssh].
+If you're using GitHub, it's likely you'll want to set up an SSH key for this machine.  For more information, see [GitHub's documentation on SSH keys][github_ssh].
 
 
 ### Fetch This Documentation
