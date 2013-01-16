@@ -194,9 +194,9 @@ git clone git://github.com/triplepoint/web_development_vm_how_to.git
 
     # Feel free to skip the wget and patch commands if you don't want to build in SPDY
     wget http://nginx.org/patches/spdy/patch.spdy.txt
-    patch -p0 < patch.spdy.txt
+    patch -p1 < patch.spdy.txt
 
-    ./configure --prefix=/usr --sbin-path=/usr/sbin --pid-path=/var/run/nginx.pid --conf-path=/etc/nginx/nginx.conf --error-log-path=/var/log/nginx/error.log --http-log-path=/var/log/nginx/access.log --user=www-data --group=www-data --with-http_ssl_module --with-ipv6
+    ./configure --prefix=/usr --sbin-path=/usr/sbin --pid-path=/var/run/nginx.pid --conf-path=/etc/nginx/nginx.conf --error-log-path=/var/log/nginx/error.log --http-log-path=/var/log/nginx/access.log --user=www-data --group=www-data --with-http_ssl_module --with-http_spdy_module --with-ipv6
     make
     make install
     ```

@@ -97,7 +97,7 @@ nginx : get_nginx_source get_nginx_spdy_patch_source
 	cd nginx-$(NGINX_VERSION) && \
 	# \
 	cp $(SOURCE_DOWNLOAD_DIR)/patch.spdy.txt . && \
-	patch -p0 < patch.spdy.txt && \
+	patch -p1 < patch.spdy.txt && \
 	# \
 	./configure 									\
 		--prefix=/usr 								\
@@ -108,6 +108,7 @@ nginx : get_nginx_source get_nginx_spdy_patch_source
 		--http-log-path=/var/log/nginx/access.log 	\
 		--user=www-data --group=www-data 			\
 		--with-http_ssl_module 						\
+		--with-http_spdy_module                     \
 		--with-ipv6  && \
 	$(MAKE) && \
 	$(MAKE) install
