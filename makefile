@@ -18,7 +18,7 @@ SOURCE_DOWNLOAD_DIR = $(TOOL_DIR)/source_downloads
 NGINX_VERSION = 1.3.11
 
 ### PHP Configuration
-PHP_VERSION = 5.4.10
+PHP_VERSION = 5.4.11
 
 ### Symlink target for /var/www
 WWW_DIRECTORY_SYMLINK_TARGET = /vagrant_development
