@@ -73,44 +73,44 @@ install_git :
 
 
 get_nginx_source :
-	@if [ ! -f $(SOURCE_DOWNLOAD_DIR)/nginx-$(NGINX_VERSION).tar.gz ]; then \
-		mkdir -p $(SOURCE_DOWNLOAD_DIR) && cd $(SOURCE_DOWNLOAD_DIR) && \
-		wget http://nginx.org/download/nginx-$(NGINX_VERSION).tar.gz; \
+	@if [ ! -f $(SOURCE_DOWNLOAD_DIR)/nginx-$(NGINX_VERSION).tar.gz ]; then	\
+		mkdir -p $(SOURCE_DOWNLOAD_DIR) && cd $(SOURCE_DOWNLOAD_DIR) &&		\
+		wget http://nginx.org/download/nginx-$(NGINX_VERSION).tar.gz;		\
 	fi
 
 
 get_nginx_spdy_patch_source :
-	@if [ ! -f $(SOURCE_DOWNLOAD_DIR)/patch.spdy.txt ]; then \
-		mkdir -p $(SOURCE_DOWNLOAD_DIR) && cd $(SOURCE_DOWNLOAD_DIR) && \
-		wget http://nginx.org/patches/spdy/patch.spdy.txt; \
+	@if [ ! -f $(SOURCE_DOWNLOAD_DIR)/patch.spdy.txt ]; then				\
+		mkdir -p $(SOURCE_DOWNLOAD_DIR) && cd $(SOURCE_DOWNLOAD_DIR) &&		\
+		wget http://nginx.org/patches/spdy/patch.spdy.txt;					\
 	fi
 
 
 nginx : get_nginx_source get_nginx_spdy_patch_source
 	apt-get install -y libc6 libpcre3 libpcre3-dev libpcrecpp0 libssl0.9.8 libssl-dev zlib1g zlib1g-dev lsb-base
 
-	mkdir -p $(WORKING_DIR) && cd $(WORKING_DIR) && \
-	# \
-	cp $(SOURCE_DOWNLOAD_DIR)/nginx-$(NGINX_VERSION).tar.gz . && \
-	tar -xvf nginx-$(NGINX_VERSION).tar.gz && \
-	# \
-	cd nginx-$(NGINX_VERSION) && \
-	# \
-	cp $(SOURCE_DOWNLOAD_DIR)/patch.spdy.txt . && \
-	patch -p1 < patch.spdy.txt && \
-	# \
-	./configure 									\
-		--prefix=/usr 								\
-		--sbin-path=/usr/sbin 						\
-		--pid-path=/var/run/nginx.pid 				\
-		--conf-path=/etc/nginx/nginx.conf 			\
-		--error-log-path=/var/log/nginx/error.log 	\
-		--http-log-path=/var/log/nginx/access.log 	\
-		--user=www-data --group=www-data 			\
-		--with-http_ssl_module 						\
-		--with-http_spdy_module                     \
-		--with-ipv6  && \
-	$(MAKE) && \
+	mkdir -p $(WORKING_DIR) && cd $(WORKING_DIR) &&							\
+	#																		\
+	cp $(SOURCE_DOWNLOAD_DIR)/nginx-$(NGINX_VERSION).tar.gz . &&			\
+	tar -xvf nginx-$(NGINX_VERSION).tar.gz &&								\
+	#																		\
+	cd nginx-$(NGINX_VERSION) &&											\
+	#																		\
+	cp $(SOURCE_DOWNLOAD_DIR)/patch.spdy.txt . &&							\
+	patch -p1 < patch.spdy.txt &&											\
+	#																		\
+	./configure																\
+		--prefix=/usr														\
+		--sbin-path=/usr/sbin												\
+		--pid-path=/var/run/nginx.pid										\
+		--conf-path=/etc/nginx/nginx.conf									\
+		--error-log-path=/var/log/nginx/error.log							\
+		--http-log-path=/var/log/nginx/access.log							\
+		--user=www-data --group=www-data									\
+		--with-http_ssl_module												\
+		--with-http_spdy_module												\
+		--with-ipv6  &&														\
+	$(MAKE) &&																\
 	$(MAKE) install
 
 	-rm -rf $(WORKING_DIR)
@@ -135,44 +135,44 @@ nginx_default_server :
 
 
 get_php_source :
-	@if [ ! -f $(SOURCE_DOWNLOAD_DIR)/php-$(PHP_VERSION).tar.bz2 ]; then \
-		mkdir -p $(SOURCE_DOWNLOAD_DIR) && cd $(SOURCE_DOWNLOAD_DIR) && \
-		wget http://us3.php.net/get/php-$(PHP_VERSION).tar.bz2/from/us2.php.net/mirror -O php-$(PHP_VERSION).tar.bz2; \
+	@if [ ! -f $(SOURCE_DOWNLOAD_DIR)/php-$(PHP_VERSION).tar.bz2 ]; then												\
+		mkdir -p $(SOURCE_DOWNLOAD_DIR) && cd $(SOURCE_DOWNLOAD_DIR) &&													\
+		wget http://us3.php.net/get/php-$(PHP_VERSION).tar.bz2/from/us2.php.net/mirror -O php-$(PHP_VERSION).tar.bz2;	\
 	fi
 
 
 php : get_php_source
 	apt-get install -y autoconf libxml2 libxml2-dev libcurl3 libcurl4-gnutls-dev libmagic-dev
 
-	mkdir -p $(WORKING_DIR) && cd $(WORKING_DIR) && \
-	# \
-	cp $(SOURCE_DOWNLOAD_DIR)/php-$(PHP_VERSION).tar.bz2 . && \
-	tar -xvf php-$(PHP_VERSION).tar.bz2 && \
-	# \
-	cd php-$(PHP_VERSION) && \
-	# \
-	./configure 						\
-		--prefix=/usr 					\
-		--sysconfdir=/etc 				\
-		--with-config-file-path=/etc 	\
-		--enable-fpm 					\
-		--with-fpm-user=www-data 		\
-		--with-fpm-group=www-data 		\
-		--enable-mbstring 				\
-		--with-mysqli 					\
-		--with-openssl 					\
-		--with-zlib && \
-	$(MAKE) && \
-	$(MAKE) install && \
-	# \
-        # ### Instead of using the provided php.ini, we're using a custom one \
-	# cp php.ini-production /etc/php.ini && \
-	# sed -i 's/;date.timezone =/date.timezone = UTC/g' /etc/php.ini && \
-	# \
-	cp $(TOOL_DIR)/etc/php.ini /etc/php.ini && \
-	# \
-	cp sapi/fpm/init.d.php-fpm /etc/init.d/php-fpm && \
-	chmod 755 /etc/init.d/php-fpm && \
+	mkdir -p $(WORKING_DIR) && cd $(WORKING_DIR) &&							\
+	#																		\
+	cp $(SOURCE_DOWNLOAD_DIR)/php-$(PHP_VERSION).tar.bz2 . &&				\
+	tar -xvf php-$(PHP_VERSION).tar.bz2 &&									\
+	#																		\
+	cd php-$(PHP_VERSION) &&												\
+	#																		\
+	./configure																\
+		--prefix=/usr														\
+		--sysconfdir=/etc													\
+		--with-config-file-path=/etc										\
+		--enable-fpm														\
+		--with-fpm-user=www-data											\
+		--with-fpm-group=www-data											\
+		--enable-mbstring													\
+		--with-mysqli														\
+		--with-openssl														\
+		--with-zlib &&														\
+	$(MAKE) &&																\
+	$(MAKE) install &&														\
+	#																		\
+	# ### Instead of using the provided php.ini, we're using a custom one	\
+	# cp php.ini-production /etc/php.ini &&									\
+	# sed -i 's/;date.timezone =/date.timezone = UTC/g' /etc/php.ini &&		\
+	#																		\
+	cp $(TOOL_DIR)/etc/php.ini /etc/php.ini &&								\
+	#																		\
+	cp sapi/fpm/init.d.php-fpm /etc/init.d/php-fpm &&						\
+	chmod 755 /etc/init.d/php-fpm &&										\
 	update-rc.d php-fpm defaults
 
 	-rm -rf $(WORKING_DIR)
@@ -199,33 +199,33 @@ php : get_php_source
 
 
 mysql_user :
-	groupadd mysql && \
+	groupadd mysql &&														\
 	useradd -c "MySQL Server" -r -g mysql mysql
 
 
 get_mysql_source :
-	@if [ ! -f $(SOURCE_DOWNLOAD_DIR)/mysql-$(MYSQL_VERSION).tar.gz ]; then \
-		mkdir -p $(SOURCE_DOWNLOAD_DIR) && cd $(SOURCE_DOWNLOAD_DIR) && \
-		wget http://cdn.mysql.com/Downloads/MySQL-5.6/mysql-$(MYSQL_VERSION).tar.gz; \
+	@if [ ! -f $(SOURCE_DOWNLOAD_DIR)/mysql-$(MYSQL_VERSION).tar.gz ]; then				\
+		mkdir -p $(SOURCE_DOWNLOAD_DIR) && cd $(SOURCE_DOWNLOAD_DIR) &&					\
+		wget http://cdn.mysql.com/Downloads/MySQL-5.6/mysql-$(MYSQL_VERSION).tar.gz;	\
 	fi
 
 
 mysql : get_mysql_source mysql_user
 	apt-get install -y build-essential cmake libaio-dev libncurses5-dev
 
-	mkdir -p $(WORKING_DIR) && cd $(WORKING_DIR) && \
-	# \
-	cp $(SOURCE_DOWNLOAD_DIR)/mysql-$(MYSQL_VERSION).tar.gz . && \
-	tar -xvf mysql-$(MYSQL_VERSION).tar.gz && \
-	# \
-	cd mysql-$(MYSQL_VERSION) && \
-	mkdir build && cd build && \
-	#\
-	cmake                                  		 	  \
-		-DCMAKE_INSTALL_PREFIX=/usr/share/mysql       \
-        -DSYSCONFDIR=/etc                             \
-		.. && \
-	$(MAKE) && \
+	mkdir -p $(WORKING_DIR) && cd $(WORKING_DIR) &&							\
+	#																		\
+	cp $(SOURCE_DOWNLOAD_DIR)/mysql-$(MYSQL_VERSION).tar.gz . &&			\
+	tar -xvf mysql-$(MYSQL_VERSION).tar.gz &&								\
+	#																		\
+	cd mysql-$(MYSQL_VERSION) &&											\
+	mkdir build && cd build &&												\
+	#																		\
+	cmake																	\
+		-DCMAKE_INSTALL_PREFIX=/usr/share/mysql								\
+		-DSYSCONFDIR=/etc													\
+		.. &&																\
+	$(MAKE) &&																\
 	$(MAKE) install
 
 	-rm -rf $(WORKING_DIR)
@@ -252,19 +252,19 @@ java_runtime :
 
 
 get_yui_compressor_source :
-	@if [ ! -f $(SOURCE_DOWNLOAD_DIR)/yuicompressor-$(YUI_COMPRESSOR_VERSION).zip ]; then \
-		mkdir -p $(SOURCE_DOWNLOAD_DIR) && cd $(SOURCE_DOWNLOAD_DIR) && \
-		wget https://github.com/downloads/yui/yuicompressor/yuicompressor-$(YUI_COMPRESSOR_VERSION).zip; \
+	@if [ ! -f $(SOURCE_DOWNLOAD_DIR)/yuicompressor-$(YUI_COMPRESSOR_VERSION).zip ]; then					\
+		mkdir -p $(SOURCE_DOWNLOAD_DIR) && cd $(SOURCE_DOWNLOAD_DIR) &&										\
+		wget https://github.com/downloads/yui/yuicompressor/yuicompressor-$(YUI_COMPRESSOR_VERSION).zip;	\
 	fi
 
 
 yui_compressor : java_runtime get_yui_compressor_source
-	mkdir -p $(WORKING_DIR) && cd $(WORKING_DIR) && \
-	# \
-	cp $(SOURCE_DOWNLOAD_DIR)/yuicompressor-$(YUI_COMPRESSOR_VERSION).zip . && \
-	unzip yuicompressor-$(YUI_COMPRESSOR_VERSION).zip && \
-	# \
-	mkdir -p /usr/share/yui-compressor && \
+	mkdir -p $(WORKING_DIR) && cd $(WORKING_DIR) &&																								\
+	#																																			\
+	cp $(SOURCE_DOWNLOAD_DIR)/yuicompressor-$(YUI_COMPRESSOR_VERSION).zip . &&																	\
+	unzip yuicompressor-$(YUI_COMPRESSOR_VERSION).zip &&																						\
+	#																																			\
+	mkdir -p /usr/share/yui-compressor &&																										\
 	cp yuicompressor-$(YUI_COMPRESSOR_VERSION)/build/yuicompressor-$(YUI_COMPRESSOR_VERSION).jar /usr/share/yui-compressor/yui-compressor.jar
 
 	-rm -rf $(WORKING_DIR)
