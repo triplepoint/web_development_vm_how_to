@@ -18,13 +18,19 @@ The basic features of this development environment are:
 - [YUI Compressor][yui_comp], for compressing web assets
 
 ## Notes on Automation
-The instructions in this guide should be very close to the automated [Vagrant] build provided along with this document.  It should be possible for you to build this environment automatically by:
-- Installing [Vagrant]
+The instructions in this guide should be very close to the automated [Vagrant] build provided along with this document.  It should be possible for you to build this environment automatically with:
+- Install [Vagrant]
 - Install VirtualBox from their [download page][vbox_dl]
-- Checking out this guide's repository somewhere convenient, and then:
+- Check out this guide somewhere convenient:
 
     ``` dos
-    cd /wherever/you/put/this/repo/Vagrant
+    cd /someplace_convenient
+    git clone git://github.com/triplepoint/web_development_vm_how_to.git how_to
+    ```
+- And finally, build the machine:
+
+    ``` dos
+    cd /someplace_convenient/how_to/Vagrant
     vagrant up
     ```
 The `makefile` packaged along with this guide together with the simple Puppet manifest in `Vagrant/manifests` should then go through this guide's process of building the development environment automatically.  You can then SSH into the dev machine at `192.168.56.11` with the username:password `vagrant`:`vagrant`.

@@ -165,10 +165,11 @@ php : get_php_source
 	$(MAKE) && \
 	$(MAKE) install && \
 	# \
-	cp $(TOOL_DIR)/etc/php.ini /etc/php.ini && \
+        # ### Instead of using the provided php.ini, we're using a custom one \
+	# cp php.ini-production /etc/php.ini && \
+	# sed -i 's/;date.timezone =/date.timezone = UTC/g' /etc/php.ini && \
 	# \
-	# \ cp php.ini-production /etc/php.ini && \
-	# \ sed -i 's/;date.timezone =/date.timezone = UTC/g' /etc/php.ini && \
+	cp $(TOOL_DIR)/etc/php.ini /etc/php.ini && \
 	# \
 	cp sapi/fpm/init.d.php-fpm /etc/init.d/php-fpm && \
 	chmod 755 /etc/init.d/php-fpm && \
@@ -210,7 +211,6 @@ get_mysql_source :
 
 
 mysql : get_mysql_source mysql_user
-	### Here's how it would look to build from source (incomplete):
 	apt-get install -y build-essential cmake libaio-dev libncurses5-dev
 
 	mkdir -p $(WORKING_DIR) && cd $(WORKING_DIR) && \
