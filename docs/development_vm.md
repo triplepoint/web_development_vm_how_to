@@ -5,7 +5,7 @@ The goal here is to build a development virtual machine that can support PHP web
 The basic features of this development environment are:
 
 - [Minimal Ubuntu 12.04 "Precise" Server][ubuntu_minimal] as a [VirtualBox] guest
-    - [Windows 7][win7] Host (but don't let that turn you away in disgust, it matters very little and these instructions are more or less accurate for other host OSes)
+    - [Windows 7][win7] Host (but don't let that turn you away in disgust, it matters very little and these instructions are useful for other host OSes)
     - Shared directory between the host and guest for code development
     - Firewall configured with [UFW]
 - [PHP 5.4 stable][php], compiled from source
@@ -21,19 +21,27 @@ The basic features of this development environment are:
 The instructions in this guide should be very close to the automated [Vagrant] build provided along with this document.  It should be possible for you to build this environment automatically with:
 - Install [Vagrant]
 - Install VirtualBox from their [download page][vbox_dl]
-- Check out this guide somewhere convenient:
+- Check out this guide somewhere convenient
 
     ``` dos
     cd /someplace_convenient
     git clone git://github.com/triplepoint/web_development_vm_how_to.git how_to
     ```
-- And finally, build the machine:
+- Edit the Vagrant configuration, if necessary
+  - In `Vagrant\Vagrantfile`, the `v-development` share folder is the project directory to share between your host and the virtual machine.  Edit it appropriately to point to your projects.
+  - In `Vagrant\Vagrantfile`, the `development_config.vm.network` configuration value sets the IP address of the virtual machine.  If this conflicts for you, you'll need to change it.
+- Build the machine
+    Vagrant will use the `makefile` packaged along with this guide to build the development environment automatically.
 
     ``` dos
     cd /someplace_convenient/how_to/Vagrant
     vagrant up
     ```
-The `makefile` packaged along with this guide together with the simple Puppet manifest in `Vagrant/manifests` should then go through this guide's process of building the development environment automatically.  You can then SSH into the dev machine at `192.168.56.11` with the username:password `vagrant`:`vagrant`.
+- Finally, you can get the SSH credentials from Vagrant and use them with whatever SSH client you want
+
+    ``` dos
+    vagrant ssh
+    ```
 
 The rest of this guide documents the manual way to build this development environment.  While there are likely a few differences between the resulting machines, hopefully they're simple cosmetic differences.
 

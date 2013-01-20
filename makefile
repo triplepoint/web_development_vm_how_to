@@ -21,7 +21,7 @@ NGINX_VERSION = 1.3.11
 PHP_VERSION = 5.4.11
 
 ### Symlink target for /var/www
-WWW_DIRECTORY_SYMLINK_TARGET = /vagrant_development
+WWW_DIRECTORY_SYMLINK_TARGET = /projects
 
 ### MySQL Configuration
 # Note that the URL this is sourced from is a needlessly-complex URL scheme at mysql.com  Any version other
