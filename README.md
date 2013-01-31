@@ -11,8 +11,8 @@ In addition to the makefile automation, I've provided a simple Vagrant wrapper w
 
 # Server Variations
 While it's ideal to develop projects in an environemnt which is identical to the production environment to which they'll be deployed, there are always unavoidable considerations which force deviations.  Here are the two variations I use:
-- [Development Local Virtual Machine](https://github.com/triplepoint/web_development_vm_how_to/blob/master/docs/development_vm.md)
-- [Production Server Virtual Machine](https://github.com/triplepoint/web_development_vm_how_to/blob/master/docs/production_vm.md)
+- [Development Local Virtual Machine](docs/development_vm.md)
+- [Production Server Virtual Machine](docs/production_vm.md)
 
 # Project Configuration
 This guide is intended to cover the creation and setup of the servers, but intentionally stops without covering any project-specific installation details.  For things like Drupal and Wordpress, there are far better guides out there which I'm sure you can find.
