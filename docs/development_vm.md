@@ -13,7 +13,7 @@ The basic features of this development environment are:
     - [APC], built from source via [PECL]
     - [XDebug], built from source via [PECL]
 - [Nginx 1.3 development][nginx], compiled from source, with the [SPDY] patch
-- [MySQL 5.6 RC][mysql], compiled from source
+- [MySQL 5.6][mysql], compiled from source
 - [SASS] and [Compass], for developing CSS
 - [YUI Compressor][yui_comp], for compressing web assets
 
@@ -326,9 +326,9 @@ git clone git://github.com/triplepoint/web_development_vm_how_to.git
 
     ``` bash
     apt-get install build-essential cmake libaio-dev libncurses5-dev
-    wget http://cdn.mysql.com/Downloads/MySQL-5.6/mysql-5.6.9-rc.tar.gz -O mysql-5.6.9-rc.tar.gz
-    tar -xvf mysql-5.6.9-rc.tar.gz
-    cd mysql-5.6.9-rc
+    wget http://cdn.mysql.com/Downloads/MySQL-5.6/mysql-5.6.10.tar.gz -O mysql-5.6.10.tar.gz
+    tar -xvf mysql-5.6.10.tar.gz
+    cd mysql-5.6.10
 
     mkdir build && cd build
     cmake -DCMAKE_INSTALL_PREFIX=/usr/share/mysql -DSYSCONFDIR=/etc ..
