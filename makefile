@@ -86,7 +86,7 @@ get_nginx_spdy_patch_source :
 	fi
 
 
-nginx : get_nginx_source get_nginx_spdy_patch_source
+nginx_build :
 	apt-get install -y libc6 libpcre3 libpcre3-dev libpcrecpp0 libssl0.9.8 libssl-dev zlib1g zlib1g-dev lsb-base
 
 	mkdir -p $(WORKING_DIR) && cd $(WORKING_DIR) &&							\
@@ -110,10 +110,16 @@ nginx : get_nginx_source get_nginx_spdy_patch_source
 		--with-http_ssl_module												\
 		--with-http_spdy_module												\
 		--with-ipv6  &&														\
-	$(MAKE) &&																\
+	#																		\
+	$(MAKE)
+
+
+nginx_install :
+	cd $(WORKING_DIR)/nginx-$(NGINX_VERSION) &&								\
+	#																		\
 	$(MAKE) install
 
-	-rm -rf $(WORKING_DIR)
+	-rm -rf $(WORKING_DIR)/nginx-$(NGINX_VERSION)*
 
 	cp $(TOOL_DIR)/etc/init.d/nginx-init /etc/init.d/nginx
 	chmod 755 /etc/init.d/nginx
@@ -129,6 +135,9 @@ nginx : get_nginx_source get_nginx_spdy_patch_source
 	service nginx start
 
 
+nginx : get_nginx_source get_nginx_spdy_patch_source nginx_build nginx_install
+
+
 nginx_default_server :
 	-ln -s /etc/nginx/sites-available/default /etc/nginx/sites-enabled/default
 	service nginx restart
@@ -141,7 +150,7 @@ get_php_source :
 	fi
 
 
-php : get_php_source
+php_build :
 	apt-get install -y autoconf libxml2 libxml2-dev libcurl3 libcurl4-gnutls-dev libmagic-dev
 
 	mkdir -p $(WORKING_DIR) && cd $(WORKING_DIR) &&							\
@@ -164,7 +173,13 @@ php : get_php_source
 		--with-curl															\
 		--with-curlwrappers													\
 		--with-zlib &&														\
-	$(MAKE) &&																\
+	#																		\
+	$(MAKE)
+
+
+php_install :
+	cd $(WORKING_DIR)/php-$(PHP_VERSION) &&									\
+	#																		\
 	$(MAKE) install &&														\
 	#																		\
 	# ### Instead of using the provided php.ini, we're using a custom one	\
@@ -177,7 +192,7 @@ php : get_php_source
 	chmod 755 /etc/init.d/php-fpm &&										\
 	update-rc.d php-fpm defaults
 
-	-rm -rf $(WORKING_DIR)
+	-rm -rf $(WORKING_DIR)/php-$(PHP_VERSION)*
 
 	# Set up PHP FPM to work with Nginx as configured above
 	cp /etc/php-fpm.conf.default /etc/php-fpm.conf
@@ -200,6 +215,9 @@ php : get_php_source
 	service php-fpm start
 
 
+php : get_php_source php_build php_install
+
+
 mysql_user :
 	groupadd mysql &&														\
 	useradd -c "MySQL Server" -r -g mysql mysql
@@ -212,7 +230,7 @@ get_mysql_source :
 	fi
 
 
-mysql : get_mysql_source mysql_user
+mysql_build :
 	apt-get install -y build-essential cmake libaio-dev libncurses5-dev
 
 	mkdir -p $(WORKING_DIR) && cd $(WORKING_DIR) &&							\
@@ -227,10 +245,16 @@ mysql : get_mysql_source mysql_user
 		-DCMAKE_INSTALL_PREFIX=/usr/share/mysql								\
 		-DSYSCONFDIR=/etc													\
 		.. &&																\
-	$(MAKE) &&																\
+	#																		\
+	$(MAKE)
+
+
+mysql_install :
+	cd $(WORKING_DIR)/mysql-$(MYSQL_VERSION) &&								\
+	#																		\
 	$(MAKE) install
 
-	-rm -rf $(WORKING_DIR)
+	-rm -rf $(WORKING_DIR)/mysql-$(MYSQL_VERSION)*
 
 	# Set up the system tables
 	chown -R mysql:mysql /usr/share/mysql
@@ -248,6 +272,10 @@ mysql : get_mysql_source mysql_user
 
 	# Start MySQL
 	service mysqld start
+
+
+mysql : get_mysql_source mysql_user mysql_build mysql_install
+
 
 java_runtime :
 	apt-get install -y unzip default-jre
