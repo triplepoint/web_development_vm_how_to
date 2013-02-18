@@ -250,7 +250,7 @@ mysql_build :
 
 
 mysql_install :
-	cd $(WORKING_DIR)/mysql-$(MYSQL_VERSION) &&								\
+	cd $(WORKING_DIR)/mysql-$(MYSQL_VERSION)/build &&						\
 	#																		\
 	$(MAKE) install
 
