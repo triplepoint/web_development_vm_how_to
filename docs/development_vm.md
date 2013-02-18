@@ -255,7 +255,7 @@ git clone git://github.com/triplepoint/web_development_vm_how_to.git
     wget http://us3.php.net/get/php-5.4.11.tar.bz2/from/us2.php.net/mirror -O php-5.4.11.tar.bz2
     tar -xvf php-5.4.11.tar.bz2
     cd php-5.4.11
-    ./configure --prefix=/usr --sysconfdir=/etc --with-config-file-path=/etc --enable-fpm --with-fpm-user=www-data --with-fpm-group=www-data --enable-mbstring --with-mysqli --with-openssl --with-zlib
+    ./configure --prefix=/usr --sysconfdir=/etc --with-config-file-path=/etc --enable-fpm --with-fpm-user=www-data --with-fpm-group=www-data --enable-mbstring --with-mysqli --with-openssl --with-curl --with-curlwrappers --with-zlib
     make
     make test
     make install

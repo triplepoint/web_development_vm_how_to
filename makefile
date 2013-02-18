@@ -161,6 +161,8 @@ php : get_php_source
 		--enable-mbstring													\
 		--with-mysqli														\
 		--with-openssl														\
+		--with-curl															\
+		--with-curlwrappers													\
 		--with-zlib &&														\
 	$(MAKE) &&																\
 	$(MAKE) install &&														\
