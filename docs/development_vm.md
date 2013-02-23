@@ -202,9 +202,9 @@ git clone git://github.com/triplepoint/web_development_vm_how_to.git
     cd /usr/src/
     apt-get install libc6 libpcre3 libpcre3-dev libpcrecpp0 libssl0.9.8 libssl-dev zlib1g zlib1g-dev lsb-base
 
-    wget http://nginx.org/download/nginx-1.3.12.tar.gz
-    tar -xvf nginx-1.3.12.tar.gz
-    cd nginx-1.3.12
+    wget http://nginx.org/download/nginx-1.3.13.tar.gz
+    tar -xvf nginx-1.3.13.tar.gz
+    cd nginx-1.3.13
 
     # Feel free to skip the wget and patch commands if you don't want to build in SPDY
     wget http://nginx.org/patches/spdy/patch.spdy.txt
@@ -252,9 +252,9 @@ git clone git://github.com/triplepoint/web_development_vm_how_to.git
     ``` bash
     cd /usr/src/
     apt-get install autoconf libxml2 libxml2-dev libcurl3 libcurl4-gnutls-dev libmagic-dev
-    wget http://us3.php.net/get/php-5.4.11.tar.bz2/from/us2.php.net/mirror -O php-5.4.11.tar.bz2
-    tar -xvf php-5.4.11.tar.bz2
-    cd php-5.4.11
+    wget http://us3.php.net/get/php-5.4.12.tar.bz2/from/us2.php.net/mirror -O php-5.4.12.tar.bz2
+    tar -xvf php-5.4.12.tar.bz2
+    cd php-5.4.12
     ./configure --prefix=/usr --sysconfdir=/etc --with-config-file-path=/etc --enable-fpm --with-fpm-user=www-data --with-fpm-group=www-data --enable-mbstring --with-mysqli --with-openssl --with-curl --with-curlwrappers --with-zlib
     make
     make test

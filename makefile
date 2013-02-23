@@ -15,10 +15,10 @@ SOURCE_DOWNLOAD_DIR = $(TOOL_DIR)/source_downloads
 
 
 ### Nginx Configuration
-NGINX_VERSION = 1.3.12
+NGINX_VERSION = 1.3.13
 
 ### PHP Configuration
-PHP_VERSION = 5.4.11
+PHP_VERSION = 5.4.12
 
 ### Symlink target for /var/www
 WWW_DIRECTORY_SYMLINK_TARGET = /projects
