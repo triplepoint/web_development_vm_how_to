@@ -43,7 +43,7 @@ target-list :
 	@echo
 
 
-development_server : package_update firewall www_directory_symlink install_git nginx nginx_default_server php mysql yui_compressor compass
+development_server : package_update firewall www_directory_symlink install_git nginx php mysql yui_compressor compass
 
 
 production_server : package_update firewall install_git nginx php mysql
@@ -136,11 +136,6 @@ nginx_install :
 
 
 nginx : get_nginx_source get_nginx_spdy_patch_source nginx_build nginx_install
-
-
-nginx_default_server :
-	-ln -s /etc/nginx/sites-available/default /etc/nginx/sites-enabled/default
-	service nginx restart
 
 
 get_php_source :

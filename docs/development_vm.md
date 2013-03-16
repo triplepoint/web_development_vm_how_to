@@ -234,11 +234,6 @@ git clone git://github.com/triplepoint/web_development_vm_how_to.git
     cp /usr/src/web_development_vm_how_to/etc/nginx/nginx.conf /etc/nginx/
     cp /usr/src/web_development_vm_how_to/etc/nginx/sites-available/* /etc/nginx/sites-available
     ```
-- Set up the default site
-
-    ``` bash
-    ln -s /etc/nginx/sites-available/default /etc/nginx/sites-enabled/default
-    ```
 - start Nginx
 
     ``` bash
