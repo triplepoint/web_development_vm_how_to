@@ -1,11 +1,10 @@
-# Build a Development Virtual Machine
+# How To Build a Web Server Virtual Machine
 ## Introduction
-The goal here is to build a development virtual machine that can support PHP web development.  While I'm aiming to keep this generally useful to anyone doing PHP web development, there are places where I install tools or make configuration choices that specifically support my projects.  Be aware that there will need to be some improvization on your part if you want this guide to work for you.
+The goal here is to build a virtual machine that can act as both a local development environment and a production server.  While I'm aiming to keep this generally useful to anyone doing PHP web development, there are places where I install tools or make configuration choices that specifically support my projects.  Be aware that there will need to be some improvization on your part if you want this guide to work for you.
 
-The basic features of this development environment are:
+The basic features of this environment are:
 
 - [Minimal Ubuntu 12.04 "Precise" Server][ubuntu_minimal] as a [VirtualBox] guest
-    - [Windows 7][win7] Host (but don't let that turn you away in disgust, it matters very little and these instructions are useful for other host OSes)
     - Shared directory between the host and guest for code development
     - Firewall configured with [UFW]
 - [PHP 5.4 stable][php], compiled from source
@@ -19,31 +18,31 @@ The basic features of this development environment are:
 
 ## Notes on Automation
 The instructions in this guide should be very close to the automated [Vagrant] build provided along with this document.  It should be possible for you to build this environment automatically with:
-- Install [Vagrant]
+- Install [Vagrant] v1.1+
 - Install VirtualBox from their [download page][vbox_dl]
-- Check out this guide somewhere convenient
+- Check out this guide repository somewhere convenient
 
-    ``` dos
-    cd /someplace_convenient
+    ``` bash
+    cd \someplace\convenient
     git clone git://github.com/triplepoint/web_development_vm_how_to.git how_to
     ```
 - Edit the Vagrant configuration, if necessary
-  - In `Vagrant\Vagrantfile`, the `v-development` share folder is the project directory to share between your host and the virtual machine.  Edit it appropriately to point to your projects.
-  - In `Vagrant\Vagrantfile`, the `development_config.vm.network` configuration value sets the IP address of the virtual machine.  If this conflicts for you, you'll need to change it.
+  - In `Vagrant\Vagrantfile`, the `/projects` share point is the project directory to share between your host and the virtual machine.  Edit it appropriately to point to your projects.
+  - In `Vagrant\Vagrantfile`, the ` web_server_config.vm.network` configuration sets the IP address of the virtual machine.  If this conflicts for you, you'll need to change it.
 - Build the machine
-    Vagrant will use the `makefile` packaged along with this guide to build the development environment automatically.
+    Vagrant will use the `makefile` packaged along with this guide to build the environment automatically.
 
-    ``` dos
-    cd /someplace_convenient/how_to/Vagrant
+    ``` bash
+    cd \someplace\convenient\how_to\Vagrant
     vagrant up
     ```
 - Finally, you can get the SSH credentials from Vagrant and use them with whatever SSH client you want
 
-    ``` dos
+    ``` bash
     vagrant ssh
     ```
 
-The rest of this guide documents the manual way to build this development environment.  While there are likely a few differences between the resulting machines, hopefully they're simple cosmetic differences.
+The rest of this guide documents the manual way to build this environment.  While there are likely a few differences between the resulting machines, hopefully they're simple cosmetic differences.
 
 
 ## On the Host
@@ -420,7 +419,7 @@ service nginx restart
 
 
 # Setting up projects
-This guide is primarily aimed at setting up a generic development server, and project-specific configuration is probably too specific to get into here.
+This guide is primarily aimed at setting up a generic server, and project-specific configuration is probably too specific to get into here.
 However, here's a few bits and pieces that may be useful in setting up a project.
 
 ## Example makefile
@@ -473,12 +472,9 @@ service nginx restart
 
 # Todo
 - mysql config
-- phpmyadmin (this should probably live on a separate VM)
+- PHPMyAdmin (this should probably live on a separate VM)
 - the `eth1` interface doesn't have a static IPV6 address.  Need to research how to do that.
-- look into an ssl cert for the default nginx config (not just per project)
-- on server errors, nginx just throws ugly 500 response
-- scriptify everything (puppet, chef, vagrant?)
-- Come up with the production server variant of all this (should be similar)
+- on server errors, Nginx just throws ugly 500 response
 
 
 # Notes and References

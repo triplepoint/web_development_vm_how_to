@@ -1,14 +1,14 @@
 ###
-# This Puppet manifest clones the PHP server
-# configuration files from github and then executes
-# the makefile contained in that repository in order
-# to build the development server.
-#
+# This Puppet manifest copies the configuration files
+# from the mounted bootstrap files and then executes
+# the makefile contained in that directory in order
+# to build the web server.
 ###
 
 $vagrant_bootstrap_mountpoint = '/vagrant_bootstrap'
 $working_directory_path       = '/usr/src/vagrant_build'
 $make_logfile                 = "${working_directory_path}/makelog.log"
+$make_target                  = 'php_web_server'
 
 package { 'make':
     ensure    => present
@@ -20,8 +20,8 @@ file { $working_directory_path:
     recurse   => true
 }
 
-exec { 'make_development_server':
-    command   => "make development_server 2>&1 | tee ${make_logfile}",
+exec { 'make_web_server':
+    command   => "make ${make_target} 2>&1 | tee ${make_logfile}",
     path      => ['/usr/bin', '/bin', '/usr/local/bin', '/usr/sbin', '/sbin', '/usr/local/sbin', '/opt/vagrant_ruby/bin'],
     cwd       => $working_directory_path,
     creates   => $make_logfile,

@@ -1,30 +1,27 @@
 ###
-# This vagrant configuration creates a simple VM, mounted at the
-# given IP address, and executes the default puppet manifest against
-# it.
+# This vagrant configuration creates a simple VM
+# and executes the provided default.pp puppet
+# manifest against it.
 ###
-Vagrant::Config.run do |config|
+Vagrant.configure("2") do |config|
 
     config.vm.box = "precise64"
     config.vm.box_url = "http://files.vagrantup.com/precise64.box"
+    config.vm.guest = :linux
 
-    # Note - the 2nd parameter here is the directory in the virtual machine's file structure
-    # where the shared directory will be mounted, while the 3rd parameter is the directory
-    # in the host's virtual machine which will be shared.
-    config.vm.share_folder "v-development", "/projects", "../../"
+    # Sync the parent directory above this project to the VM, to make it
+    # convenient to reach all projects on the new VM guest
+    config.vm.synced_folder "../../", "/projects"
 
-    # This mounts this how-to package on the virtual machine.  Later, puppet will copy
-    # this mount to use as the working-copy for all the makefile behavior.
-    config.vm.share_folder "v-bootstrap", "/vagrant_bootstrap", "../"
+    # This syncs this how-to package on the virtual machine.  Later, puppet will copy
+    # this sync to use as the working-copy for all the makefile behavior.
+    config.vm.synced_folder "../", "/vagrant_bootstrap"
 
-    # Main development machine
-    config.vm.define :development do |development_config|
-        development_config.vm.host_name = "devbox.local"
-        development_config.vm.network :hostonly, "192.168.56.11"
-
-        development_config.vm.provision :puppet do |puppet|
-            puppet.options = []
-        end
+    # Main web server
+    config.vm.define :web_server do |web_server_config|
+        web_server_config.vm.hostname = "phpwebbox.local"
+        web_server_config.vm.network :private_network, ip: "192.168.56.11"
+        web_server_config.vm.provision :puppet
     end
 
 end

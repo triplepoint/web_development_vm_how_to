@@ -34,19 +34,14 @@ YUI_COMPRESSOR_VERSION = 2.4.7
 
 
 target-list :
-	@echo "This makefile is capable of building multiple versions of a the web development server.  Please"
-	@echo "choose one by running 'make <type>' with one of the types listed below."
+	@echo "This makefile builds the PHP-enabled web server.""
 	@echo
-	@echo "Available types:"
-	@echo "    development_server"
-	@echo "    production_server"
+	@echo "To build the server:"
+	@echo "    make php_web_server"
 	@echo
 
 
-development_server : package_update firewall www_directory_symlink install_git nginx php mysql yui_compressor compass
-
-
-production_server : package_update firewall install_git nginx php mysql
+php_web_server : package_update firewall www_directory_symlink install_git nginx php mysql yui_compressor compass
 
 
 ###############################################################

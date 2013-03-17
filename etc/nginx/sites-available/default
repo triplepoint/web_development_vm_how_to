@@ -1,3 +1,10 @@
+# This server defines the fallback server that would apply
+# if no other domains match.  As it's currently configured,
+# this server would be a bad idea to deploy in production, since
+# it exposes the autoindex and provides a very general root
+# directory.  Feel free to enable this server, though, in
+# a development environment.
+
 server {
     listen       80 default;
     listen       [::]:80 default;
@@ -34,13 +41,13 @@ server {
 
     # pass the PHP scripts to FastCGI server listening on a unix port
     #
-    location ~ \.php {       
+    location ~ \.php {
         root   /var/www;
-    
+
         # filter out arbitrary code execution (path crawling)
         location ~ \..*/.*\.php$ {return 404;}
 
-        # Pull in the shared fast cgi parameters 
+        # Pull in the shared fast cgi parameters
         include /etc/nginx/fastcgi.conf;
         include fastcgi_params;
 

@@ -1,6 +1,6 @@
 ###
 # This makefile is intended to be a template for custom makefiles which
-# set up individual web projects after the server itself is built.  But, the more
+# set up individual web projects after the server itself is built.  But the more
 # specific a guide gets, the more likely that it'll need significant rework in order
 # for someone else to use it, and this guide is definitely very specific
 # to the kind of projects I typically use.
@@ -24,10 +24,12 @@ CERT_DOMAIN = *.somedomain.local         ## TODO - can be wildcard like the show
 CERT_FILE_NAME = $(PROJECT_NAME)
 
 ## The password used to generate the cert files - note that this is
-# obviously a secure thing if you ever intend to use the self-signed cert in a
-# publicly available site
+# obviously a think which should be kept secure if you ever intend
+# to use the self-signed cert in a publicly available site
 CERT_PASSWORD = selfsignedpassword
 
+
+###############################################################################
 
 
 ### Global configuration
@@ -88,20 +90,20 @@ self_signed_cert :
 
 install_composer :
     cd ../ && \
-    wget http://getcomposer.org/installer -O composer.phar
+    php -r "eval('?>'.file_get_contents('https://getcomposer.org/installer'));"
 
 
 composer_install_dependencies :
     cd ../ && \
-    ./composer.phar install --verbose
+    ./composer.phar install --verbose --prefer-dist -o
 
 
 composer_install_dependencies_dev :
     cd ../ && \
-    ./composer.phar install --verbose --dev
+    ./composer.phar install --verbose --prefer-dist --dev
 
 
 db_init :
     ## TODO - Your project's database initialization will likely be so custom that it's not
     # worth even showing an example here.  Speculating, I'd guess you'd call an external
-    # .sql script.  At least, that's what I would do.
+    # .sql script with the command-line mysql client.

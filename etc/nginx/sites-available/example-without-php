@@ -1,3 +1,6 @@
+# This example nginx site config would be suitable for
+# a static site without PHP support.
+
 server {
     # Note the 'spdy' parameter needs to be removed from the ssl listeners if the SPDY patch wasn't compiled into Nginx
     listen      80;
@@ -33,7 +36,7 @@ server {
     #error_page   500 502 503 504  /50x.html;
     #location = /50x.html {
     #    root              /var/www/somesite;          # CHANGE THIS
-    #} 
+    #}
 
     # Images and static content is treated different
     #

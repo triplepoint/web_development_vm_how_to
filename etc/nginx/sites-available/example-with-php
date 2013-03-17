@@ -1,5 +1,9 @@
-# HTTP Site
-## Redirect requests without a subdomain to the www version of the site
+# This example site configuration would be suitable for
+a php-driven site with SSL support.
+
+## Redirect requests without a subdomain to the www version of the site.
+## For example 'some_domain_name.com' would redirect to 'www.some_domain_name.com'
+## Note that this entire server block can be removed if this behavior isn't required.
 server {
     # Note the 'spdy' parameter needs to be removed from the ssl listeners if the SPDY patch wasn't compiled into Nginx
     listen      80;
@@ -21,6 +25,7 @@ server {
     return 301 $scheme://www.$host$uri;
 }
 
+## This server handles the actual website
 server {
     # Note the 'spdy' parameter needs to be removed from the ssl listeners if the SPDY patch wasn't compiled into Nginx
     listen      80;
@@ -49,8 +54,8 @@ server {
     }
 
     location @rewritephp {
-        root /path/to/project/web/root;       # CHANGE THIS
-        rewrite ^(.*)$ /__main.php$1 last;    # CHANGE THIS, IF __main.php IS NOT THE DESIRED REWRITE TARGET
+        root /var/www/somesite;               # CHANGE THIS
+        rewrite ^(.*)$ /__main.php$1 last;    # CHANGE THIS IF __main.php IS NOT THE DESIRED REWRITE TARGET
     }
 
     #error_page  404              /404.html;
@@ -59,13 +64,13 @@ server {
     #
     #error_page   500 502 503 504  /50x.html;
     #location = /50x.html {
-    #    root              /path/to/project/web/root;       # CHANGE THIS
+    #    root              /var/www/somesite;       # CHANGE THIS
     #}
 
     # Images and static content is treated different
     #
     location ~* ^.+\.(jpg|jpeg|gif|css|png|js|ico|xml|svg)$ {
-        root              /path/to/project/web/root;        # CHANGE THIS
+        root              /var/www/somesite;        # CHANGE THIS
         access_log        off;
         expires           30d;
     }
@@ -74,12 +79,12 @@ server {
     # pass the PHP scripts to FastCGI server listening on a unix port
     #
     location ~ \.php {
-        root /path/to/project/web/root;                         # CHANGE THIS
-           
+        root /var/www/somesite;                         # CHANGE THIS
+
         # filter out arbitrary code execution (path crawling)
         location ~ \..*/.*\.php$ {return 404;}
 
-        # Pull in the shared fast cgi parameters 
+        # Pull in the shared fast cgi parameters
         include /etc/nginx/fastcgi.conf;
         include fastcgi_params;
 
