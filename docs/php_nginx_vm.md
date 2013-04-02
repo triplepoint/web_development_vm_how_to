@@ -11,7 +11,7 @@ The basic features of this environment are:
     - FastCGI with [PHP-FPM], including Unix socket configuration for talking to [Nginx]
     - [APC], built from source via [PECL]
     - [XDebug], built from source via [PECL]
-- [Nginx 1.3 development][nginx], compiled from source, with the [SPDY] patch
+- [Nginx 1.3 development][nginx], compiled from source, with [SPDY] enabled
 - [MySQL 5.6][mysql], compiled from source
 - [SASS] and [Compass], for developing CSS
 - [YUI Compressor][yui_comp], for compressing web assets
@@ -201,13 +201,9 @@ git clone git://github.com/triplepoint/web_development_vm_how_to.git
     cd /usr/src/
     apt-get install libc6 libpcre3 libpcre3-dev libpcrecpp0 libssl0.9.8 libssl-dev zlib1g zlib1g-dev lsb-base
 
-    wget http://nginx.org/download/nginx-1.3.14.tar.gz
-    tar -xvf nginx-1.3.14.tar.gz
-    cd nginx-1.3.14
-
-    # Feel free to skip the wget and patch commands if you don't want to build in SPDY
-    wget http://nginx.org/patches/spdy/patch.spdy.txt
-    patch -p1 < patch.spdy.txt
+    wget http://nginx.org/download/nginx-1.3.15.tar.gz
+    tar -xvf nginx-1.3.15.tar.gz
+    cd nginx-1.3.15
 
     ./configure --prefix=/usr --sbin-path=/usr/sbin --pid-path=/var/run/nginx.pid --conf-path=/etc/nginx/nginx.conf --error-log-path=/var/log/nginx/error.log --http-log-path=/var/log/nginx/access.log --user=www-data --group=www-data --with-http_ssl_module --with-http_spdy_module --with-ipv6
     make

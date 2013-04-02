@@ -15,7 +15,7 @@ SOURCE_DOWNLOAD_DIR = $(TOOL_DIR)/source_downloads
 
 
 ### Nginx Configuration
-NGINX_VERSION = 1.3.14
+NGINX_VERSION = 1.3.15
 
 ### PHP Configuration
 PHP_VERSION = 5.4.13
@@ -73,14 +73,6 @@ get_nginx_source :
 		wget http://nginx.org/download/nginx-$(NGINX_VERSION).tar.gz;		\
 	fi
 
-
-get_nginx_spdy_patch_source :
-	@if [ ! -f $(SOURCE_DOWNLOAD_DIR)/patch.spdy.txt ]; then				\
-		mkdir -p $(SOURCE_DOWNLOAD_DIR) && cd $(SOURCE_DOWNLOAD_DIR) &&		\
-		wget http://nginx.org/patches/spdy/patch.spdy.txt;					\
-	fi
-
-
 nginx_build :
 	apt-get install -y libc6 libpcre3 libpcre3-dev libpcrecpp0 libssl0.9.8 libssl-dev zlib1g zlib1g-dev lsb-base
 
@@ -90,9 +82,6 @@ nginx_build :
 	tar -xvf nginx-$(NGINX_VERSION).tar.gz &&								\
 	#																		\
 	cd nginx-$(NGINX_VERSION) &&											\
-	#																		\
-	cp $(SOURCE_DOWNLOAD_DIR)/patch.spdy.txt . &&							\
-	patch -p1 < patch.spdy.txt &&											\
 	#																		\
 	./configure																\
 		--prefix=/usr														\
@@ -130,7 +119,7 @@ nginx_install :
 	service nginx start
 
 
-nginx : get_nginx_source get_nginx_spdy_patch_source nginx_build nginx_install
+nginx : get_nginx_source nginx_build nginx_install
 
 
 get_php_source :
