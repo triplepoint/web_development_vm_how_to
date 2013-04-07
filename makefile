@@ -186,11 +186,10 @@ php_install :
 
 	# install the PECL extensions
 	pecl update-channels
-	printf "\n" | pecl install pecl_http apc-beta xdebug
+	printf "\n" | pecl install pecl_http xdebug
 
 	# ### These commands are only necessary if you're modifying the default php.ini.
 	# echo 'extension=http.so' >> /etc/php.ini
-	# echo 'extension=apc.so' >> /etc/php.ini
 	# echo 'zend_extension="/usr/lib/php/extensions/no-debug-non-zts-20100525/xdebug.so"' >> /etc/php.ini
 
 	service php-fpm start
