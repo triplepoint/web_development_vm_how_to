@@ -125,7 +125,7 @@ nginx : get_nginx_source nginx_build nginx_install
 get_php_source :
 	@if [ ! -f $(SOURCE_DOWNLOAD_DIR)/php-$(PHP_VERSION).tar.bz2 ]; then												\
 		mkdir -p $(SOURCE_DOWNLOAD_DIR) && cd $(SOURCE_DOWNLOAD_DIR) &&													\
-		wget http://us3.php.net/get/php-$(PHP_VERSION).tar.bz2/from/us2.php.net/mirror -O php-$(PHP_VERSION).tar.bz2;	\
+		wget http://www.php.net/get/php-$(PHP_VERSION).tar.bz2/from/this/mirror -O php-$(PHP_VERSION).tar.bz2;	        \
 	fi
 
 
