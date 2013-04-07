@@ -18,7 +18,7 @@ SOURCE_DOWNLOAD_DIR = $(TOOL_DIR)/source_downloads
 NGINX_VERSION = 1.3.15
 
 ### PHP Configuration
-PHP_VERSION = 5.4.13
+PHP_VERSION = 5.5.0beta2
 
 ### Symlink target for /var/www
 WWW_DIRECTORY_SYMLINK_TARGET = /projects
@@ -125,7 +125,9 @@ nginx : get_nginx_source nginx_build nginx_install
 get_php_source :
 	@if [ ! -f $(SOURCE_DOWNLOAD_DIR)/php-$(PHP_VERSION).tar.bz2 ]; then												\
 		mkdir -p $(SOURCE_DOWNLOAD_DIR) && cd $(SOURCE_DOWNLOAD_DIR) &&													\
-		wget http://us3.php.net/get/php-$(PHP_VERSION).tar.bz2/from/us2.php.net/mirror -O php-$(PHP_VERSION).tar.bz2;	\
+		wget http://downloads.php.net/dsp/php-5.5.0beta2.tar.bz2                                                        \
+		# I suspect the above downloads.php.net link is temporary.  When 5.5 goes live, the following link should be used: \
+		# wget http://www.php.net/get/php-$(PHP_VERSION).tar.bz2/from/this/mirror -O php-$(PHP_VERSION).tar.bz2;	\
 	fi
 
 
