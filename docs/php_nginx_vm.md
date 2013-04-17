@@ -201,9 +201,9 @@ git clone git://github.com/triplepoint/web_development_vm_how_to.git
     cd /usr/src/
     apt-get install libc6 libpcre3 libpcre3-dev libpcrecpp0 libssl0.9.8 libssl-dev zlib1g zlib1g-dev lsb-base
 
-    wget http://nginx.org/download/nginx-1.3.15.tar.gz
-    tar -xvf nginx-1.3.15.tar.gz
-    cd nginx-1.3.15
+    wget http://nginx.org/download/nginx-1.3.16.tar.gz
+    tar -xvf nginx-1.3.16.tar.gz
+    cd nginx-1.3.16
 
     ./configure --prefix=/usr --sbin-path=/usr/sbin --pid-path=/var/run/nginx.pid --conf-path=/etc/nginx/nginx.conf --error-log-path=/var/log/nginx/error.log --http-log-path=/var/log/nginx/access.log --user=www-data --group=www-data --with-http_ssl_module --with-http_spdy_module --with-ipv6
     make
@@ -242,9 +242,9 @@ git clone git://github.com/triplepoint/web_development_vm_how_to.git
     ``` bash
     cd /usr/src/
     apt-get install autoconf libxml2 libxml2-dev libcurl3 libcurl4-gnutls-dev libmagic-dev
-    wget http://us3.php.net/get/php-5.4.13.tar.bz2/from/us2.php.net/mirror -O php-5.4.13.tar.bz2
-    tar -xvf php-5.4.13.tar.bz2
-    cd php-5.4.13
+    wget http://us3.php.net/get/php-5.4.14.tar.bz2/from/us2.php.net/mirror -O php-5.4.14.tar.bz2
+    tar -xvf php-5.4.14.tar.bz2
+    cd php-5.4.14
     ./configure --prefix=/usr --sysconfdir=/etc --with-config-file-path=/etc --enable-fpm --with-fpm-user=www-data --with-fpm-group=www-data --enable-mbstring --with-mysqli --with-openssl --with-curl --with-curlwrappers --with-zlib
     make
     make test
