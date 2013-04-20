@@ -1,2 +1,30 @@
+# Windows image file caches
+Thumbs.db
+
+# Mac folder view config
+.DS_Store
+Desktop.ini
+
+# Python compiled files
+*.py[co]
+
+# PHP Composer files
+/composer.phar
+# /composer.lock
+/vendor/
+
+# Sass
+## From https://github.com/github/gitignore
+### SASS Ignores - "Sassy CSS" http://sass-lang.com/
+*.sass-cache
+
+
+######################
+### PROJECT IGNORES
+######################
+
+# Downloaded source files
 /source_downloads/
+
+# Vagrant data
 /Vagrant/.vagrant*
