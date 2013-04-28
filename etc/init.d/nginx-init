@@ -9,7 +9,7 @@
 # Description:       nginx init.d dash script for Ubuntu <=9.10.
 ### END INIT INFO
 #------------------------------------------------------------------------------
-# nginx - this Debian Almquist shell (dash) script, starts and stops the nginx 
+# nginx - this Debian Almquist shell (dash) script, starts and stops the nginx
 #         daemon for ubuntu 9.10 and lesser version numbered releases.
 #
 # description:  Nginx is an HTTP(S) server, HTTP(S) reverse \
@@ -27,7 +27,7 @@
 #
 # Version: 2.0 02-NOV-2009 jason.giedymin AT gmail.com
 # Notes: nginx init.d dash script for Ubuntu <=9.10.
-# 
+#
 # This script's project home is:
 # 	http://code.google.com/p/nginx-init-ubuntu/
 #
@@ -198,10 +198,10 @@ removePIDFile(){
 
 start() {
         log_daemon_msg "Starting $DESCRIPTION"
-	
+
 	isRunning
 	isAlive=$?
-	
+
         if [ "${isAlive}" -eq $TRUE ]; then
                 log_end_msg $SCRIPT_ERROR
         else
@@ -214,7 +214,7 @@ start() {
 
 stop() {
 	log_daemon_msg "Stopping $DESCRIPTION"
-	
+
 	isRunning
 	isAlive=$?
         if [ "${isAlive}" -eq $TRUE ]; then
@@ -257,7 +257,7 @@ quietupgrade() {
         if [ "${isAlive}" -eq $TRUE ]; then
 		kill -USR2 `cat $PIDSPATH/$PIDFILE`
 		kill -WINCH `cat $PIDSPATH/$PIDFILE.oldbin`
-		
+
 		isRunning
 		isAlive=$?
 		if [ "${isAlive}" -eq $TRUE ]; then
@@ -268,7 +268,7 @@ quietupgrade() {
 			log_end_msg $SCRIPT_OK
 		else
 			log_end_msg $SCRIPT_ERROR
-			
+
 			log_daemon_msg "ERROR! Reverting back to original $DESCRIPTION"
 
 			kill -HUP `cat $PIDSPATH/$PIDFILE`
@@ -287,7 +287,7 @@ quietupgrade() {
 
 terminate() {
         log_daemon_msg "Force terminating (via KILL) $DESCRIPTION"
-        
+
 	PIDS=`pidof $PS` || true
 
 	[ -e $PIDSPATH/$PIDFILE ] && PIDS2=`cat $PIDSPATH/$PIDFILE`
@@ -355,7 +355,7 @@ case "$1" in
   *)
 	FULLPATH=/etc/init.d/$PS
 	echo "Usage: $FULLPATH {start|stop|restart|force-reload|status|configtest|quietupgrade|terminate|destroy}"
-	echo "       The 'destroy' command should only be used as a last resort." 
+	echo "       The 'destroy' command should only be used as a last resort."
 	exit 1
 	;;
 esac
