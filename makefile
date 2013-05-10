@@ -15,7 +15,7 @@ SOURCE_DOWNLOAD_DIR = $(TOOL_DIR)/source_downloads
 
 
 ### Nginx Configuration
-NGINX_VERSION = 1.4.0
+NGINX_VERSION = 1.4.1
 
 ### PHP Configuration
 PHP_VERSION = 5.5.0beta4
