@@ -242,9 +242,9 @@ git clone git://github.com/triplepoint/web_development_vm_how_to.git
     ``` bash
     cd /usr/src/
     apt-get install autoconf libxml2 libxml2-dev libcurl3 libcurl4-gnutls-dev libmagic-dev
-    wget http://us3.php.net/get/php-5.4.15.tar.bz2/from/us2.php.net/mirror -O php-5.4.15.tar.bz2
-    tar -xvf php-5.4.15.tar.bz2
-    cd php-5.4.15
+    wget http://us3.php.net/get/php-5.4.16.tar.bz2/from/us2.php.net/mirror -O php-5.4.16.tar.bz2
+    tar -xvf php-5.4.16.tar.bz2
+    cd php-5.4.16
     ./configure --prefix=/usr --sysconfdir=/etc --with-config-file-path=/etc --enable-fpm --with-fpm-user=www-data --with-fpm-group=www-data --enable-mbstring --with-mysqli --with-openssl --with-curl --with-curlwrappers --with-zlib
     make
     make test
@@ -316,9 +316,9 @@ git clone git://github.com/triplepoint/web_development_vm_how_to.git
 
     ``` bash
     apt-get install build-essential cmake libaio-dev libncurses5-dev
-    wget http://cdn.mysql.com/Downloads/MySQL-5.6/mysql-5.6.11.tar.gz -O mysql-5.6.11.tar.gz
-    tar -xvf mysql-5.6.11.tar.gz
-    cd mysql-5.6.11
+    wget http://cdn.mysql.com/Downloads/MySQL-5.6/mysql-5.6.12.tar.gz -O mysql-5.6.12.tar.gz
+    tar -xvf mysql-5.6.12.tar.gz
+    cd mysql-5.6.12
 
     mkdir build && cd build
     cmake -DCMAKE_INSTALL_PREFIX=/usr/share/mysql -DSYSCONFDIR=/etc ..

@@ -18,7 +18,7 @@ SOURCE_DOWNLOAD_DIR = $(TOOL_DIR)/source_downloads
 NGINX_VERSION = 1.4.1
 
 ### PHP Configuration
-PHP_VERSION = 5.4.15
+PHP_VERSION = 5.4.16
 
 ### Symlink target for /var/www
 WWW_DIRECTORY_SYMLINK_TARGET = /projects
@@ -27,7 +27,7 @@ WWW_DIRECTORY_SYMLINK_TARGET = /projects
 # Note that the URL this is sourced from is a needlessly-complex URL scheme at mysql.com  Any version other
 # than a 5.6.x version will likely require the URL to be reviewed and modified.  See down below for where this
 # is used in the URL fragment
-MYSQL_VERSION = 5.6.11
+MYSQL_VERSION = 5.6.12
 
 ### YUI Compressor
 YUI_COMPRESSOR_VERSION = 2.4.7
@@ -285,4 +285,4 @@ ruby :
 
 compass : ruby
 	gem install compass
-	-ln -s /usr/local/bin/compass /usr/bin/compass
+	-ln -s `which compass` /usr/bin/compass
