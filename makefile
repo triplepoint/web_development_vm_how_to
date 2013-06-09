@@ -27,7 +27,7 @@ WWW_DIRECTORY_SYMLINK_TARGET = /projects
 # Note that the URL this is sourced from is a needlessly-complex URL scheme at mysql.com  Any version other
 # than a 5.6.x version will likely require the URL to be reviewed and modified.  See down below for where this
 # is used in the URL fragment
-MYSQL_VERSION = 5.6.11
+MYSQL_VERSION = 5.6.12
 
 ### YUI Compressor
 YUI_COMPRESSOR_VERSION = 2.4.7
