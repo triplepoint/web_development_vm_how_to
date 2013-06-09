@@ -18,7 +18,7 @@ SOURCE_DOWNLOAD_DIR = $(TOOL_DIR)/source_downloads
 NGINX_VERSION = 1.4.1
 
 ### PHP Configuration
-PHP_VERSION = 5.5.0RC1
+PHP_VERSION = 5.5.0RC3
 
 ### Symlink target for /var/www
 WWW_DIRECTORY_SYMLINK_TARGET = /projects
@@ -148,6 +148,7 @@ php_build :
 		--enable-fpm														\
 		--with-fpm-user=www-data											\
 		--with-fpm-group=www-data											\
+		--enable-opcache    											    \
 		--enable-mbstring													\
 		--with-mysqli														\
 		--with-openssl														\
@@ -286,4 +287,4 @@ ruby :
 
 compass : ruby
 	gem install compass
-	-ln -s /usr/local/bin/compass /usr/bin/compass
+	-ln -s `which compass` /usr/bin/compass
