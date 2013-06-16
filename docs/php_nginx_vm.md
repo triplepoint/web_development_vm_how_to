@@ -18,8 +18,8 @@ The basic features of this environment are:
 
 ## Notes on Automation
 The instructions in this guide should be very close to the automated [Vagrant] build provided along with this document.  It should be possible for you to build this environment automatically with:
-- Install [Vagrant] v1.1+
 - Install VirtualBox from their [download page][vbox_dl]
+- Install [Vagrant] v1.1+
 - Check out this guide repository somewhere convenient
 
     ``` bash
