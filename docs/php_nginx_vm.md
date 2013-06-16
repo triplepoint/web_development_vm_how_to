@@ -30,6 +30,7 @@ The instructions in this guide should be very close to the automated [Vagrant] b
   - In `Vagrant\Vagrantfile`, the `/projects` share point is the project directory to share between your host and the virtual machine.  Edit it appropriately to point to your projects.
   - In `Vagrant\Vagrantfile`, the ` web_server_config.vm.network` configuration sets the IP address of the virtual machine.  If this conflicts for you, you'll need to change it.
 - Build the machine
+
     Vagrant will use the `makefile` packaged along with this guide to build the environment automatically.
 
     ``` bash
