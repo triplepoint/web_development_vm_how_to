@@ -7,9 +7,8 @@ The basic features of this environment are:
 - [Minimal Ubuntu 12.04 "Precise" Server][ubuntu_minimal] as a [VirtualBox] guest
     - Shared directory between the host and guest for code development
     - Firewall configured with [UFW]
-- [PHP 5.4 stable][php], compiled from source
+- [PHP 5.5 stable][php], compiled from source
     - FastCGI with [PHP-FPM], including Unix socket configuration for talking to [Nginx]
-    - [APC], built from source via [PECL]
     - [XDebug], built from source via [PECL]
 - [Nginx 1.4 stable][nginx], compiled from source
 - [MySQL 5.6][mysql], compiled from source
@@ -283,20 +282,17 @@ git clone git://github.com/triplepoint/web_development_vm_how_to.git
     mkdir /var/log/php-fpm
     mkdir /var/log/php
     ```
-- Install the PECL extensions: APC, HTTP, XDebug
+- Install the PECL extensions: HTTP, XDebug
 
     ``` bash
     pecl update-channels
     # when prompted, answer with defaults
-    pecl install pecl_http apc-beta xdebug
+    pecl install pecl_http xdebug
     ```
-    *NOTE* that `apc-beta` was necessary above to get APC version 3.1.11+ (in beta right now) which includes fixes for PHP 5.4 compatability.  This may not be necessary down the road, so keep an eye on it.  The production package name is `apc`.
-
     append to `/etc/php.ini` (skip this step if you're using the custom php.ini provided above):
 
     ```
     extension=http.so
-    extension=apc.so
     zend_extension="/usr/lib/php/extensions/no-debug-non-zts-20100525/xdebug.so"
     ```
 - start PHP-FPM
@@ -484,7 +480,6 @@ service nginx restart
 [UFW]: https://wiki.ubuntu.com/UncomplicatedFirewall?action=show&redirect=UbuntuFirewall "Uncomplicated Firewall"
 [php]: http://www.php.net/ "PHP"
 [PHP-FPM]: http://php-fpm.org/ "PHP FastCGI Process Manager"
-[APC]: http://php.net/manual/en/book.apc.php "Advanced PHP Cache"
 [XDebug]: http://xdebug.org/ "XDebug Extension for PHP"
 [PECL]: http://pecl.php.net/
 [mysql]: http://dev.mysql.com/doc/refman/5.6/en/
