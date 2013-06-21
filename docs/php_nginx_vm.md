@@ -242,9 +242,9 @@ git clone git://github.com/triplepoint/web_development_vm_how_to.git
     ``` bash
     cd /usr/src/
     apt-get install autoconf libxml2 libxml2-dev libcurl3 libcurl4-gnutls-dev libmagic-dev
-    wget http://us3.php.net/get/php-5.4.16.tar.bz2/from/us2.php.net/mirror -O php-5.4.16.tar.bz2
-    tar -xvf php-5.4.16.tar.bz2
-    cd php-5.4.16
+    wget http://us3.php.net/get/php-5.5.0.tar.bz2/from/us2.php.net/mirror -O php-5.5.0.tar.bz2
+    tar -xvf php-5.5.0.tar.bz2
+    cd php-5.5.0
     ./configure --prefix=/usr --sysconfdir=/etc --with-config-file-path=/etc --enable-fpm --with-fpm-user=www-data --with-fpm-group=www-data --enable-opcache --enable-mbstring --with-mysqli --with-openssl --with-curl --with-zlib
     make
     make test
@@ -292,8 +292,8 @@ git clone git://github.com/triplepoint/web_development_vm_how_to.git
     append to `/etc/php.ini` (skip this step if you're using the custom php.ini provided above):
 
     ```
-    extension=http.so
-    zend_extension="/usr/lib/php/extensions/no-debug-non-zts-20100525/xdebug.so"
+    extension = http.so
+    zend_extension = "/usr/lib/php/extensions/no-debug-non-zts-20121212/xdebug.so"
     ```
 - start PHP-FPM
 
