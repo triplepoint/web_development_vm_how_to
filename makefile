@@ -151,7 +151,6 @@ php_build :
 		--with-mysqli														\
 		--with-openssl														\
 		--with-curl															\
-		--with-curlwrappers													\
 		--with-zlib &&														\
 	#																		\
 	$(MAKE)
