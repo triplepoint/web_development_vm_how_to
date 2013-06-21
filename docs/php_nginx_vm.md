@@ -16,10 +16,10 @@ The basic features of this environment are:
 - [SASS] and [Compass], for developing CSS
 - [YUI Compressor][yui_comp], for compressing web assets
 
-## Notes on Automation
+## Automated Build
 The instructions in this guide should be very close to the automated [Vagrant] build provided along with this document.  It should be possible for you to build this environment automatically with:
-- Install [Vagrant] v1.1+
 - Install VirtualBox from their [download page][vbox_dl]
+- Install [Vagrant] v1.1+
 - Check out this guide repository somewhere convenient
 
     ``` bash
@@ -30,6 +30,7 @@ The instructions in this guide should be very close to the automated [Vagrant] b
   - In `Vagrant\Vagrantfile`, the `/projects` share point is the project directory to share between your host and the virtual machine.  Edit it appropriately to point to your projects.
   - In `Vagrant\Vagrantfile`, the ` web_server_config.vm.network` configuration sets the IP address of the virtual machine.  If this conflicts for you, you'll need to change it.
 - Build the machine
+
     Vagrant will use the `makefile` packaged along with this guide to build the environment automatically.
 
     ``` bash
@@ -44,9 +45,9 @@ The instructions in this guide should be very close to the automated [Vagrant] b
 
 The rest of this guide documents the manual way to build this environment.  While there are likely a few differences between the resulting machines, hopefully they're simple cosmetic differences.
 
-
-## On the Host
-### Create the Guest
+## Manual Build
+### On the Host
+#### Create the Guest
 - Install VirtualBox from their [download page][vbox_dl]
 - Configure the host-only network
     - Start up the VirtualBox Manager
@@ -106,11 +107,11 @@ The rest of this guide documents the manual way to build this environment.  Whil
 - At this point it might be worth while to create a backup of the guest's virtual disk to enable future cloning and rollbacks.  See the [VirtualBox Media Manager][vbox_clone] for details on how to do this.
 
 
-## On the Guest
+### On the Guest
 Until the network interfaces are set up correctly, you'll need to do this part from the VirtualBox guest directly (that is, not over SSH).
 
 
-### Set Up the Network Interfaces
+#### Set Up the Network Interfaces
 - I noted from `ifconfig` that the `eth0` and `lo` adapters are present at this point, but `eth1` isn't.  I did `ifconfig eth1 up` and it came up, but with only an ipv6 address, which is incorrect.
 
     It turns out both adapters were configured for DHCP, but the Virtualbox host-only DHCP server is disabled (see above).
@@ -137,7 +138,7 @@ Until the network interfaces are set up correctly, you'll need to do this part f
     vboxmanage startvm SomeVMName --type=headless
     ```
 
-### Set Up the Firewall
+#### Set Up the Firewall
 This part is quick and easy.
 
 ``` bash
@@ -148,7 +149,7 @@ ufw allow 443
 ufw enable
 ```
 
-### Add the VirtualBox Shared Mount
+#### Add the VirtualBox Shared Mount
 We'll be editing code on the host machine and sharing it to the guest VM with a shared mount.
 
 - Create the directory which will be the mount point for the share
@@ -174,7 +175,7 @@ We'll be editing code on the host machine and sharing it to the guest VM with a 
     ```
 
 
-### Install Git
+#### Install Git
 Git is used later by composer.phar, and also to fetch these configuration files.
 
 ``` bash
@@ -185,7 +186,7 @@ git config --global user.email "your_email@youremail.com"
 If you're using GitHub, it's likely you'll want to set up an SSH key for this machine.  For more information, see [GitHub's documentation on SSH keys][github_ssh].
 
 
-### Fetch This Documentation
+#### Fetch This Documentation
 This documentation includes useful configuration scripts, so we'll fetch it into the VM for easy access:
 
 ``` bash
@@ -194,7 +195,7 @@ git clone git://github.com/triplepoint/web_development_vm_how_to.git
 ```
 
 
-### Install Nginx
+#### Install Nginx
 - Fetch, make, and install:
 
     ``` bash
@@ -236,7 +237,7 @@ git clone git://github.com/triplepoint/web_development_vm_how_to.git
     ```
 
 
-### Install PHP
+#### Install PHP
 - Fetch, make, and install.  Note that the test command is optional, but good practice:
 
     ``` bash
@@ -305,7 +306,7 @@ git clone git://github.com/triplepoint/web_development_vm_how_to.git
     ```
 
 
-### MySQL
+#### MySQL
 - Add the MySQL User
 
     ``` bash
@@ -352,8 +353,7 @@ git clone git://github.com/triplepoint/web_development_vm_how_to.git
     ```
 
 
-
-### Install YUI Compressor
+#### Install YUI Compressor
 - Install Java runtime (required for yui compressor):
 
     ``` bash
@@ -371,7 +371,7 @@ git clone git://github.com/triplepoint/web_development_vm_how_to.git
     ```
 
 
-### Install Compass/Sass
+#### Install Compass/Sass
 
 ``` bash
 apt-get install ruby1.9.3
@@ -381,8 +381,8 @@ ln -s /usr/local/bin/compass /usr/bin/compass
 ```
 
 
-# Updating
-Periodically it'll be necessary to upgrade this machine without rebuilding it.  Here's how:
+## Updating
+Periodically it may be necessary to upgrade this machine without rebuilding it.  Here's how:
 - Apt Repository update (covers MySQL):
 
     ``` bash
