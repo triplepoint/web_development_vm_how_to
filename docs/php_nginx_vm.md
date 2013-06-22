@@ -7,9 +7,8 @@ The basic features of this environment are:
 - [Minimal Ubuntu 12.04 "Precise" Server][ubuntu_minimal] as a [VirtualBox] guest
     - Shared directory between the host and guest for code development
     - Firewall configured with [UFW]
-- [PHP 5.4 stable][php], compiled from source
+- [PHP 5.5 stable][php], compiled from source
     - FastCGI with [PHP-FPM], including Unix socket configuration for talking to [Nginx]
-    - [APC], built from source via [PECL]
     - [XDebug], built from source via [PECL]
 - [Nginx 1.4 stable][nginx], compiled from source
 - [MySQL 5.6][mysql], compiled from source
@@ -243,10 +242,10 @@ git clone git://github.com/triplepoint/web_development_vm_how_to.git
     ``` bash
     cd /usr/src/
     apt-get install autoconf libxml2 libxml2-dev libcurl3 libcurl4-gnutls-dev libmagic-dev
-    wget http://us3.php.net/get/php-5.4.16.tar.bz2/from/us2.php.net/mirror -O php-5.4.16.tar.bz2
-    tar -xvf php-5.4.16.tar.bz2
-    cd php-5.4.16
-    ./configure --prefix=/usr --sysconfdir=/etc --with-config-file-path=/etc --enable-fpm --with-fpm-user=www-data --with-fpm-group=www-data --enable-mbstring --with-mysqli --with-openssl --with-curl --with-curlwrappers --with-zlib
+    wget http://us3.php.net/get/php-5.5.0.tar.bz2/from/us2.php.net/mirror -O php-5.5.0.tar.bz2
+    tar -xvf php-5.5.0.tar.bz2
+    cd php-5.5.0
+    ./configure --prefix=/usr --sysconfdir=/etc --with-config-file-path=/etc --enable-fpm --with-fpm-user=www-data --with-fpm-group=www-data --enable-opcache --enable-mbstring --with-mysqli --with-openssl --with-curl --with-zlib
     make
     make test
     make install
@@ -283,21 +282,18 @@ git clone git://github.com/triplepoint/web_development_vm_how_to.git
     mkdir /var/log/php-fpm
     mkdir /var/log/php
     ```
-- Install the PECL extensions: APC, HTTP, XDebug
+- Install the PECL extensions: HTTP, XDebug
 
     ``` bash
     pecl update-channels
     # when prompted, answer with defaults
-    pecl install pecl_http apc-beta xdebug
+    pecl install pecl_http xdebug
     ```
-    *NOTE* that `apc-beta` was necessary above to get APC version 3.1.11+ (in beta right now) which includes fixes for PHP 5.4 compatability.  This may not be necessary down the road, so keep an eye on it.  The production package name is `apc`.
-
     append to `/etc/php.ini` (skip this step if you're using the custom php.ini provided above):
 
     ```
-    extension=http.so
-    extension=apc.so
-    zend_extension="/usr/lib/php/extensions/no-debug-non-zts-20100525/xdebug.so"
+    extension = http.so
+    zend_extension = "/usr/lib/php/extensions/no-debug-non-zts-20121212/xdebug.so"
     ```
 - start PHP-FPM
 
@@ -484,7 +480,6 @@ service nginx restart
 [UFW]: https://wiki.ubuntu.com/UncomplicatedFirewall?action=show&redirect=UbuntuFirewall "Uncomplicated Firewall"
 [php]: http://www.php.net/ "PHP"
 [PHP-FPM]: http://php-fpm.org/ "PHP FastCGI Process Manager"
-[APC]: http://php.net/manual/en/book.apc.php "Advanced PHP Cache"
 [XDebug]: http://xdebug.org/ "XDebug Extension for PHP"
 [PECL]: http://pecl.php.net/
 [mysql]: http://dev.mysql.com/doc/refman/5.6/en/
