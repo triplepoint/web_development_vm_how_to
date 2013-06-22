@@ -18,7 +18,7 @@ SOURCE_DOWNLOAD_DIR = $(TOOL_DIR)/source_downloads
 NGINX_VERSION = 1.4.1
 
 ### PHP Configuration
-PHP_VERSION = 5.4.16
+PHP_VERSION = 5.5.0
 
 ### Symlink target for /var/www
 WWW_DIRECTORY_SYMLINK_TARGET = /projects
@@ -146,11 +146,11 @@ php_build :
 		--enable-fpm														\
 		--with-fpm-user=www-data											\
 		--with-fpm-group=www-data											\
+		--enable-opcache    											    \
 		--enable-mbstring													\
 		--with-mysqli														\
 		--with-openssl														\
 		--with-curl															\
-		--with-curlwrappers													\
 		--with-zlib &&														\
 	#																		\
 	$(MAKE)
@@ -184,12 +184,11 @@ php_install :
 
 	# install the PECL extensions
 	pecl update-channels
-	printf "\n" | pecl install pecl_http apc-beta xdebug
+	printf "\n" | pecl install pecl_http xdebug
 
 	# ### These commands are only necessary if you're modifying the default php.ini.
-	# echo 'extension=http.so' >> /etc/php.ini
-	# echo 'extension=apc.so' >> /etc/php.ini
-	# echo 'zend_extension="/usr/lib/php/extensions/no-debug-non-zts-20100525/xdebug.so"' >> /etc/php.ini
+	# echo 'extension = http.so' >> /etc/php.ini
+	# echo 'zend_extension = "/usr/lib/php/extensions/no-debug-non-zts-20121212/xdebug.so"' >> /etc/php.ini
 
 	service php-fpm start
 
