@@ -100,7 +100,7 @@ composer_install_dependencies :
 
 composer_install_dependencies_dev :
     cd ../ && \
-    ./composer.phar install --verbose --prefer-dist --dev
+    ./composer.phar install --verbose --prefer-source --dev
 
 
 db_init :
