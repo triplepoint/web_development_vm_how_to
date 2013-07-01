@@ -47,6 +47,10 @@ php_web_server : package_update firewall www_directory_symlink install_git nginx
 ###############################################################
 
 
+clean :
+	-rm -rf $(WORKING_DIR)
+	-rm -rf $(SOURCE_DOWNLOAD_DIR)
+
 package_update :
 	apt-get update
 
@@ -102,8 +106,6 @@ nginx_install :
 	cd $(WORKING_DIR)/nginx-$(NGINX_VERSION) &&								\
 	#																		\
 	$(MAKE) install
-
-	-rm -rf $(WORKING_DIR)/nginx-$(NGINX_VERSION)*
 
 	cp $(TOOL_DIR)/etc/init.d/nginx-init /etc/init.d/nginx
 	chmod 755 /etc/init.d/nginx
@@ -171,8 +173,6 @@ php_install :
 	chmod 755 /etc/init.d/php-fpm &&										\
 	update-rc.d php-fpm defaults
 
-	-rm -rf $(WORKING_DIR)/php-$(PHP_VERSION)*
-
 	# Set up PHP FPM to work with Nginx as configured above
 	cp /etc/php-fpm.conf.default /etc/php-fpm.conf
 	sed -i 's/;pid = /pid = /g' /etc/php-fpm.conf
@@ -232,8 +232,6 @@ mysql_install :
 	#																		\
 	$(MAKE) install
 
-	-rm -rf $(WORKING_DIR)/mysql-$(MYSQL_VERSION)*
-
 	# Set up the system tables
 	chown -R mysql:mysql /usr/share/mysql
 	cd /usr/share/mysql/ && scripts/mysql_install_db --user=mysql
@@ -274,8 +272,6 @@ yui_compressor : java_runtime get_yui_compressor_source
 	#																																			\
 	mkdir -p /usr/share/yui-compressor &&																										\
 	cp yuicompressor-$(YUI_COMPRESSOR_VERSION)/build/yuicompressor-$(YUI_COMPRESSOR_VERSION).jar /usr/share/yui-compressor/yui-compressor.jar
-
-	-rm -rf $(WORKING_DIR)
 
 
 ruby :
