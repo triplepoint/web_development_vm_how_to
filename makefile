@@ -41,7 +41,7 @@ target-list :
 	@echo
 
 
-php_web_server : package_update firewall www_directory_symlink install_git nginx php mysql yui_compressor compass
+php_web_server : firewall www_directory_symlink nginx php mysql yui_compressor compass
 
 
 ###############################################################
@@ -54,6 +54,14 @@ clean :
 package_update :
 	apt-get update
 
+package_install : package_update
+	apt-get install -y  																			\
+		git-core 																					\
+		libc6 libpcre3 libpcre3-dev libpcrecpp0 libssl0.9.8 libssl-dev zlib1g zlib1g-dev lsb-base 	\
+		autoconf libxml2 libxml2-dev libcurl3 libcurl4-gnutls-dev libmagic-dev 						\
+		build-essential cmake libaio-dev libncurses5-dev 											\
+		unzip default-jre 																			\
+		ruby
 
 firewall :
 	ufw default deny
@@ -67,18 +75,14 @@ www_directory_symlink :
 	-ln -s $(WWW_DIRECTORY_SYMLINK_TARGET) /var/www
 
 
-install_git :
-	apt-get install -y git-core
-
-
 get_nginx_source :
 	@if [ ! -f $(SOURCE_DOWNLOAD_DIR)/nginx-$(NGINX_VERSION).tar.gz ]; then	\
 		mkdir -p $(SOURCE_DOWNLOAD_DIR) && cd $(SOURCE_DOWNLOAD_DIR) &&		\
 		wget http://nginx.org/download/nginx-$(NGINX_VERSION).tar.gz;		\
 	fi
 
-nginx_build :
-	apt-get install -y libc6 libpcre3 libpcre3-dev libpcrecpp0 libssl0.9.8 libssl-dev zlib1g zlib1g-dev lsb-base
+nginx_build : package_install get_nginx_source
+	# Packages needed: libc6 libpcre3 libpcre3-dev libpcrecpp0 libssl0.9.8 libssl-dev zlib1g zlib1g-dev lsb-base
 
 	mkdir -p $(WORKING_DIR) && cd $(WORKING_DIR) &&							\
 	#																		\
@@ -102,7 +106,7 @@ nginx_build :
 	$(MAKE)
 
 
-nginx_install :
+nginx_install : nginx_build
 	cd $(WORKING_DIR)/nginx-$(NGINX_VERSION) &&								\
 	#																		\
 	$(MAKE) install
@@ -121,18 +125,18 @@ nginx_install :
 	service nginx start
 
 
-nginx : get_nginx_source nginx_build nginx_install
+nginx : nginx_install
 
 
 get_php_source :
 	@if [ ! -f $(SOURCE_DOWNLOAD_DIR)/php-$(PHP_VERSION).tar.bz2 ]; then												\
 		mkdir -p $(SOURCE_DOWNLOAD_DIR) && cd $(SOURCE_DOWNLOAD_DIR) &&													\
-		wget http://www.php.net/get/php-$(PHP_VERSION).tar.bz2/from/this/mirror -O php-$(PHP_VERSION).tar.bz2;	        \
+		wget http://www.php.net/get/php-$(PHP_VERSION).tar.bz2/from/this/mirror -O php-$(PHP_VERSION).tar.bz2;			\
 	fi
 
 
-php_build :
-	apt-get install -y autoconf libxml2 libxml2-dev libcurl3 libcurl4-gnutls-dev libmagic-dev
+php_build : package_install get_php_source
+	# Packages needed: autoconf libxml2 libxml2-dev libcurl3 libcurl4-gnutls-dev libmagic-dev
 
 	mkdir -p $(WORKING_DIR) && cd $(WORKING_DIR) &&							\
 	#																		\
@@ -148,7 +152,7 @@ php_build :
 		--enable-fpm														\
 		--with-fpm-user=www-data											\
 		--with-fpm-group=www-data											\
-		--enable-opcache    											    \
+		--enable-opcache    												\
 		--enable-mbstring													\
 		--with-mysqli														\
 		--with-openssl														\
@@ -158,7 +162,7 @@ php_build :
 	$(MAKE)
 
 
-php_install :
+php_install : php_build
 	cd $(WORKING_DIR)/php-$(PHP_VERSION) &&									\
 	#																		\
 	$(MAKE) install &&														\
@@ -193,7 +197,7 @@ php_install :
 	service php-fpm start
 
 
-php : get_php_source php_build php_install
+php : php_install
 
 
 mysql_user :
@@ -208,8 +212,8 @@ get_mysql_source :
 	fi
 
 
-mysql_build :
-	apt-get install -y build-essential cmake libaio-dev libncurses5-dev
+mysql_build : package_install get_mysql_source mysql_user
+	# Packages needed: build-essential cmake libaio-dev libncurses5-dev
 
 	mkdir -p $(WORKING_DIR) && cd $(WORKING_DIR) &&							\
 	#																		\
@@ -227,7 +231,7 @@ mysql_build :
 	$(MAKE)
 
 
-mysql_install :
+mysql_install : mysql_build
 	cd $(WORKING_DIR)/mysql-$(MYSQL_VERSION)/build &&						\
 	#																		\
 	$(MAKE) install
@@ -250,11 +254,7 @@ mysql_install :
 	service mysqld start
 
 
-mysql : get_mysql_source mysql_user mysql_build mysql_install
-
-
-java_runtime :
-	apt-get install -y unzip default-jre
+mysql : mysql_install
 
 
 get_yui_compressor_source :
@@ -264,7 +264,9 @@ get_yui_compressor_source :
 	fi
 
 
-yui_compressor : java_runtime get_yui_compressor_source
+yui_compressor : package_install get_yui_compressor_source
+	# Packages needed: unzip default-jre
+
 	mkdir -p $(WORKING_DIR) && cd $(WORKING_DIR) &&																								\
 	#																																			\
 	cp $(SOURCE_DOWNLOAD_DIR)/yuicompressor-$(YUI_COMPRESSOR_VERSION).zip . &&																	\
@@ -274,10 +276,8 @@ yui_compressor : java_runtime get_yui_compressor_source
 	cp yuicompressor-$(YUI_COMPRESSOR_VERSION)/build/yuicompressor-$(YUI_COMPRESSOR_VERSION).jar /usr/share/yui-compressor/yui-compressor.jar
 
 
-ruby :
-	apt-get install -y ruby
+compass : package_install
+	# Packages needed: ruby
 
-
-compass : ruby
 	gem install compass
 	-ln -s `which compass` /usr/bin/compass
