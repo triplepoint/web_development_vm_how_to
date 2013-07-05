@@ -116,6 +116,7 @@ nginx_install : nginx_build
 	update-rc.d nginx defaults
 
 	mkdir -p /var/log/nginx
+	chown www-data:www-data /var/log/nginx
 
 	mkdir -p /etc/nginx/sites-available
 	mkdir -p /etc/nginx/sites-enabled
@@ -184,7 +185,9 @@ php_install : php_build
 	sed -i 's/listen = 127.0.0.1:9000/listen = \/tmp\/php.socket/g' /etc/php-fpm.conf
 
 	mkdir -p /var/log/php-fpm
+	chown www-data:www-data /var/log/php-fpm
 	mkdir -p /var/log/php
+	chown www-data:www-data /var/log/php
 
 	# install the PECL extensions
 	pecl update-channels
