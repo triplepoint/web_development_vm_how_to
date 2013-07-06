@@ -34,7 +34,7 @@ YUI_COMPRESSOR_VERSION = 2.4.7
 
 
 target-list :
-	@echo "This makefile builds the PHP-enabled web server.""
+	@echo "This makefile builds the PHP-enabled web server."
 	@echo
 	@echo "To build the server:"
 	@echo "    make php_web_server"
