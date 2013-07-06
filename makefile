@@ -155,6 +155,7 @@ php_build : package_install get_php_source
 		--with-fpm-group=www-data											\
 		--enable-opcache    												\
 		--enable-mbstring													\
+		--enable-mbregex													\
 		--with-mysqli														\
 		--with-openssl														\
 		--with-curl															\
