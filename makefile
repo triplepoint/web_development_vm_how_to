@@ -106,7 +106,7 @@ nginx_build : cache_nginx_source install_nginx_dependencies
 	$(MAKE)
 
 nginx_install : nginx_build
-	cd $(WORKING_DIR)/nginx-$(NGINX_VERSION) &&									\
+	cd $(WORKING_DIR)/nginx-$(NGINX_VERSION) &&								\
 	$(MAKE) install
 
 	# Set up the Nginx init script
