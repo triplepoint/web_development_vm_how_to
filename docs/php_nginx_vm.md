@@ -137,6 +137,13 @@ Until the network interfaces are set up correctly, you'll need to do this part f
     vboxmanage startvm SomeVMName --type=headless
     ```
 
+#### Update the Software Packages
+Later, when we install tools and dependencies which we've chosen not to build from source, this will ensure we have the latest knowledge of available packages.
+
+``` bash
+apt-get update;
+```
+
 #### Set Up the Firewall
 This part is quick and easy.
 
@@ -350,39 +357,27 @@ git clone git://github.com/triplepoint/web_development_vm_how_to.git
 
 
 #### Install YUI Compressor
-- Install Java runtime (required for yui compressor):
+We could fetch this from GitHub and build it manually, but I don't think it's worth the effort.  The version in the repository works fine:
 
-    ``` bash
-    apt-get install default-jre
-    ```
-- Fetch and install the `yui-compressor` jar file
-
-    ``` bash
-    cd /usr/src/
-    apt-get install unzip
-    wget https://github.com/downloads/yui/yuicompressor/yuicompressor-2.4.7.zip
-    unzip yuicompressor-2.4.7.zip
-    mkdir /usr/share/yui-compressor
-    cp yuicompressor-2.4.7/build/yuicompressor-2.4.7.jar /usr/share/yui-compressor/yui-compressor.jar
-    ```
+``` bash
+apt-get install yui-compressor
+```
 
 
 #### Install Compass/Sass
+We could install Ruby and use Gems ot install compass, but honestly the version in the package repo is just as good.
 
 ``` bash
-apt-get install ruby1.9.3
-gem update
-gem install compass
-ln -s /usr/local/bin/compass /usr/bin/compass
+apt-get install ruby-compass
 ```
 
 
 ## Updating
 Periodically it may be necessary to upgrade this machine without rebuilding it.  Here's how:
-- Apt Repository update (covers MySQL):
+- Apt Repository update (covers MySQL, compass, and yui-compressor):
 
     ``` bash
-    apt-get update; apt-get dist-upgrade;
+    apt-get update; apt-get upgrade;
     ```
 - PHP - `make clean` and recompile as during the install above
 - PECL and PEAR
@@ -394,12 +389,6 @@ Periodically it may be necessary to upgrade this machine without rebuilding it. 
     pear upgrade
     ```
 - Nginx - `make clean` and recompile as during the install above
-- Ruby Gem update for Compass and SASS:
-
-    ``` bash
-    gem update
-    ```
-- YUI-Compressor - redownload and overwrite the jar file, as during the install above
 
 Once all upgrades are complete, the various services will need to be restarted
 

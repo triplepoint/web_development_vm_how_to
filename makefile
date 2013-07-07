@@ -39,7 +39,7 @@ target-list :
 	@echo
 
 
-php_web_server : aptget_update firewall_config www_directory_symlink yuicompressor_install compass_install nginx_install php_install mysql_install
+php_web_server : aptget_update firewall_config www_directory_symlink git_install yuicompressor_install compass_install nginx_install php_install mysql_install
 
 
 ###############################################################
@@ -49,8 +49,10 @@ clean :
 	-rm -rf $(WORKING_DIR)
 	-rm -rf $(SOURCE_DOWNLOAD_DIR)
 
+
 aptget_update :
 	apt-get update
+
 
 firewall_config :
 	ufw default deny
@@ -64,30 +66,16 @@ www_directory_symlink :
 	-ln -s $(WWW_DIRECTORY_SYMLINK_TARGET) /var/www
 
 
-cache_yuicompressor_source :
-	@if [ ! -f $(SOURCE_DOWNLOAD_DIR)/yuicompressor-$(YUI_COMPRESSOR_VERSION).zip ]; then					\
-		mkdir -p $(SOURCE_DOWNLOAD_DIR) && cd $(SOURCE_DOWNLOAD_DIR) &&										\
-		wget https://github.com/yui/yuicompressor/archive/v$(YUI_COMPRESSOR_VERSION).tar.gz;				\
-	fi
+git_install :
+	apt-get install -y git-core
 
-install_yuicompressor_dependencies :
-	apt-get install -y default-jre
 
-yuicompressor_install : cache_yuicompressor_source install_yuicompressor_dependencies
-	mkdir -p $(WORKING_DIR)
-
-	cp $(SOURCE_DOWNLOAD_DIR)/yuicompressor-$(YUI_COMPRESSOR_VERSION).tar.gz $(WORKING_DIR)
-	tar -C $(WORKING_DIR) -xvf yuicompressor-$(YUI_COMPRESSOR_VERSION).tar.gz
-
-	mkdir -p /usr/share/yui-compressor &&																														\
-	cp $(WORKING_DIR)/yuicompressor-$(YUI_COMPRESSOR_VERSION)/build/yuicompressor-$(YUI_COMPRESSOR_VERSION).jar /usr/share/yui-compressor/yui-compressor.jar
+yuicompressor_install :
+	apt-get install -y yui-compressor
 
 
 compass_install :
-	apt-get install -y ruby
-
-	gem install compass
-	-ln -s `which compass` /usr/bin/compass
+	apt-get install -y ruby-compass
 
 
 cache_nginx_source :
@@ -228,12 +216,12 @@ mysql_build : cache_mysql_source install_mysql_dependencies
 	cp $(SOURCE_DOWNLOAD_DIR)/mysql-$(MYSQL_VERSION).tar.gz $(WORKING_DIR)
 	tar -C $(WORKING_DIR) -xvf $(WORKING_DIR)/mysql-$(MYSQL_VERSION).tar.gz
 
-	mkdir -p $(WORKING_DIR)/mysql-$(MYSQL_VERSION)/build && cd $(WORKING_DIR)/mysql-$(MYSQL_VERSION)/build 	\
-	cmake																									\
-		-DCMAKE_INSTALL_PREFIX=/usr/share/mysql																\
-		-DSYSCONFDIR=/etc																					\
-		.. &&																								\
-	#																										\
+	mkdir -p $(WORKING_DIR)/mysql-$(MYSQL_VERSION)/build && cd $(WORKING_DIR)/mysql-$(MYSQL_VERSION)/build && 	\
+	cmake																										\
+		-DCMAKE_INSTALL_PREFIX=/usr/share/mysql																	\
+		-DSYSCONFDIR=/etc																						\
+		.. &&																									\
+	#																											\
 	$(MAKE)
 
 mysql_install : mysql_user mysql_build
