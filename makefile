@@ -148,7 +148,7 @@ php_build : cache_php_source install_php_dependencies
 	cd $(WORKING_DIR)/php-$(PHP_VERSION) &&									\
 	./configure																\
 		--prefix=/usr														\
-		--sysconfdir=/etc 													\
+		--sysconfdir=/etc/php												\
 		--with-config-file-path=/etc										\
 		--enable-fpm														\
 		--with-fpm-user=www-data											\
@@ -189,7 +189,8 @@ php_install : php_build
 	pecl update-channels
 	printf "\n" | pecl install pecl_http xdebug
 
-	cp $(TOOL_DIR)/etc/php.ini /etc/php.ini
+	mkdir -p /etc/php
+	cp $(TOOL_DIR)/etc/php.ini /etc/php/php.ini
 
 	service php-fpm start
 
@@ -216,11 +217,30 @@ mysql_build : mysql_user cache_mysql_source install_mysql_dependencies
 	tar -C $(WORKING_DIR) -xvf $(WORKING_DIR)/mysql-$(MYSQL_VERSION).tar.gz
 
 	mkdir -p $(WORKING_DIR)/mysql-$(MYSQL_VERSION)/build && cd $(WORKING_DIR)/mysql-$(MYSQL_VERSION)/build && 	\
-	cmake																										\
-		-DCMAKE_INSTALL_PREFIX=/usr/share/mysql																	\
-		-DSYSCONFDIR=/etc																						\
-		.. &&																									\
-	#																											\
+	cmake												\
+		-DCMAKE_BUILD_TYPE=Release                    	\
+  		-DCMAKE_INSTALL_PREFIX=/usr                   	\
+      	-DINSTALL_DOCDIR=share/doc/mysql              	\
+      	-DINSTALL_DOCREADMEDIR=share/doc/mysql        	\
+      	-DINSTALL_INCLUDEDIR=include/mysql            	\
+      	-DINSTALL_INFODIR=share/info                  	\
+      	-DINSTALL_MANDIR=share/man                    	\
+      	-DINSTALL_MYSQLDATADIR=/srv/mysql             	\
+      	-DINSTALL_MYSQLSHAREDIR=share/mysql           	\
+      	-DINSTALL_MYSQLTESTDIR=share/mysql/test       	\
+      	-DINSTALL_PLUGINDIR=lib/mysql/plugin          	\
+      	-DINSTALL_SBINDIR=sbin                        	\
+      	-DINSTALL_SCRIPTDIR=bin                       	\
+      	-DINSTALL_SQLBENCHDIR=share/mysql/bench       	\
+      	-DINSTALL_SUPPORTFILESDIR=share/mysql         	\
+      	-DMYSQL_DATADIR=/srv/mysql                    	\
+      	-DMYSQL_UNIX_ADDR=/run/mysqld/mysqld.sock     	\
+      	-DSYSCONFDIR=/etc/mysql                       	\
+      	-DWITH_PARTITION_STORAGE_ENGINE=OFF           	\
+    	-DWITH_PERFSCHEMA_STORAGE_ENGINE=OFF          	\
+	    -DWITH_EXTRA_CHARSETS=complex                 	\
+		.. &&											\
+	#													\
 	$(MAKE)
 
 mysql_install : mysql_user mysql_build
@@ -241,7 +261,8 @@ mysql_install : mysql_user mysql_build
 	chown -R mysql /usr/share/mysql/data
 
 	# Set up the MySQL config file
-	cp /usr/share/mysql/support-files/my-default.cnf /etc/my.cnf
+	mkdir -p /etc/mysql
+	cp /usr/share/mysql/support-files/my-default.cnf /etc/mysql/my.cnf
 
 	# Start MySQL
 	service mysqld start
