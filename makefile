@@ -36,7 +36,7 @@ target-list :
 	@echo
 
 
-php_web_server : aptget_update firewall_config www_directory_symlink git_install yuicompressor_install compass_install nginx_install php_install mysql_install
+php_web_server : aptget_update firewall_config www_directory_symlink git_install yuicompressor_install compass_install nginx_install php_install composer_install mysql_install
 
 
 ###############################################################
@@ -66,6 +66,12 @@ www_directory_symlink :
 git_install :
 	apt-get install -y git-core
 
+
+composer_install :
+	apt-get install -y curl
+	mkdir -p $(WORKING_DIR) && cd $(WORKING_DIR) &&     \
+	curl -sS https://getcomposer.org/installer | php && \
+	mv composer.phar /usr/local/bin/composer
 
 yuicompressor_install :
 	apt-get install -y yui-compressor
