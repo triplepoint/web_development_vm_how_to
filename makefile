@@ -248,21 +248,19 @@ mysql_install : mysql_user mysql_build
 	$(MAKE) install
 
 	# Set up the init.d files
-	cp /usr/share/mysql/support-files/mysql.server /etc/init.d/mysqld
+	cp /usr/share/mysql/mysql.server /etc/init.d/mysqld
 	chmod 755 /etc/init.d/mysqld
 
 	# Finalize set up and copy over all the customized config files
 	update-rc.d mysqld defaults
 
 	# Set up the system tables
-	chown -R mysql:mysql /usr/share/mysql
-	cd /usr/share/mysql/ && scripts/mysql_install_db --user=mysql
-	chown -R root /usr/share/mysql
-	chown -R mysql /srv/mysql
+	mysql_install_db --basedir=/usr --datadir=/srv/mysql --user=mysql
+	chown -R mysql:mysql /srv/mysql
 
 	# Set up the MySQL config file
 	mkdir -p /etc/mysql
-	cp /usr/share/mysql/support-files/my-default.cnf /etc/mysql/my.cnf
+	cp /usr/share/mysql/my-default.cnf /etc/mysql/my.cnf
 
 	# Start MySQL
 	service mysqld start
