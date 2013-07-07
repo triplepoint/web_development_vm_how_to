@@ -149,7 +149,7 @@ php_build : cache_php_source install_php_dependencies
 	./configure																\
 		--prefix=/usr														\
 		--sysconfdir=/etc/php												\
-		--with-config-file-path=/etc										\
+		--with-config-file-path=/etc/php									\
 		--enable-fpm														\
 		--with-fpm-user=www-data											\
 		--with-fpm-group=www-data											\
@@ -172,10 +172,10 @@ php_install : php_build
 	chmod 755 /etc/init.d/php-fpm
 
 	# Set up PHP FPM config file, configured to work with the Nginx socket as configured in Nginx earlier
-	cp /etc/php-fpm.conf.default /etc/php-fpm.conf
-	sed -i 's/;pid = /pid = /g' /etc/php-fpm.conf
-	sed -i 's/;error_log = log\/php-fpm.log/error_log = \/var\/log\/php-fpm\/php-fpm.log/g' /etc/php-fpm.conf
-	sed -i 's/listen = 127.0.0.1:9000/listen = \/tmp\/php.socket/g' /etc/php-fpm.conf
+	cp /etc/php/php-fpm.conf.default /etc/php/php-fpm.conf
+	sed -i 's/;pid = /pid = /g' /etc/php/php-fpm.conf
+	sed -i 's/;error_log = log\/php-fpm.log/error_log = \/var\/log\/php-fpm\/php-fpm.log/g' /etc/php/php-fpm.conf
+	sed -i 's/listen = 127.0.0.1:9000/listen = \/tmp\/php.socket/g' /etc/php/php-fpm.conf
 
 	# Make the log directories
 	mkdir -p /var/log/php-fpm
@@ -244,7 +244,7 @@ mysql_build : mysql_user cache_mysql_source install_mysql_dependencies
 	$(MAKE)
 
 mysql_install : mysql_user mysql_build
-	cd $(WORKING_DIR)/mysql-$(MYSQL_VERSION)/build &&						\
+	cd $(WORKING_DIR)/mysql-$(MYSQL_VERSION)/build &&	\
 	$(MAKE) install
 
 	# Set up the init.d files
@@ -258,7 +258,7 @@ mysql_install : mysql_user mysql_build
 	chown -R mysql:mysql /usr/share/mysql
 	cd /usr/share/mysql/ && scripts/mysql_install_db --user=mysql
 	chown -R root /usr/share/mysql
-	chown -R mysql /usr/share/mysql/data
+	chown -R mysql /srv/mysql
 
 	# Set up the MySQL config file
 	mkdir -p /etc/mysql
