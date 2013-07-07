@@ -21,12 +21,6 @@ NGINX_VERSION = 1.4.1
 ### PHP Configuration
 PHP_VERSION = 5.5.0
 
-### MySQL Configuration
-# Note that the URL this is sourced from is a needlessly-complex URL scheme at mysql.com  Any version other
-# than a 5.6.x version will likely require the URL to be reviewed and modified.  See down below for where this
-# is used in the URL fragment
-MYSQL_VERSION = 5.6.12
-
 
 target-list :
 	@echo "This makefile builds tools from source for a PHP-enabled web server."
@@ -36,15 +30,18 @@ target-list :
 	@echo
 
 
-php_web_server : aptget_update firewall_config www_directory_symlink git_install yuicompressor_install compass_install memcached_install nginx_install php_install composer_install mysql_install
+php_web_server : clean aptget_update firewall_config www_directory_symlink git_install yuicompressor_install compass_install memcached_install mysql_install nginx_install php_install composer_install
 
 
 ###############################################################
 
 
+purge :
+	-rm -rf $(SOURCE_DOWNLOAD_DIR)
+
+
 clean :
 	-rm -rf $(WORKING_DIR)
-	-rm -rf $(SOURCE_DOWNLOAD_DIR)
 
 
 aptget_update :
@@ -84,6 +81,10 @@ compass_install :
 
 memcached_install :
 	apt-get install -y memcached
+
+
+mysql_install :
+	apt-get install -y mysql-server mysql-client
 
 
 cache_nginx_source :
@@ -204,74 +205,3 @@ php_install : php_build
 	cp $(TOOL_DIR)/etc/php.ini /etc/php/php.ini
 
 	service php-fpm start
-
-
-mysql_user :
-	@if [ "`cat /etc/passwd | cut -d ":" -f1 | grep mysql`" == "" ]; then																	\
-		groupadd mysql &&																\
-		useradd -c "MySQL Server" -r -g mysql mysql;									\
-	fi
-
-cache_mysql_source :
-	@if [ ! -f $(SOURCE_DOWNLOAD_DIR)/mysql-$(MYSQL_VERSION).tar.gz ]; then				\
-		mkdir -p $(SOURCE_DOWNLOAD_DIR) && cd $(SOURCE_DOWNLOAD_DIR) &&					\
-		wget http://cdn.mysql.com/Downloads/MySQL-5.6/mysql-$(MYSQL_VERSION).tar.gz;	\
-	fi
-
-install_mysql_dependencies :
-	apt-get install -y make build-essential cmake libaio-dev libncurses5-dev
-
-mysql_build : mysql_user cache_mysql_source install_mysql_dependencies
-	mkdir -p $(WORKING_DIR)
-
-	cp $(SOURCE_DOWNLOAD_DIR)/mysql-$(MYSQL_VERSION).tar.gz $(WORKING_DIR)
-	tar -C $(WORKING_DIR) -xvf $(WORKING_DIR)/mysql-$(MYSQL_VERSION).tar.gz
-
-	mkdir -p $(WORKING_DIR)/mysql-$(MYSQL_VERSION)/build && cd $(WORKING_DIR)/mysql-$(MYSQL_VERSION)/build && 	\
-	cmake												\
-		-DCMAKE_BUILD_TYPE=Release                    	\
-  		-DCMAKE_INSTALL_PREFIX=/usr                   	\
-      	-DINSTALL_DOCDIR=share/doc/mysql              	\
-      	-DINSTALL_DOCREADMEDIR=share/doc/mysql        	\
-      	-DINSTALL_INCLUDEDIR=include/mysql            	\
-      	-DINSTALL_INFODIR=share/info                  	\
-      	-DINSTALL_MANDIR=share/man                    	\
-      	-DINSTALL_MYSQLDATADIR=/srv/mysql             	\
-      	-DINSTALL_MYSQLSHAREDIR=share/mysql           	\
-      	-DINSTALL_MYSQLTESTDIR=share/mysql/test       	\
-      	-DINSTALL_PLUGINDIR=lib/mysql/plugin          	\
-      	-DINSTALL_SBINDIR=sbin                        	\
-      	-DINSTALL_SCRIPTDIR=bin                       	\
-      	-DINSTALL_SQLBENCHDIR=share/mysql/bench       	\
-      	-DINSTALL_SUPPORTFILESDIR=share/mysql         	\
-      	-DMYSQL_DATADIR=/srv/mysql                    	\
-      	-DMYSQL_UNIX_ADDR=/run/mysqld/mysqld.sock     	\
-      	-DSYSCONFDIR=/etc/mysql                       	\
-      	-DWITH_PARTITION_STORAGE_ENGINE=OFF           	\
-    	-DWITH_PERFSCHEMA_STORAGE_ENGINE=OFF          	\
-	    -DWITH_EXTRA_CHARSETS=complex                 	\
-		.. &&											\
-	#													\
-	$(MAKE)
-
-mysql_install : mysql_user mysql_build
-	cd $(WORKING_DIR)/mysql-$(MYSQL_VERSION)/build &&	\
-	$(MAKE) install
-
-	# Set up the init.d files
-	cp /usr/share/mysql/mysql.server /etc/init.d/mysqld
-	chmod 755 /etc/init.d/mysqld
-
-	# Finalize set up and copy over all the customized config files
-	update-rc.d mysqld defaults
-
-	# Set up the system tables
-	mysql_install_db --basedir=/usr --datadir=/srv/mysql --user=mysql
-	chown -R mysql:mysql /srv/mysql
-
-	# Set up the MySQL config file
-	mkdir -p /etc/mysql
-	cp /usr/share/mysql/my-default.cnf /etc/mysql/my.cnf
-
-	# Start MySQL
-	service mysqld start
