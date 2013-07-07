@@ -36,7 +36,7 @@ target-list :
 	@echo
 
 
-php_web_server : aptget_update firewall_config www_directory_symlink git_install yuicompressor_install compass_install nginx_install php_install composer_install mysql_install
+php_web_server : aptget_update firewall_config www_directory_symlink git_install yuicompressor_install compass_install memcached_install nginx_install php_install composer_install mysql_install
 
 
 ###############################################################
@@ -73,12 +73,17 @@ composer_install :
 	curl -sS https://getcomposer.org/installer | php && \
 	mv composer.phar /usr/local/bin/composer
 
+
 yuicompressor_install :
 	apt-get install -y yui-compressor
 
 
 compass_install :
 	apt-get install -y ruby-compass
+
+
+memcached_install :
+	apt-get install -y memcached
 
 
 cache_nginx_source :
