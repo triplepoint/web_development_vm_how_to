@@ -195,8 +195,10 @@ php_install : php_build
 
 
 mysql_user :
-	groupadd mysql &&																	\
-	useradd -c "MySQL Server" -r -g mysql mysql
+	@if [ "`cat /etc/passwd | cut -d ":" -f1 | grep mysql`" == "" ]; then																	\
+		groupadd mysql &&																\
+		useradd -c "MySQL Server" -r -g mysql mysql;									\
+	fi
 
 cache_mysql_source :
 	@if [ ! -f $(SOURCE_DOWNLOAD_DIR)/mysql-$(MYSQL_VERSION).tar.gz ]; then				\
@@ -207,7 +209,7 @@ cache_mysql_source :
 install_mysql_dependencies :
 	apt-get install -y make build-essential cmake libaio-dev libncurses5-dev
 
-mysql_build : cache_mysql_source install_mysql_dependencies
+mysql_build : mysql_user cache_mysql_source install_mysql_dependencies
 	mkdir -p $(WORKING_DIR)
 
 	cp $(SOURCE_DOWNLOAD_DIR)/mysql-$(MYSQL_VERSION).tar.gz $(WORKING_DIR)
