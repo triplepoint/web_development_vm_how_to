@@ -28,7 +28,7 @@ WWW_DIRECTORY_SYMLINK_TARGET = /projects
 MYSQL_VERSION = 5.6.12
 
 ### YUI Compressor
-YUI_COMPRESSOR_VERSION = 2.4.7
+YUI_COMPRESSOR_VERSION = 2.4.8
 
 
 target-list :
@@ -39,7 +39,7 @@ target-list :
 	@echo
 
 
-php_web_server : firewall_config www_directory_symlink yui_compressor_install compass_install nginx_install php_install mysql_install
+php_web_server : aptget_update firewall_config www_directory_symlink yuicompressor_install compass_install nginx_install php_install mysql_install
 
 
 ###############################################################
@@ -49,6 +49,8 @@ clean :
 	-rm -rf $(WORKING_DIR)
 	-rm -rf $(SOURCE_DOWNLOAD_DIR)
 
+aptget_update :
+	apt-get update
 
 firewall_config :
 	ufw default deny
@@ -62,27 +64,26 @@ www_directory_symlink :
 	-ln -s $(WWW_DIRECTORY_SYMLINK_TARGET) /var/www
 
 
-get_yui_compressor_source :
+cache_yuicompressor_source :
 	@if [ ! -f $(SOURCE_DOWNLOAD_DIR)/yuicompressor-$(YUI_COMPRESSOR_VERSION).zip ]; then					\
 		mkdir -p $(SOURCE_DOWNLOAD_DIR) && cd $(SOURCE_DOWNLOAD_DIR) &&										\
-		wget https://github.com/downloads/yui/yuicompressor/yuicompressor-$(YUI_COMPRESSOR_VERSION).zip;	\
+		wget https://github.com/yui/yuicompressor/archive/v$(YUI_COMPRESSOR_VERSION).tar.gz;				\
 	fi
 
-yui_compressor_install : get_yui_compressor_source
-	apt-get update
-	apt-get install -y unzip default-jre
+install_yuicompressor_dependencies :
+	apt-get install -y default-jre
 
-	mkdir -p $(WORKING_DIR) && cd $(WORKING_DIR) &&																								\
-	#																																			\
-	cp $(SOURCE_DOWNLOAD_DIR)/yuicompressor-$(YUI_COMPRESSOR_VERSION).zip . &&																	\
-	unzip yuicompressor-$(YUI_COMPRESSOR_VERSION).zip &&																						\
-	#																																			\
-	mkdir -p /usr/share/yui-compressor &&																										\
-	cp yuicompressor-$(YUI_COMPRESSOR_VERSION)/build/yuicompressor-$(YUI_COMPRESSOR_VERSION).jar /usr/share/yui-compressor/yui-compressor.jar
+yuicompressor_install : cache_yuicompressor_source install_yuicompressor_dependencies
+	mkdir -p $(WORKING_DIR)
+
+	cp $(SOURCE_DOWNLOAD_DIR)/yuicompressor-$(YUI_COMPRESSOR_VERSION).tar.gz $(WORKING_DIR)
+	tar -C $(WORKING_DIR) -xvf yuicompressor-$(YUI_COMPRESSOR_VERSION).tar.gz
+
+	mkdir -p /usr/share/yui-compressor &&																														\
+	cp $(WORKING_DIR)/yuicompressor-$(YUI_COMPRESSOR_VERSION)/build/yuicompressor-$(YUI_COMPRESSOR_VERSION).jar /usr/share/yui-compressor/yui-compressor.jar
 
 
 compass_install :
-	apt-get update
 	apt-get install -y ruby
 
 	gem install compass
@@ -96,7 +97,6 @@ cache_nginx_source :
 	fi
 
 install_nginx_dependencies :
-	apt-get update
 	apt-get install -y make libc6 libpcre3 libpcre3-dev libpcrecpp0 libssl0.9.8 libssl-dev zlib1g zlib1g-dev lsb-base
 
 nginx_build : cache_nginx_source install_nginx_dependencies
@@ -152,7 +152,6 @@ cache_php_source :
 	fi
 
 install_php_dependencies :
-	apt-get update
 	apt-get install -y make autoconf libxml2 libxml2-dev libcurl3 libcurl4-gnutls-dev libmagic-dev
 
 php_build : cache_php_source install_php_dependencies
@@ -164,12 +163,12 @@ php_build : cache_php_source install_php_dependencies
 	cd $(WORKING_DIR)/php-$(PHP_VERSION) &&									\
 	./configure																\
 		--prefix=/usr														\
-		--sysconfdir=/etc                                                   \
+		--sysconfdir=/etc 													\
 		--with-config-file-path=/etc										\
 		--enable-fpm														\
 		--with-fpm-user=www-data											\
 		--with-fpm-group=www-data											\
-		--enable-opcache    												\
+		--enable-opcache 													\
 		--enable-mbstring													\
 		--enable-mbregex													\
 		--with-mysqli														\
@@ -221,7 +220,6 @@ cache_mysql_source :
 	fi
 
 install_mysql_dependencies :
-	apt-get update
 	apt-get install -y make build-essential cmake libaio-dev libncurses5-dev
 
 mysql_build : cache_mysql_source install_mysql_dependencies
