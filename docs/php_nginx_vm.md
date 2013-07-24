@@ -208,9 +208,9 @@ git clone git://github.com/triplepoint/web_development_vm_how_to.git
     cd /usr/src/
     apt-get install libc6 libpcre3 libpcre3-dev libpcrecpp0 libssl0.9.8 libssl-dev zlib1g zlib1g-dev lsb-base
 
-    wget http://nginx.org/download/nginx-1.4.1.tar.gz
-    tar -xvf nginx-1.4.1.tar.gz
-    cd nginx-1.4.1
+    wget http://nginx.org/download/nginx-1.4.2.tar.gz
+    tar -xvf nginx-1.4.2.tar.gz
+    cd nginx-1.4.2
 
     ./configure --prefix=/usr --sbin-path=/usr/sbin --pid-path=/var/run/nginx.pid --conf-path=/etc/nginx/nginx.conf --error-log-path=/var/log/nginx/error.log --http-log-path=/var/log/nginx/access.log --user=www-data --group=www-data --with-http_ssl_module --with-http_spdy_module --with-ipv6
     make
@@ -249,9 +249,9 @@ git clone git://github.com/triplepoint/web_development_vm_how_to.git
     ``` bash
     cd /usr/src/
     apt-get install autoconf libxml2 libxml2-dev libcurl3 libcurl4-gnutls-dev libmagic-dev
-    wget http://us3.php.net/get/php-5.5.0.tar.bz2/from/us2.php.net/mirror -O php-5.5.0.tar.bz2
-    tar -xvf php-5.5.0.tar.bz2
-    cd php-5.5.0
+    wget http://us3.php.net/get/php-5.5.1.tar.bz2/from/us2.php.net/mirror -O php-5.5.1.tar.bz2
+    tar -xvf php-5.5.1.tar.bz2
+    cd php-5.5.1
     ./configure --prefix=/usr --sysconfdir=/etc --with-config-file-path=/etc --enable-fpm --with-fpm-user=www-data --with-fpm-group=www-data --enable-opcache --enable-mbstring --enable-mbregex --with-mysqli --with-openssl --with-curl --with-zlib
     make
     make test
