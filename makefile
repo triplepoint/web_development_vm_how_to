@@ -16,10 +16,10 @@ WORKING_DIR = /tmp/makework
 WWW_DIRECTORY_SYMLINK_TARGET = /projects
 
 ### Nginx Configuration
-NGINX_VERSION = 1.4.1
+NGINX_VERSION = 1.4.2
 
 ### PHP Configuration
-PHP_VERSION = 5.5.0
+PHP_VERSION = 5.5.1
 
 
 target-list :
