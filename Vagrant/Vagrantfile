@@ -1,27 +1,20 @@
-###
-# This vagrant configuration creates a simple VM
-# and executes the provided default.pp puppet
-# manifest against it.
-###
 Vagrant.configure("2") do |config|
 
-    config.vm.box = "precise64"
-    config.vm.box_url = "http://files.vagrantup.com/precise64.box"
-    config.vm.guest = :linux
+    config.vm.box = "raring64"
+    config.vm.box_url = "http://cloud-images.ubuntu.com/raring/current/raring-server-cloudimg-vagrant-amd64-disk1.box"
 
-    # Sync the parent directory above this project to the VM, to make it
-    # convenient to reach all projects on the new VM guest
     config.vm.synced_folder "../../", "/projects"
 
-    # This syncs this how-to package on the virtual machine.  Later, puppet will copy
-    # this sync to use as the working-copy for all the makefile behavior.
     config.vm.synced_folder "../", "/vagrant_bootstrap"
 
-    # Main web server
-    config.vm.define :web_server do |web_server_config|
-        web_server_config.vm.hostname = "phpwebbox.local"
-        web_server_config.vm.network :private_network, ip: "192.168.56.11"
-        web_server_config.vm.provision :puppet
+    config.vm.provider :virtualbox do |v, override|
+        override.vm.network :private_network, ip: "192.168.56.11"
+    end
+
+    config.vm.provision :puppet do |puppet|
+        puppet.manifests_path = "puppet/manifests"
+        puppet.module_path = "puppet/modules"
+        puppet.manifest_file = "default.pp"
     end
 
 end
