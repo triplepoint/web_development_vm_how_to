@@ -19,7 +19,7 @@ WWW_DIRECTORY_SYMLINK_TARGET = /projects
 NGINX_VERSION = 1.4.2
 
 ### PHP Configuration
-PHP_VERSION = 5.5.1
+PHP_VERSION = 5.5.2
 
 
 target-list :
