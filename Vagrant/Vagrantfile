@@ -15,8 +15,6 @@ Vagrant.configure(VAGRANTFILE_API_VERSION) do |config|
 
     config.vm.synced_folder "../../", "/projects", :nfs => true
 
-    config.vm.synced_folder "../", "/vagrant_bootstrap", :nfs => true
-
     config.vm.provision :puppet do |puppet|
         puppet.manifests_path = "puppet/manifests"
         puppet.manifest_file = "default.pp"
