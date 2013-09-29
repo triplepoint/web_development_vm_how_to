@@ -1,3 +1,6 @@
 [submodule "Vagrant/puppet/modules/composer"]
 	path = Vagrant/puppet/modules/composer
 	url = https://github.com/puphpet/puphpet-composer.git
+[submodule "Vagrant/puppet/modules/ufw"]
+	path = Vagrant/puppet/modules/ufw
+	url = https://github.com/puppetmodules/puppet-module-ufw.git
