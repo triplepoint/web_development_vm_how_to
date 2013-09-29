@@ -15,4 +15,4 @@
 	url = https://github.com/example42/puppi.git
 [submodule "Vagrant/puppet/modules/nginx"]
 	path = Vagrant/puppet/modules/nginx
-	url = https://github.com/jfryman/puppetlabs-nginx.git
+	url = https://github.com/jfryman/puppet-nginx.git
