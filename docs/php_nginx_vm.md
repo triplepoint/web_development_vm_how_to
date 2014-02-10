@@ -453,7 +453,6 @@ service nginx restart
 
 # Todo
 - mysql config
-- PHPMyAdmin (this should probably live on a separate VM)
 - the `eth1` interface doesn't have a static IPV6 address.  Need to research how to do that.
 - on server errors, Nginx just throws ugly 500 response
 
