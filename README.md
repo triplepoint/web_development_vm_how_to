@@ -19,5 +19,3 @@ I'd rather not get into the practice of supporting multiple variations on this g
 This guide is intended to cover the creation and setup of the servers, but intentionally stops without covering any project-specific installation details.  For things like Drupal and Wordpress, there are far better guides out there which I'm sure you can find.
 
 The only guidance I'll offer for project setup is in the attached `project.makefile.example` which gives the beginnings of an installation makefile which you can copy into your project.  It primarily deals with self-signed SSL certificates and Nginx configuration.
-
-[![Bitdeli Badge](https://d2weczhvl823v0.cloudfront.net/triplepoint/web_development_vm_how_to/trend.png)](https://bitdeli.com/free "Bitdeli Badge")
